@@ -2,24 +2,24 @@
 
 {% block content %}
     <h1>Add Translation</h1>
-    <form action="{% url 'translations:add' %}" method="post">
+    <form action="{% url 'translations:add' %}" method="POST">
         {% csrf_token %}
 
-        <select name="source_lang">
+        <select name="lang">
             <option value="akl">Aklanon</option>
             <option value="eng">English</option>
         </select>
 
-        <input name="source_content" type="text" placeholder="Source" autofocus>
+        <input name="content" type="text" placeholder="Source" autofocus>
         to
-        <select name="target_lang">
+        <select name="translation_lang">
             <option value="eng">English</option>
             <option value="akl">Aklanon</option>
         </select>
 
-        <input name="target_content" type="text" placeholder="Target">
+        <input name="translation_content" type="text" placeholder="Target">
 
         <input type="submit" value="Add">
     </form>
-    <a href="{% url 'translations:translations' %}">View translations</a>
+    <a href="{% url 'translations:catalog' %}">Catalog</a>
 {% endblock %}

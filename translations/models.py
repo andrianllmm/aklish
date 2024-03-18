@@ -10,24 +10,26 @@ class Language(models.Model):
         return f"{self.name} ({self.code})"
 
 
-class TextEntry(models.Model):
+class Entry(models.Model):
     content = models.TextField()
     lang = models.ForeignKey(Language, on_delete=models.PROTECT, related_name="texts")
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="text_entries")
+    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name="texts")
 
-    def __str__(self):
-        return f"{self.content} ({self.lang.code}) by {self.user.username}"
-    
     class Meta:
         unique_together = ("content", "lang")
+    
+    def __str__(self):
+        return f"{self.content} ({self.lang.code}) by {self.user.username}"
 
 
-class TranslationEntry(models.Model):
-    source = models.OneToOneField(TextEntry, on_delete=models.CASCADE, related_name="requests")
-    target = models.ManyToManyField(TextEntry, blank=True, related_name="responses")
+class Translation(models.Model):
+    entry = models.ForeignKey(Entry, on_delete=models.CASCADE, related_name="translations")
+    content = models.TextField()
+    lang = models.ForeignKey(Language, on_delete=models.PROTECT, related_name="translations")
+    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name="translations")
+
+    class Meta:
+        unique_together = ("content", "lang", "entry")
 
     def __str__(self):
-        if len(self.target.all()) > 0:
-            return f"{self.source.content} ({self.source.lang.name} => {self.target.all()[0].lang.name})"
-        else:
-            return f"{self.source.content} ({self.source.lang.name} => NA)"
+        return f"{self.entry} to {self.content} ({self.lang.code}) by {self.user.username}"

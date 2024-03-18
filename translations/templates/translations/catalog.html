@@ -1,17 +1,16 @@
 {% extends "translations/layout.html" %}
 
 {% block content %}
-    <h1>Translations</h1>
+    <h1>Catalog</h1>
     <ul>
-        {% for translation in translations %}
+        {% for entry in entries %}
             <li>
-                <a href="{% url 'translations:translation_entry' translation.id %}">{{ translation }}</a>
+                <a href="{% url 'translations:entry' entry.id %}">{{ entry }}</a>
             </li>
         {% empty %}
             <li>No entries</li>
         {% endfor %}
     </ul>
-    <a href="{% url 'translations:texts' %}">View texts</a>
     <a href="{% url 'translations:search' %}">Search</a>
     <a href="{% url 'translations:add' %}">Add</a>
 {% endblock %}

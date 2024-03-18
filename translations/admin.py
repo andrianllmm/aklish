@@ -1,7 +1,8 @@
 from django.contrib import admin
-from .models import Language, TextEntry, TranslationEntry
+from .models import Language, Entry, Translation
+
 
 # Register your models here.
 admin.site.register(Language)
-admin.site.register(TextEntry)
-admin.site.register(TranslationEntry)
+admin.site.register(Entry)
+admin.site.register(Translation)
