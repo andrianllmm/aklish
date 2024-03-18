@@ -1,0 +1,13 @@
+{% extends "user/layout.html" %}
+
+{% block content %}
+    <h1>Register</h1>
+
+    <form method="POST" autocomplete="off">
+        {% csrf_token %}
+
+        {{ register_form.as_p }}
+
+        <input type="submit" value="Register">
+    </form>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "translations/layout.html" %}
+
+{% block content %}
+    <h3>Translations of</h3>
+    <h1>{{ translation_entry.source }}</h1>
+    <ul>
+        {% for target in targets %}
+            <li>{{ target }}</li>
+        {% endfor %}
+    </ul>
+    <form action="{% url 'translations:translation_entry' translation_entry.id %}" method="POST">
+        {% csrf_token %}
+        <input name="source_lang" value="{{ translation_entry.source.lang.code }}" type="hidden">
+        <input name="source_content" value="{{ translation_entry.source.content }}" type="hidden">
+        <select name="target_lang">
+            <option value="akl">Aklanon</option>
+            <option value="eng">English</option>
+        </select>
+        <input name="target_content" type="text">
+        <input type="submit" value="Add">
+    </form>
+    <a href="{% url 'translations:translations' %}">View translations</a>
+{% endblock %}

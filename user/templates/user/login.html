@@ -1,0 +1,13 @@
+{% extends "user/layout.html" %}
+
+{% block content %}
+    <h1>Login</h1>
+    <form method="post" autocomplete="off">
+        {% csrf_token %}
+
+        {{ login_form }}
+
+        <input type="submit" value="Login">
+    </form>
+    <a href="translations:homepage">Homepage</a>
+{% endblock %}

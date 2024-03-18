@@ -1,0 +1,10 @@
+{% extends "translations/layout.html" %}
+
+{% block content %}
+    <h1>Search</h1>
+    <form action="{% url 'translations:translations' %}">
+        <input name="q" type="text" placeholder="Search" autofocus>
+        <input type="submit" value="Search">
+    </form>
+    <a href="{% url 'translations:translations' %}">View translations</a>
+{% endblock %}
