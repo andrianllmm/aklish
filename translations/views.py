@@ -1,9 +1,17 @@
 from django.shortcuts import render, redirect
 from .models import Language, Entry, Translation
+from dictionary.models import DictEntry
 
 # Create your views here.
 def homepage(request):
-    return render(request, "translations/homepage.html")
+    text_count = len(Entry.objects.all())
+    translation_count = len(Translation.objects.all())
+    word_count = len(DictEntry.objects.all())
+    return render(request, "translations/homepage.html", {
+        "text_count": text_count,
+        "translation_count": translation_count,
+        "word_count": word_count,
+    })
 
 
 def catalog(request):
@@ -11,6 +19,7 @@ def catalog(request):
         return render(request, "translations/catalog.html", {
         "entries": Entry.objects.filter(content__contains=query)
         })
+    
     return render(request, "translations/catalog.html", {
         "entries": Entry.objects.all()
     })

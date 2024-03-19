@@ -1,0 +1,13 @@
+{% extends "translations/layout.html" %}
+
+{% block content %}
+    <div class="container p-0 mb-3">
+        <h1>Search Dictionary</h1>
+    </div>
+    <form action="{% url 'dictionary:catalog' %}">
+        <div class="input-group">
+            <input name="q" type="search" class="form-control rounded" placeholder="Search" autofocus>
+            <input type="submit" value="Search" class="btn btn-primary">
+        </div>
+    </form>
+{% endblock %}

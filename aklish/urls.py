@@ -21,4 +21,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("user/", include("user.urls")),
     path("", include("translations.urls")),
+    path("dictionary/", include("dictionary.urls")),
 ]

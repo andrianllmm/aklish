@@ -1,12 +1,18 @@
 {% extends "user/layout.html" %}
 
 {% block content %}
-    <h1>Login</h1>
-    <form method="post" autocomplete="off">
-        {% csrf_token %}
-
-        {{ login_form }}
-
-        <input type="submit" value="Login">
-    </form>
+    <div class="container mb-3">
+        <h1>Login</h1>
+    </div>
+    <div class="container">
+        <form method="post" autocomplete="off" class="mb-3">
+            {% csrf_token %}
+    
+            {{ login_form }}
+    
+            <input class="btn btn-primary "type="submit" value="Login">
+        </form>
+        <a href="{% url 'user:register' %}" class="btn btn-secondary mb-3">Register</a>
+    </div>
+    
 {% endblock %}
