@@ -1,16 +1,32 @@
 {% extends "translations/layout.html" %}
 
 {% block content %}
-    <h1>Catalog</h1>
-    <ul>
-        {% for entry in entries %}
-            <li>
-                <a href="{% url 'translations:entry' entry.id %}">{{ entry }}</a>
-            </li>
-        {% empty %}
-            <li>No entries</li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'translations:search' %}">Search</a>
-    <a href="{% url 'translations:add' %}">Add</a>
+    <div class="container p-0 mb-3 border-bottom">
+        <h1>Catalog</h1>
+    </div>
+    <div class="mb-3">
+        <a href="{% url 'translations:search' %}" class="btn btn-primary">Search</a>
+        <a href="{% url 'translations:add' %}" class="btn btn-primary">Add</a>
+    </div>
+    <table class="table table-hover mb-3 border-top">
+        <tbody>
+            {% for entry in entries %}
+                <tr scope="row">
+                    <td>
+                        <a href="{% url 'translations:entry' entry.id %}">{{ entry.content }}</a>
+                    </td>
+                    <td class="text-end">
+                        {{ entry.lang.name }}
+                    </td>
+                    <td class="text-end">
+                        {{ entry.user.username }}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr scope="row">
+                    <td>No entries</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

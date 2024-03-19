@@ -1,25 +1,64 @@
 {% extends "translations/layout.html" %}
 
 {% block content %}
-    <h1>Add Translation</h1>
+    <div class="container p-0 mb-3">
+        <h1>Add Translation</h1>
+    </div>
     <form action="{% url 'translations:add' %}" method="POST">
         {% csrf_token %}
 
-        <select name="lang">
-            <option value="akl">Aklanon</option>
-            <option value="eng">English</option>
-        </select>
-
-        <input name="content" type="text" placeholder="Source" autofocus>
-        to
-        <select name="translation_lang">
-            <option value="eng">English</option>
-            <option value="akl">Aklanon</option>
-        </select>
-
-        <input name="translation_content" type="text" placeholder="Target">
-
-        <input type="submit" value="Add">
+        <div class="row mb-3">
+            <div class="col">
+                <label for="source" class="form-label">from:</label>
+                <select name="lang" id="lang" class="form-select form-select-sm mb-2">
+                    <option value="akl">Aklanon</option>
+                    <option value="eng">English</option>
+                </select>
+                <input name="content" type="text" class="form-control" id="source" placeholder="Source" autofocus>
+            </div>
+            <div class="col">
+                <label for="target" class="form-label">to:</label>
+                <select name="translation_lang" id="translation_lang" class="form-select form-select-sm mb-2">
+                    <option value="eng">English</option>
+                    <option value="akl">Aklanon</option>
+                </select>
+                <input name="translation_content" class="form-control" id="target" type="text" placeholder="Target">
+            </div>
+        </div>
+        <input type="submit" value="Add" class="btn btn-primary">
+        <button id="swap-btn"class="btn btn-primary">Swap</button>
     </form>
-    <a href="{% url 'translations:catalog' %}">Catalog</a>
+
+    <script>
+        function updateTargetSelect() {
+            const sourceSelect = document.getElementById("lang");
+            const targetSelect = document.getElementById("translation_lang");
+            const selectedSource = sourceSelect.value;
+
+            targetSelect.disabled = false;
+
+            for (let option of targetSelect.options) {
+                option.disabled = option.value === selectedSource;
+            }
+
+            targetSelect.value = selectedSource === "akl" ? "eng" : "akl";
+        }
+
+        document.getElementById("lang").addEventListener("change", updateTargetSelect);
+    
+        document.getElementById("swap-btn").addEventListener("click", function() {
+            event.preventDefault();
+            const sourceSelect = document.querySelector("#lang");
+            const targetSelect = document.querySelector("#translation_lang");
+            const sourceValue = sourceSelect.value;
+            const targetValue = targetSelect.value;
+        
+            sourceSelect.value = targetValue;
+            targetSelect.value = sourceValue;
+
+            updateTargetSelect();
+        });
+
+        updateTargetSelect();
+    </script>
 {% endblock %}

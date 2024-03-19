@@ -1,12 +1,18 @@
 {% extends "user/layout.html" %}
 
 {% block content %}
-    <h1>Profile</h1>
-
-    <ul>
-        <li>Username: {{ request.user.username }}</li>
-        <li>Email: {{ request.user.email }}</li>
+    <div class="container mb-3">
+        <h1>Profile</h1>
+    </div>
+    
+    <ul class="list-group mb-3">
+        <li class="list-group-item">
+            <strong>Username:</strong> {{ request.user.username }}
+        </li>
+        <li class="list-group-item">
+            <strong>Email:</strong> {{ request.user.email }}
+        </li>
     </ul>
 
-    <a href="{% url 'user:logout' %}">Logout</a>
+    <a href="{% url 'user:logout' %}" class="btn btn-warning">Logout</a>
 {% endblock %}

@@ -1,10 +1,13 @@
 {% extends "translations/layout.html" %}
 
 {% block content %}
-    <h1>Search</h1>
+    <div class="container p-0 mb-3">
+        <h1>Search</h1>
+    </div>
     <form action="{% url 'translations:catalog' %}">
-        <input name="q" type="text" placeholder="Search" autofocus>
-        <input type="submit" value="Search">
+        <div class="input-group">
+            <input name="q" type="search" class="form-control rounded" placeholder="Search" autofocus>
+            <input type="submit" value="Search" class="btn btn-primary">
+        </div>
     </form>
-    <a href="{% url 'translations:catalog' %}">Catalog</a>
 {% endblock %}
