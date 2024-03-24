@@ -1,5 +1,9 @@
 from django.contrib import admin
-from .models import DictEntry
+from .models import PartsOfSpeech, Etymology, Classification, Attribute, DictEntry
 
-# Register your models here.
+
+admin.site.register(PartsOfSpeech)
+admin.site.register(Etymology)
+admin.site.register(Classification)
+admin.site.register(Attribute)
 admin.site.register(DictEntry)

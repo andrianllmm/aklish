@@ -1,12 +1,35 @@
-{% extends 'dictionary/layout.html' %}
+{% extends 'dictionary/base.html' %}
 
 {% block content %}
-    <div class="container p-0 mb-3 border-bottom">
+    <div class="container pb-3 mb-3 border-bottom">
         <h1>{{ word }}</h1>
     </div>
-    <ol class="list-group list-group-numbered mb-3">
-        {% for definition in definitions %}
-            <li class="list-group-item">{{ definition }}</li>
-        {% endfor %}
-    </ol>
+    <div class="container pb-3 mb-3">
+        <ul class="list-group mb-3">
+            {% for attribute in attributes %}
+                <div class="mb-3">
+                    <ul class="list-group list-group-horizontal mb-1">
+                        {% if attribute.pos %}
+                            <li class="list-group-item p-1 px-2 fst-italic">
+                                {{ attribute.pos.meaning|lower }}
+                            </li>
+                        {% endif %}
+                        {% if attribute.classification %}
+                            <li class="list-group-item p-1 px-2 fst-italic">
+                                {{ attribute.classification.meaning|lower }}
+                            </li>
+                        {% endif %}
+                    </ul>
+
+                    <ol class="list-group list-group-numbered mb-2">
+                        <li class="list-group-item border-0">{{ attribute.definition }}</li>
+                    </ol>
+
+                    {% if attribute.etymology %}
+                        <p class="text-muted"><strong>Etymology:</strong> {{ attribute.etymology.meaning }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}

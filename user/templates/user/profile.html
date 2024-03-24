@@ -1,18 +1,99 @@
-{% extends "user/layout.html" %}
+{% extends 'user/base.html' %}
 
 {% block content %}
-    <div class="container mb-3">
-        <h1>Profile</h1>
+    <div class="container w-75 px-4">
+        <div class="container pb-3 mb-3 border-bottom">
+            <h1>Profile</h1>
+        </div>
+        <div class="container pb-3 mb-3 border-bottom">
+            <div class="pb-3 mb-3">
+                <h2 class="h5">
+                    About
+                </h2>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <strong>Username:</strong> {{ user.username }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Email:</strong> {{ user.email }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Date Joined:</strong> {{ user.date_joined }}
+                    </li>
+                </ul>
+            </div>
+            <div class="pb-3 mb-3">
+                <h2 class="h5">
+                    Stats
+                </h2>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        {{ user.entries.count }} total entries
+                    </li>
+                    <li class="list-group-item">
+                        {{ user.translations.count }} total translations
+                    </li>
+                </ul>
+            </div>
+            <div class="pb-3 mb-3">
+                <h2 class="h5">
+                    Entries
+                </h2>
+                <ul class="list-group">
+                    {% for entry in user.entries.all %}
+                        <li class="list-group-item d-flex align-items-center">
+                            <a href="{% url 'translations:entry' entry.id %}"
+                            class="flex-grow-1 text-decoration-none">
+                                {{ entry.content|slice:100 }}...
+                            </a>
+                            {% if request.user == user %}
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="entry_to_delete_pk" value="{{ entry.pk }}">
+                                    <input type="submit" name="delete_entry" value="Delete"
+                                    class="btn btn-sm btn-danger">
+                                </form>
+                            {% endif %}
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">
+                            No entries
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div>
+                <h2 class="h5">
+                    Translations
+                </h2>
+                <ul class="list-group">
+                    {% for translation in user.translations.all %}
+                        <li class="list-group-item d-flex align-items-center">
+                            <a href="{% url 'translations:entry' translation.entry.pk %}"
+                            class="flex-grow-1 text-decoration-none">
+                                {{ translation.content|slice:100 }}...
+                            </a>
+                            {% if request.user == user %}
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="translation_to_delete_pk" value="{{ translation.pk }}">
+                                    <input type="submit" name="delete_translation" value="Delete"
+                                    class="btn btn-sm btn-danger">
+                                </form>
+                            {% endif %}
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">
+                            No translations
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% if user == request.user %}
+            <div class="container pb-3 mb-3">
+                <a href="{% url 'user:logout' %}" class="btn btn-warning">Logout</a>
+            </div>
+        {% endif %}
     </div>
-    
-    <ul class="list-group mb-3">
-        <li class="list-group-item">
-            <strong>Username:</strong> {{ request.user.username }}
-        </li>
-        <li class="list-group-item">
-            <strong>Email:</strong> {{ request.user.email }}
-        </li>
-    </ul>
-
-    <a href="{% url 'user:logout' %}" class="btn btn-warning">Logout</a>
 {% endblock %}

@@ -1,25 +1,38 @@
-{% extends 'dictionary/layout.html' %}
+{% extends 'dictionary/base.html' %}
 
 {% block content %}
-    <div class="container p-0 mb-3 border-bottom">
-        <h1>Dictionary Catalog</h1>
+    <div class="container d-flex align-items-center pb-3 mb-3 border-bottom">
+        <div class="flex-grow-1">
+            <h1>Dictionary Entries</h1>
+        </div>
+        <div>
+            <a href="{% url 'dictionary:search' %}" class="btn btn-primary">Search</a>
+        </div>
     </div>
-    <div class="mb-3">
-        <a href="{% url 'dictionary:search' %}" class="btn btn-primary">Search</a>
+
+    <div class="container pb-3 mb-3">
+        <div class="mb-3">
+            <ul class="list-group">
+                {% for entry in entries %}
+                    <li class="list-group-item">
+                        <a href="{% url 'dictionary:entry' entry.word %}">{{ entry.word }}</a>
+                    </li>
+                {% empty %}
+                    No entries
+                {% endfor %}
+            </ul>
+        </div>
+        {% if as_definitions %}
+            <div class="mb-3">
+                <h2 class="h4">"{{ query }}" as definition</h2>
+                <ul class="list-group">
+                    {% for entry in as_definitions %}
+                        <li class="list-group-item">
+                            <a href="{% url 'dictionary:entry' entry.word %}">{{ entry.word }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
     </div>
-    <table class="table table-hover mb-3 border-top">
-        <tbody>
-            {% for entry in entries %}
-                <tr scope="row">
-                    <td>
-                        <a href="{% url 'dictionary:entry' entry.id %}">{{ entry.word }}</a>
-                    </td>
-                </tr>
-            {% empty %}
-                <tr scope="row">
-                    <td>No entries</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
 {% endblock %}

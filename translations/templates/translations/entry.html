@@ -1,49 +1,78 @@
-{% extends "translations/layout.html" %}
+{% extends 'translations/base.html' %}
 
 {% block content %}
-    <div class="container p-0 mb-3">
-        <h6 class="mb-2">Translations of</h6>
-        <h3>{{ entry.content }}</h3>
-        <p class="small">{{ entry.lang.name }} | {{ entry.user.username }}</p>
+    <div class="container pb-3 mb-4 border-bottom">
+        <p class="fs-5">{{ entry.content }}</p>
+
+        <div class="d-flex align-items-center">
+            <div class="flex-grow-1">
+                <span class="badge bg-primary p-2">{{ entry.lang.name }}</span>
+            </div>
+            <div class="text-muted">
+                <small class="mx-1">
+                    <a href="{% url 'user:profile' entry.user.id entry.user.username %}"
+                    class="text-decoration-none">{{ entry.user.username }}</a>
+                </small>
+                <small class="mx-1">{{ entry.created_at|date:"d M y" }}</small>
+            </div>
+        </div>
     </div>
 
-    <form class="d-flex align-items-center mb-3" action="{% url 'translations:entry' entry.id %}" method="POST">
-        {% csrf_token %}
-        <input name="lang" value="{{ entry.lang.code }}" type="hidden" id="lang">
-        <input name="content" value="{{ entry.content }}" type="hidden">
-    
-        <select name="translation_lang" id="translation_lang" class="form-select me-2" style="width: 200px">
-            {% if entry.lang.code == 'eng' %}
-                <option value="akl" selected>Aklanon</option>
-                <option value="eng" disabled>English</option>
-            {% elif entry.lang.code == 'akl' %}
-                <option value="akl" disabled >Aklanon</option>
-                <option value="eng" selected>English</option>
-            {% endif %}
-        </select>
-        <input name="translation_content" type="text" class="form-control me-2">
-        <input type="submit" value="Add" class="btn btn-primary">
-    </form>
-
-    <table class="table table-hover mb-3 align-middle border-top">
-        <tbody>
-            {% for translation in translations %}
-                <tr scope="row">
-                    <td>
+    <div class="container pb-3 mb-5 border-bottom">
+        <h2 class="h5 mb-3">{{ translations.count }} translations</h2>
+        {% for translation in translations %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <p class="card-text">
                         {{ translation.content }}
-                    </td>
-                    <td class="text-end">
-                        {{ translation.lang.name }}
-                    </td>
-                    <td class="text-end">
-                        {{ translation.user.username }}
-                    </td>
-                </tr>
-            {% empty %}
-                <tr scope="row">
-                    <td>No translations</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                    </p>
+
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <span class="badge bg-primary p-2">{{ translation.lang.name }}</span>
+                        </div>
+                        <div class="text-muted">
+                            <small class="mx-1">
+                                <a href="{% url 'user:profile' translation.user.id translation.user.username %}"
+                                class="text-decoration-none">{{ translation.user.username }}</a>
+                            </small>
+                            <small class="mx-1">{{ translation.created_at|date:"d M y" }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            No translations
+        {% endfor %}
+    </div>
+
+    <div class="container w-75 pb-3 mb-3">
+        <h2 class="h5 mb-3">Add translation</h2>
+        <form action="{% url 'translations:entry' entry.id %}" method="POST" id="add-translation">
+            {% csrf_token %}
+            <input type="hidden" name="entry_lang" value="{{ entry.lang }}" id="entry_lang">
+            <div class="form-group pb-3 mb-3">
+                <label for="lang" class="mb-2">Language</label>
+                {{ form.lang }}
+                <label for="content" class="mb-2">Content</label>
+                {{ form.content }}
+                <input type="checkbox" name="reverse" id="reverse">
+                <label for="reverse">Also add translation as entry</label>
+            </div>
+            <input type="submit" value="Add Translation" class="btn btn-primary">
+        </form>
+    </div>
+
+    <script>
+        const targetSelect = document.querySelector("#lang")
+        const sourceLang = document.querySelector("#entry_lang")
+    
+        for (let option of targetSelect.options) {
+            option.disabled = option.innerHTML === sourceLang.value
+        }
+
+        document.querySelector("#add-translation").onsubmit = () => {
+            document.querySelector("#content").value = ""
+        }
+    </script>
 {% endblock %}

@@ -1,10 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-# Create your models here.
+
 class Language(models.Model):
-    name = models.CharField(max_length=64)
     code = models.CharField(max_length=3, unique=True)
+    name = models.CharField(max_length=64)
+
+    class Meta:
+        unique_together = ("name", "code")
 
     def __str__(self):
         return f"{self.name} ({self.code})"
@@ -12,8 +15,9 @@ class Language(models.Model):
 
 class Entry(models.Model):
     content = models.TextField()
-    lang = models.ForeignKey(Language, on_delete=models.PROTECT, related_name="texts")
-    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name="texts")
+    lang = models.ForeignKey(Language, on_delete=models.PROTECT, related_name="entries")
+    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name="entries")
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ("content", "lang")
@@ -27,6 +31,7 @@ class Translation(models.Model):
     content = models.TextField()
     lang = models.ForeignKey(Language, on_delete=models.PROTECT, related_name="translations")
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name="translations")
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ("content", "lang", "entry")

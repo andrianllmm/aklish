@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from .models import DictEntry
+from .models import PartsOfSpeech, Etymology, Classification, Attribute, DictEntry
 
-# Create your views here.
+
 def index(request):
     return redirect("dictionary:catalog")
 
@@ -9,21 +9,24 @@ def index(request):
 def catalog(request):
     if query := request.GET.get("q"):
         return render(request, "dictionary/catalog.html", {
-        "entries": DictEntry.objects.filter(word__contains=query)
+            "query": query,
+            "entries": DictEntry.objects.filter(word__icontains=query),
+            "as_definitions": DictEntry.objects.filter(attributes__definition__icontains=query),
         })
 
     return render(request, "dictionary/catalog.html", {
-        "entries": DictEntry.objects.all(),
+        "entries": DictEntry.objects.all().extra(select={"lower_word":"lower(word)"}).order_by("lower_word"),
     })
 
 
-def entry(request, entry_id):
-    entry = DictEntry.objects.get(pk=entry_id)
+def entry(request, word):
+    entry = DictEntry.objects.get(word=word)
     word = entry.word
-    definitions = entry.definition.split("; ")
+    attributes = entry.attributes.all()
+
     return render(request, "dictionary/entry.html", {
         "word": word,
-        "definitions": definitions
+        "attributes": attributes.order_by("pos", "classification"),
     })
 
 

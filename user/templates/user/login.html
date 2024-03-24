@@ -1,18 +1,24 @@
-{% extends "user/layout.html" %}
+{% extends 'user/base.html' %}
 
 {% block content %}
-    <div class="container mb-3">
-        <h1>Login</h1>
+    <div class="container w-50 p-4 mt-4 border rounded">
+        <div class="mb-3">
+            <h1>Log in</h1>
+        </div>
+        <div class="mb-3">
+            <form method="POST" autocomplete="off" class="mb-3">
+                {% csrf_token %}
+                <div class="form-group mb-3">
+                    <label for="#username" class="form-label">Username</label>
+                    {{ form.username }}
+                    <label for="password" class="form-label">Password</label>
+                    {{ form.password }}
+                </div>
+                <input type="submit" value="Login" class="col-12 btn btn-primary">
+            </form>
+        </div>
+        <div class="mb-3">
+            <p class="m-0">Don't have an account? <a href="{% url 'user:register' %}">Sign up</a></p>
+        </div>
     </div>
-    <div class="container">
-        <form method="post" autocomplete="off" class="mb-3">
-            {% csrf_token %}
-    
-            {{ login_form }}
-    
-            <input class="btn btn-primary "type="submit" value="Login">
-        </form>
-        <a href="{% url 'user:register' %}" class="btn btn-secondary mb-3">Register</a>
-    </div>
-    
 {% endblock %}

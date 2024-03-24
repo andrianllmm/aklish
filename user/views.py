@@ -1,37 +1,53 @@
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import auth
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from translations.models import Language, Entry, Translation
 from .forms import RegisterForm, LoginForm
 
-# Create your views here.
+
+@login_required(login_url="user:login")
 def index(request):
     return redirect("user:profile")
 
 
-@login_required(login_url="user:login")
-def profile(request):
-    return render(request, "user/profile.html",)
+def profile(request, user_id, username):
+    if request.method == "POST":
+        if request.POST.get("delete_entry"):
+            entry_to_delete_pk = request.POST.get("entry_to_delete_pk")
+            entry_to_delete = Entry.objects.get(pk=entry_to_delete_pk)
+            entry_to_delete.delete()
+        
+        if request.POST.get("delete_translation"):
+            translation_to_delete_pk = request.POST.get("translation_to_delete_pk")
+            translation_to_delete = Translation.objects.get(pk=translation_to_delete_pk)
+            translation_to_delete.delete()
+        
+        return redirect("user:profile", request.user.pk, request.user.username)
+
+    user = User.objects.get(pk=user_id, username=username)
+    return render(request, "user/profile.html", {
+        "user": user,
+    })
 
 
 def register(request):
-    form = RegisterForm()
-
     if request.method == "POST":
         form = RegisterForm(request.POST)
         if form.is_valid():
             form.save()
+
             return redirect("user:login")
+    else:
+        form = RegisterForm()
 
     return render(request, "user/register.html", {
-        "register_form": form
+        "form": form
     })
 
 
 def login(request):
-    form = LoginForm()
-
     if request.method == "POST":
         form = LoginForm(request, data=request.POST)
         if form.is_valid():
@@ -44,8 +60,11 @@ def login(request):
                 auth.login(request, user)
 
                 return redirect("translations:homepage")
+    else:
+        form = LoginForm()
+
     return render(request, "user/login.html", {
-        "login_form": form
+        "form": form
     })
 
 

@@ -1,13 +1,15 @@
-{% extends "translations/layout.html" %}
+{% extends 'translations/base.html' %}
 
 {% block content %}
-    <div class="container p-0 mb-3">
-        <h1>Search</h1>
+    <div class="container pb-3 mb-3 border-bottom">
+        <h1>Search entries</h1>
     </div>
-    <form action="{% url 'translations:catalog' %}">
-        <div class="input-group">
-            <input name="q" type="search" class="form-control rounded" placeholder="Search" autofocus>
-            <input type="submit" value="Search" class="btn btn-primary">
-        </div>
-    </form>
+    <div class="container pb-3 mb-3">
+        <form action="{% url 'translations:catalog' %}">
+            <div class="input-group">
+                <input name="q" type="search" class="form-control" placeholder="Search" autofocus>
+                <input type="submit" value="Search" class="btn btn-primary">
+            </div>
+        </form>
+    </div>
 {% endblock %}

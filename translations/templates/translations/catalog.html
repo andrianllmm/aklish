@@ -1,32 +1,46 @@
-{% extends "translations/layout.html" %}
+{% extends 'translations/base.html' %}
 
 {% block content %}
-    <div class="container p-0 mb-3 border-bottom">
-        <h1>Catalog</h1>
+    <div class="container d-flex align-items-center pb-3 mb-3 border-bottom">
+        <div class="flex-grow-1">
+            <h1>Entries</h1>
+        </div>
+        <div>
+            <a href="{% url 'translations:search' %}" class="btn btn-primary">Search</a>
+            <a href="{% url 'translations:add' %}" class="btn btn-primary">Add</a>
+        </div>
     </div>
-    <div class="mb-3">
-        <a href="{% url 'translations:search' %}" class="btn btn-primary">Search</a>
-        <a href="{% url 'translations:add' %}" class="btn btn-primary">Add</a>
+
+    <div class="container">
+        {% for entry in entries %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <small class="card-subtitle text-muted">
+                        {{ entry.translations.count }} translations
+                    </small>
+
+                    <h2 class="card-title mb-3 fs-6 fw-normal">
+                        <a href="{% url 'translations:entry' entry.id %}" class="text-decoration-none">
+                            {{ entry.content|slice:125 }}...
+                        </a>
+                    </h2>
+
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <span class="badge bg-primary p-2">{{ entry.lang.name }}</span>
+                        </div>
+                        <div class="text-muted">
+                            <small class="mx-1">
+                                <a href="{% url 'user:profile' entry.user.id entry.user.username %}"
+                                class="text-decoration-none">{{ entry.user.username }}</a>
+                            </small>
+                            <small class="mx-1">{{ entry.created_at|date:"d M y" }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            No entries
+        {% endfor %}
     </div>
-    <table class="table table-hover mb-3 border-top">
-        <tbody>
-            {% for entry in entries %}
-                <tr scope="row">
-                    <td>
-                        <a href="{% url 'translations:entry' entry.id %}">{{ entry.content }}</a>
-                    </td>
-                    <td class="text-end">
-                        {{ entry.lang.name }}
-                    </td>
-                    <td class="text-end">
-                        {{ entry.user.username }}
-                    </td>
-                </tr>
-            {% empty %}
-                <tr scope="row">
-                    <td>No entries</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
 {% endblock %}
