@@ -14,6 +14,11 @@ def index(request):
 
 def profile(request, user_id, username):
     if request.method == "POST":
+        if request.POST.get("remove_bookmark"):
+            entry_to_unbookmark_pk = request.POST.get("entry_to_unbookmark_pk")
+            entry_to_unbookmark = Entry.objects.get(pk=entry_to_unbookmark_pk)
+            entry_to_unbookmark.bookmarks.remove(request.user)
+
         if request.POST.get("delete_entry"):
             entry_to_delete_pk = request.POST.get("entry_to_delete_pk")
             entry_to_delete = Entry.objects.get(pk=entry_to_delete_pk)

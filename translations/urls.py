@@ -9,4 +9,6 @@ urlpatterns = [
     path("entry/<int:entry_id>", views.entry, name="entry"),
     path("search", views.search, name="search"),
     path("add", views.add, name="add"),
+    path("bookmark/<int:entry_id>", views.bookmark, name="bookmark"),
+    path("vote/<int:translation_id>", views.vote, name="vote")
 ]

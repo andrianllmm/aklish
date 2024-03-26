@@ -7,7 +7,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %} Aklish {% endblock %}</title>
-    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'node_modules/bootstrap-icons/font/bootstrap-icons.css' %}">
 </head>
 
 <body>
@@ -31,6 +32,9 @@
                     </ul>
     
                     <form action="{% url 'translations:catalog' %}" class="d-flex w-50 mx-auto">
+                        <button class="btn btn-tertiary">
+                            <i class="bi bi-search"></i>
+                        </button>
                         <input name="q" type="search" class="form-control form-control-sm" placeholder="Search entries">
                     </form>
 
@@ -62,6 +66,7 @@
     <footer class="container"></footer>
 
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'node_modules/bootstrap-icons/font/bootstrap-icons.js' %}"></script>
 </body>
 
 </html>

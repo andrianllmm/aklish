@@ -1,31 +1,87 @@
 {% extends 'translations/base.html' %}
 
 {% block content %}
-    <div class="container pb-3 mb-4 border-bottom">
-        <p class="fs-5">{{ entry.content }}</p>
+    <div class="container d-flex pb-3 mb-4 border-bottom">
+        <div class="me-3 text-center">
+            <form action="{% url 'translations:bookmark' entry.pk %}" method="POST">
+                {% csrf_token %}
+                {% if request.user.is_authenticated %}
+                    {% if bookmarked %}
+                        <button type="submit" class="btn btn-sm btn-primary">
+                            <i class="bi bi-bookmark"></i>
+                        </button>
+                    {% else %}
+                        <button type="submit" class="btn btn-sm btn-outline-primary">
+                           <i class="bi bi-bookmark"></i>
+                        </button>
+                    {% endif %}
+                {% else %}
+                    <button type="submit" class="btn btn-sm btn-outline-secondary">
+                        <i class="bi bi-bookmark"></i>
+                    </button>
+                {% endif %}
+                <div class="my-1">{{ entry.bookmarks.count }}</div>
+            </form>
+        </div>
+        
+        <div class="flex-grow-1">
+            <p class="fs-5">{{ entry.content }}</p>
 
-        <div class="d-flex align-items-center">
-            <div class="flex-grow-1">
-                <span class="badge bg-primary p-2">{{ entry.lang.name }}</span>
-            </div>
-            <div class="text-muted">
-                <small class="mx-1">
-                    <a href="{% url 'user:profile' entry.user.id entry.user.username %}"
-                    class="text-decoration-none">{{ entry.user.username }}</a>
-                </small>
-                <small class="mx-1">{{ entry.created_at|date:"d M y" }}</small>
+            <div class="d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <span class="badge bg-primary p-2">{{ entry.lang.name }}</span>
+                </div>
+                <div class="text-muted">
+                    <small class="mx-1">
+                        <a href="{% url 'user:profile' entry.user.id entry.user.username %}"
+                        class="text-decoration-none">{{ entry.user.username }}</a>
+                    </small>
+                    <small class="mx-1">{{ entry.created_at|date:"d M y" }}</small>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="container pb-3 mb-5 border-bottom">
-        <h2 class="h5 mb-3">{{ translations.count }} translations</h2>
-        {% for translation in translations %}
-            <div class="card mb-3">
-                <div class="card-body">
-                    <p class="card-text">
-                        {{ translation.content }}
-                    </p>
+    <div>
+        <h2 class="h5 mb-4">{{ translations_votes|length }} Translations</h2>
+        {% for translation, vote in translations_votes %}
+            <div class="container d-flex pb-3 mb-4 border-bottom">
+                <div class="me-3 text-center">
+                    <form action="{% url 'translations:vote' translation.pk %}" method="POST">
+                        {% csrf_token %}
+                        {% if vote %}
+                            {% if vote.direction == 1 %}
+                                <button type="submit" name="upvote" value="1" class="btn btn-sm btn-primary">
+                                    <i class="bi bi-arrow-up-circle"></i>
+                                </button>
+                            {% else %}
+                                <button type="submit" name="upvote" value="1" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-arrow-up-circle"></i>
+                                </button>
+                            {% endif %}
+                            <div class="my-1">{{ translation.vote_count }}</div>
+                            {% if vote.direction == -1 %}
+                                <button type="submit" name="downvote" value="-1" class="btn btn-sm btn-primary">
+                                    <i class="bi bi-arrow-down-circle"></i>
+                                </button>
+                            {% else %}
+                                <button type="submit" name="downvote" value="-1" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-arrow-down-circle"></i>
+                                </button>
+                            {% endif %}
+                        {% else %}
+                            <button type="submit" class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-arrow-up-circle"></i>
+                            </button>
+                            {{ translation.vote_count }}
+                            <button type="submit"  class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-arrow-down-circle"></i>
+                            </button>
+                        {% endif %}
+                    </form>
+                </div>
+                <div class="flex-grow-1">
+                    <p>{{ translation.content }}</p>
 
                     <div class="d-flex align-items-center">
                         <div class="flex-grow-1">
@@ -42,7 +98,9 @@
                 </div>
             </div>
         {% empty %}
-            No translations
+            <div class="container pb-3 mb-4 border-bottom">
+                No translations
+            </div>
         {% endfor %}
     </div>
 
@@ -69,10 +127,6 @@
     
         for (let option of targetSelect.options) {
             option.disabled = option.innerHTML === sourceLang.value
-        }
-
-        document.querySelector("#add-translation").onsubmit = () => {
-            document.querySelector("#content").value = ""
         }
     </script>
 {% endblock %}

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Language, Entry, Translation
+from .models import Language, Entry, Translation, Vote
 
 
 class AddEntryForm(forms.ModelForm):
