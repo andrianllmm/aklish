@@ -32,11 +32,13 @@
                     <span class="badge bg-primary p-2">{{ entry.lang.name }}</span>
                 </div>
                 <div class="text-muted">
-                    <small class="mx-1">
-                        <a href="{% url 'user:profile' entry.user.id entry.user.username %}"
+                    <small class="me-3">
+                        by
+                        <a href="{% url 'users:profile' entry.user.id entry.user.username %}"
                         class="text-decoration-none">{{ entry.user.username }}</a>
+                        <span class="fw-bold">{{ entry.user.profile.reputation }}</span>
                     </small>
-                    <small class="mx-1">{{ entry.created_at|date:"d M y" }}</small>
+                    <small>on {{ entry.created_at|date:"d M y" }}</small>
                 </div>
             </div>
         </div>
@@ -88,11 +90,13 @@
                             <span class="badge bg-primary p-2">{{ translation.lang.name }}</span>
                         </div>
                         <div class="text-muted">
-                            <small class="mx-1">
-                                <a href="{% url 'user:profile' translation.user.id translation.user.username %}"
+                            <small class="me-3">
+                                by
+                                <a href="{% url 'users:profile' entry.user.id entry.user.username %}"
                                 class="text-decoration-none">{{ translation.user.username }}</a>
+                                <span class="fw-bold">{{ translation.user.profile.reputation }}</span>
                             </small>
-                            <small class="mx-1">{{ translation.created_at|date:"d M y" }}</small>
+                            <small>on {{ translation.created_at|date:"d M y" }}</small>
                         </div>
                     </div>
                 </div>

@@ -15,7 +15,7 @@ def catalog(request):
         })
 
     return render(request, "dictionary/catalog.html", {
-        "entries": DictEntry.objects.all().extra(select={"lower_word":"lower(word)"}).order_by("lower_word"),
+        "entries": DictEntry.objects.all().extra(select={"lower_word": "lower(word)"}).order_by("lower_word"),
     })
 
 

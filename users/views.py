@@ -7,9 +7,10 @@ from translations.models import Language, Entry, Translation
 from .forms import RegisterForm, LoginForm
 
 
-@login_required(login_url="user:login")
 def index(request):
-    return redirect("user:profile")
+    return render(request, "users/index.html", {
+        "users": sorted(User.objects.all(), key=lambda user: user.profile.reputation(), reverse=True)
+    })
 
 
 def profile(request, user_id, username):
@@ -29,10 +30,10 @@ def profile(request, user_id, username):
             translation_to_delete = Translation.objects.get(pk=translation_to_delete_pk)
             translation_to_delete.delete()
         
-        return redirect("user:profile", request.user.pk, request.user.username)
+        return redirect("users:profile", request.user.pk, request.user.username)
 
     user = User.objects.get(pk=user_id, username=username)
-    return render(request, "user/profile.html", {
+    return render(request, "users/profile.html", {
         "user": user,
     })
 
@@ -43,11 +44,11 @@ def register(request):
         if form.is_valid():
             form.save()
 
-            return redirect("user:login")
+            return redirect("users:login")
     else:
         form = RegisterForm()
 
-    return render(request, "user/register.html", {
+    return render(request, "users/register.html", {
         "form": form
     })
 
@@ -68,7 +69,7 @@ def login(request):
     else:
         form = LoginForm()
 
-    return render(request, "user/login.html", {
+    return render(request, "users/login.html", {
         "form": form
     })
 

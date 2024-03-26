@@ -42,6 +42,12 @@ class Translation(models.Model):
         for vote in self.votes.all():
             total += vote.direction
         return total
+    
+    def upvote_count(self):
+        return self.votes.filter(direction=1).count()
+    
+    def downvote_count(self):
+        return self.votes.filter(direction=-1).count()
 
     def __str__(self):
         return f"{self.entry} to {self.content} ({self.lang.code}) by {self.user.username}"

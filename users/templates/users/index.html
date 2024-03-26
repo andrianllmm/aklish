@@ -1,0 +1,26 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+    <div class="container pb-3 mb-3 border-bottom">
+        <h1>Users</h1>
+    </div>
+
+    <div class="container pb-3 mb-3">
+        <ul class="list-group">
+            {% for user in users %}
+                <li class="list-group-item">
+                    <div class="d-flex">
+                        <div class="flex-grow-1">
+                            <a href="{% url 'users:profile' user.pk user.username %}">{{ user.username }}</a>
+                        </div>
+                        <div>
+                            {{ user.profile.reputation }} reputation
+                        </div>
+                    </div>
+                </li>
+            {% empty %}
+                No users
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

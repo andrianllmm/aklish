@@ -60,7 +60,6 @@ def entry(request, entry_id):
         translation_vote = (translation, vote)
         translations_votes.append(translation_vote)
 
-
     return render(request, "translations/entry.html", {
         "form": form,
         "entry": entry,
@@ -73,7 +72,7 @@ def search(request):
     return render(request, "translations/search.html")
 
 
-@login_required(login_url="user:login")
+@login_required(login_url="users:login")
 def add(request):
     if request.method == "POST":
         form = AddEntryForm(request.POST)
@@ -113,7 +112,7 @@ def bookmark(request, entry_id):
             else:
                 entry.bookmarks.add(request.user)
         else:
-            return redirect("user:login")
+            return redirect("users:login")
     return redirect("translations:entry", entry_id)
 
 
@@ -128,5 +127,5 @@ def vote(request, translation_id):
                 vote.direction = -1 if vote.direction != -1 else 0
             vote.save()
         else:
-            return redirect("user:login")
+            return redirect("users:login")
     return redirect("translations:entry", translation.entry.pk)

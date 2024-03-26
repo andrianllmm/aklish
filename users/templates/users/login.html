@@ -1,4 +1,4 @@
-{% extends 'user/base.html' %}
+{% extends 'users/base.html' %}
 
 {% block content %}
     <div class="container w-50 p-4 mt-4 border rounded">
@@ -18,7 +18,7 @@
             </form>
         </div>
         <div class="mb-3">
-            <p class="m-0">Don't have an account? <a href="{% url 'user:register' %}">Sign up</a></p>
+            <p class="m-0">Don't have an account? <a href="{% url 'users:register' %}">Sign up</a></p>
         </div>
     </div>
 {% endblock %}

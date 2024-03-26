@@ -1,26 +1,29 @@
-{% extends 'user/base.html' %}
+{% extends 'users/base.html' %}
 
 {% block content %}
     <div class="container w-75 px-4">
         <div class="container pb-3 mb-3 border-bottom">
-            <h1>Profile</h1>
+            <div class="mb-2">
+                <h1>{{ user.username }}</h1>
+            </div>
+            <div class="text-muted">
+                <div class="mb-1">
+                    <small class="me-2">Member since {{ user.date_joined|date:'d M y' }}</small>
+                    <small class="me-2">Last active {{ user.last_login|date:'d M y' }}</small>
+                </div>
+                <div class="mb-1">
+                    <small class="me-2">{{ user.email }}</small>
+                </div>
+            </div>
         </div>
         <div class="container pb-3 mb-3 border-bottom">
             <div class="pb-3 mb-3">
                 <h2 class="h5">
                     About
                 </h2>
-                <ul class="list-group">
-                    <li class="list-group-item">
-                        <strong>Username:</strong> {{ user.username }}
-                    </li>
-                    <li class="list-group-item">
-                        <strong>Email:</strong> {{ user.email }}
-                    </li>
-                    <li class="list-group-item">
-                        <strong>Date Joined:</strong> {{ user.date_joined }}
-                    </li>
-                </ul>
+                <div class="container py-2 px-3 m-0 border rounded">
+                    <p></p>
+                </div>
             </div>
             <div class="pb-3 mb-3">
                 <h2 class="h5">
@@ -28,10 +31,13 @@
                 </h2>
                 <ul class="list-group">
                     <li class="list-group-item">
-                        {{ user.entries.count }} total entries
+                        {{ user.profile.reputation }} reputation
                     </li>
                     <li class="list-group-item">
-                        {{ user.translations.count }} total translations
+                        {{ user.entries.count }} entries
+                    </li>
+                    <li class="list-group-item">
+                        {{ user.translations.count }} translations
                     </li>
                 </ul>
             </div>
@@ -119,7 +125,7 @@
         </div>
         {% if user == request.user %}
             <div class="container pb-3 mb-3">
-                <a href="{% url 'user:logout' %}" class="btn btn-warning">Logout</a>
+                <a href="{% url 'users:logout' %}" class="btn btn-warning">Logout</a>
             </div>
         {% endif %}
     </div>

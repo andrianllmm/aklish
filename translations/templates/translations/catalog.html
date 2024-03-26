@@ -16,8 +16,8 @@
             <div class="card mb-3">
                 <div class="card-body">
                     <small class="card-subtitle text-muted">
-                        <span class="me-1">{{ entry.translations.count }} translations</span>
-                        <span class="me-1"></span>{{ entry.bookmarks.count }} bookmarks</span>
+                        <span class="me-2">{{ entry.translations.count }} translations</span>
+                        <span></span>{{ entry.bookmarks.count }} bookmarks</span>
                     </small>
 
                     <h2 class="card-title mb-3 fs-6 fw-normal">
@@ -30,12 +30,14 @@
                         <div class="flex-grow-1">
                             <span class="badge bg-primary p-2">{{ entry.lang.name }}</span>
                         </div>
-                        <div class="text-muted">
-                            <small class="mx-1">
-                                <a href="{% url 'user:profile' entry.user.id entry.user.username %}"
+                        <div class="d-flex text-muted">
+                            <small class="me-3">
+                                by
+                                <a href="{% url 'users:profile' entry.user.id entry.user.username %}"
                                 class="text-decoration-none">{{ entry.user.username }}</a>
+                                <span class="fw-bold">{{ entry.user.profile.reputation }}</span>
                             </small>
-                            <small class="mx-1">{{ entry.created_at|date:"d M y" }}</small>
+                            <small>on {{ entry.created_at|date:"d M y" }}</small>
                         </div>
                     </div>
                 </div>
