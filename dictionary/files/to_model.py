@@ -1,10 +1,14 @@
-import csv
-from .models import PartsOfSpeech, Etymology, Classification, Attribute, DictEntry
+import csv, os
+from dictionary.models import PartsOfSpeech, Etymology, Classification, Attribute, DictEntry
 
 
-def import_data(file_name):
-    with open(file_name, "r") as infile:
+script_dir = os.path.dirname(os.path.realpath(__file__))
+
+
+def to_model(file_path):
+    with open(file_path, "r") as infile:
         reader = csv.DictReader(infile)
+
         for row in reader:
             print(row)
 
@@ -36,5 +40,12 @@ def import_data(file_name):
                 entry.attributes.add(attribute)
 
 
+def delete_all_objects(Model):
+    for object in Model.objects.all():
+        object.delete()
+
+
 if __name__ == "__main__":
-    import_data("dictionary.csv")
+    delete_all_objects(Attribute)
+    delete_all_objects(DictEntry)
+    to_model(f"{script_dir}/akl-dictionary.csv")

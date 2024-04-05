@@ -1,62 +1,19 @@
 {% extends 'translations/base.html' %}
 
 {% block content %}
-    <div class="container w-75">
-        <div class="container pb-3 mb-3 border-bottom">
-            <h1>Add an entry</h1>
-        </div>
-        <div class="container pb-3 mb-3">
-            <form action="{% url 'translations:add' %}" method="POST">
-                {% csrf_token %}
-                <div class="form-group pb-3 mb-3 border-bottom">
-                    <label for="lang" class="fw-bold mb-2">Language</label>
-                    {{ form.lang }}
-                    <label for="content" class="fw-bold mb-2">Content</label>
-                    {{ form.content }}
-                </div>
-                <h2 class="mb-3">Translate entry</h2>
-                <div class="form-group pb-3 mb-3 border-bottom">
-                    <label for="translation_lang" class="fw-bold mb-2">Translation language</label>
-                    {{ form.translation_lang }}
-                    <label for="translation_content" class="fw-bold mb-2">Translation content</label>
-                    {{ form.translation_content }}
-                    <input type="checkbox" name="reverse" id="reverse">
-                    <label for="reverse">Also add translation as entry</label>
-                </div>
-                <input type="submit" value="Add entry" class="btn btn-primary">
-            </form>
-        </div>
+    <div class="container pb-3 mb-3 border-bottom">
+        <h1>Add an entry</h1>
     </div>
-
-    <script>
-        function updateTargetSelect() {
-            const sourceSelect = document.querySelector("#lang");
-            const targetSelect = document.querySelector("#translation_lang");
-
-            if (sourceSelect.value === targetSelect.value) {
-                targetSelect.value = ""
-            }
-                
-            for (let option of targetSelect.options) {
-                option.disabled = option.value === sourceSelect.value;
-            }
-        }
-
-        function disableTargetFields() {
-            if (document.querySelector("#content").value.length > 0 && document.querySelector("#lang").value != "") {
-                document.querySelector("#translation_content").disabled = false;
-                document.querySelector("#translation_lang").disabled = false;
-            } else {
-                document.querySelector("#translation_lang").disabled = true;
-                document.querySelector("#translation_content").disabled = true;
-            }
-        }
-
-        document.querySelector("#lang").addEventListener("change", updateTargetSelect);
-        document.querySelector("#lang").addEventListener("change", disableTargetFields);
-        document.querySelector("#content").addEventListener("keyup", disableTargetFields);
-
-        disableTargetFields();
-        updateTargetSelect();
-    </script>
+    <div class="container mb-3">
+        <form action="{% url 'translations:add' %}" method="POST">
+            {% csrf_token %}
+            <div class="form-group mb-3 border-bottom">
+                <label for="lang" class="fw-bold mb-2">Language</label>
+                {{ form.lang }}
+                <label for="content" class="fw-bold mb-2">Content</label>
+                {{ form.content }}
+            </div>
+            <input type="submit" value="Add entry" class="btn btn-primary">
+        </form>
+    </div>
 {% endblock %}

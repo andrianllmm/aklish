@@ -1,0 +1,52 @@
+{% extends 'users/base.html' %}
+
+{% block head_additional %}
+    {% load static %}
+    <script src="{% static 'js/spellchecker.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/spellchecker.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container pb-3 mb-3 border-bottom">
+        <h1>Spell Checker</h1>
+    </div>
+    <div class="container mb-3">
+        <div class="row mb-2">
+            <div class="col p-0">
+                <div class="form-group">
+                    <div id="spellcheck-field">
+                        <textarea name="text-input" id="text-input" cols="30" rows="10"
+                        placeholder="Start writing here." autofocus
+                        class="form-control px-4 py-3 m-0"></textarea>
+
+                        <div name="text-marks" id="text-marks"
+                        class="form-control px-4 py-3 m-0"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="suggestions-col" class="col p-0 ms-3">
+                <div>
+                    <h5 id="suggestions-header">Suggestions</h5>
+                </div>
+                <div>
+                    <ul id="suggestions" class="list-group"></ul>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex align-items-center">
+            <div class="flex-grow-1">
+                <small class="me-2"><strong id="word-count">0</strong> words</small>
+                <small class="me-2"><strong id="mistake-count">0</strong> mistakes</small>
+                <small><strong id="correctness">0%</strong> correct</small>
+            </div>
+            <div>
+                <button id="hide-suggestions" class="btn">
+                    <i class="bi bi-eye-slash"></i>
+                </button>
+                <button id="show-suggestions" class="btn btn-outline-secondary me-2">
+                    <i class="bi bi-spellcheck"></i> <small>Suggest</small>
+                </button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

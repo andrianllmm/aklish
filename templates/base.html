@@ -6,8 +6,10 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %} Aklish {% endblock %}</title>
+        <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
         <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
         <link rel="stylesheet" href="{% static 'icons/font/bootstrap-icons.css' %}">
+        {% block head_additional %}{% endblock %}
     </head>
     <body>
         <header class="p-0 mb-5">
@@ -29,6 +31,26 @@
                             </li>
                             <li class="nav-item">
                                 <a href="{% url 'users:index' %}" class="nav-link">Users</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                  Tools
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{% url 'spellchecker:index' %}" class="dropdown-item">Spell Checker</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a href="#" class="dropdown-item">Another tool</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                  Games
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" class="dropdown-item">Crossword</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a href="#" class="dropdown-item">Another game</a></li>
+                                </ul>
                             </li>
                         </ul>
         
@@ -65,8 +87,5 @@
         </main>
 
         <footer class="container"></footer>
-
-        <script src="{% static 'js/bootstrap.min.js' %}"></script>
-        <script src="{% static 'icons/font/bootstrap-icons.js' %}"></script>
     </body>
 </html>

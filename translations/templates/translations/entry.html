@@ -7,17 +7,17 @@
                 {% csrf_token %}
                 {% if request.user.is_authenticated %}
                     {% if bookmarked %}
-                        <button type="submit" class="btn btn-sm btn-primary">
-                            <i class="bi bi-bookmark"></i>
+                        <button type="submit" class="btn btn-sm">
+                            <i class="bi bi-bookmark-fill text-primary"></i>
                         </button>
                     {% else %}
-                        <button type="submit" class="btn btn-sm btn-outline-primary">
-                           <i class="bi bi-bookmark"></i>
+                        <button type="submit" class="btn btn-sm">
+                           <i class="bi bi-bookmark text-primary"></i>
                         </button>
                     {% endif %}
                 {% else %}
-                    <button type="submit" class="btn btn-sm btn-outline-secondary">
-                        <i class="bi bi-bookmark"></i>
+                    <button type="submit" class="btn btn-sm">
+                        <i class="bi bi-bookmark text-secondary"></i>
                     </button>
                 {% endif %}
                 <div class="my-1">{{ entry.bookmarks.count }}</div>
@@ -53,31 +53,35 @@
                         {% csrf_token %}
                         {% if vote %}
                             {% if vote.direction == 1 %}
-                                <button type="submit" name="upvote" value="1" class="btn btn-sm btn-primary">
-                                    <i class="bi bi-arrow-up-circle"></i>
+                                <button type="submit" name="upvote" value="1"
+                                class="btn btn-sm btn-primary rounded-circle">
+                                    <i class="bi bi-caret-up-fill"></i>
                                 </button>
                             {% else %}
-                                <button type="submit" name="upvote" value="1" class="btn btn-sm btn-outline-primary">
-                                    <i class="bi bi-arrow-up-circle"></i>
+                                <button type="submit" name="upvote" value="1"
+                                class="btn btn-sm btn-outline-primary rounded-circle">
+                                    <i class="bi bi-caret-up-fill"></i>
                                 </button>
                             {% endif %}
                             <div class="my-1">{{ translation.vote_count }}</div>
                             {% if vote.direction == -1 %}
-                                <button type="submit" name="downvote" value="-1" class="btn btn-sm btn-primary">
-                                    <i class="bi bi-arrow-down-circle"></i>
+                                <button type="submit" name="downvote" value="-1"
+                                class="btn btn-sm btn-primary rounded-circle">
+                                    <i class="bi bi-caret-down-fill"></i>
                                 </button>
                             {% else %}
-                                <button type="submit" name="downvote" value="-1" class="btn btn-sm btn-outline-primary">
-                                    <i class="bi bi-arrow-down-circle"></i>
+                                <button type="submit" name="downvote" value="-1"
+                                class="btn btn-sm btn-outline-primary rounded-circle">
+                                    <i class="bi bi-caret-down-fill"></i>
                                 </button>
                             {% endif %}
                         {% else %}
-                            <button type="submit" class="btn btn-sm btn-outline-secondary">
-                                <i class="bi bi-arrow-up-circle"></i>
+                            <button type="submit" class="btn btn-sm btn-outline-secondary rounded-circle">
+                                <i class="bi bi-caret-up-fill"></i>
                             </button>
-                            {{ translation.vote_count }}
-                            <button type="submit"  class="btn btn-sm btn-outline-secondary">
-                                <i class="bi bi-arrow-down-circle"></i>
+                            <div class="my-1">{{ translation.vote_count }}</div>
+                            <button type="submit"  class="btn btn-sm btn-outline-secondary rounded-circle">
+                                <i class="bi bi-caret-down-fill"></i>
                             </button>
                         {% endif %}
                     </form>

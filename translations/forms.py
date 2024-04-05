@@ -10,23 +10,9 @@ class AddEntryForm(forms.ModelForm):
         widgets = {
             "lang": forms.Select(attrs={"class": "form-select mb-2",
                                         "id": "lang"}),
-            "content": forms.Textarea(attrs={"class": "form-control mb-2",
-                                             "id": "content",
-                                             "placeholder": "Type what you want to be translated here..."}),
+            "content": forms.Textarea(attrs={"class": "form-control px-4 py-3 m-0",
+                                             "id": "text-input",}),
         }
-
-    translation_lang = forms.ModelChoiceField(
-        queryset=Language.objects.all(),
-        required=False,
-        widget=forms.Select(attrs={"class": "form-select mb-2",
-                                   "id": "translation_lang"})
-    )
-    translation_content = forms.CharField(
-        required=False,
-        widget=forms.Textarea(attrs={"class": "form-control mb-2",
-                                     "id": "translation_content",
-                                     "placeholder": "Type your translation here..."}),
-    )
 
 
 class AddTranslationForm(forms.ModelForm):
@@ -38,6 +24,5 @@ class AddTranslationForm(forms.ModelForm):
             "lang": forms.Select(attrs={"class": "form-select mb-2",
                                         "id": "lang"}),
             "content": forms.Textarea(attrs={"class": "form-control mb-2",
-                                             "id": "content",
-                                             "placeholder": "Type your translation here..."}),
+                                             "id": "content",}),
         }

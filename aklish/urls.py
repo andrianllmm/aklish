@@ -22,4 +22,5 @@ urlpatterns = [
     path("users/", include("users.urls")),
     path("", include("translations.urls")),
     path("dictionary/", include("dictionary.urls")),
+    path("spellchecker/", include("spellchecker.urls"),)
 ]

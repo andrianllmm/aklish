@@ -9,14 +9,16 @@ def homepage(request):
     return render(request, "translations/homepage.html", {
         "entries": Entry.objects.all(),
         "translations": Translation.objects.all(),
-        "dict_entries": DictEntry.objects.all()
+        "dict_entries": DictEntry.objects.all(),
     })
 
 
 def catalog(request):
     if query := request.GET.get("q"):
         return render(request, "translations/catalog.html", {
-            "entries": Entry.objects.filter(content__icontains=query)
+            "query": query,
+            "entries": Entry.objects.filter(content__icontains=query),
+            "as_translation": Entry.objects.filter(translations__content__icontains=query),
         })
     
     return render(request, "translations/catalog.html", {
@@ -80,20 +82,6 @@ def add(request):
             entry = form.save(commit=False)
             entry.user = request.user
             entry.save()
-
-            translation_content = form.cleaned_data["translation_content"]
-            translation_lang = form.cleaned_data["translation_lang"]
-            if translation_content and translation_lang:
-                translation, created= Translation.objects.get_or_create(
-                    entry=entry, content=translation_content, lang=translation_lang, user=request.user
-                )
-                if request.POST.get("reverse"):
-                    entry_reverse, created = Entry.objects.get_or_create(
-                        content=translation_content, lang=translation_lang, user=request.user
-                    )
-                    translation_reverse, created = Translation.objects.get_or_create(
-                        entry=entry_reverse, content=entry.content, lang=entry.lang, user=request.user
-                    )
             return redirect("translations:entry", entry.pk)
     else:
         form = AddEntryForm()

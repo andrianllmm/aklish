@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     "users",
     "translations",
     "dictionary",
+    "spellchecker",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
