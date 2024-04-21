@@ -10,7 +10,7 @@
             {% for user in users %}
                 <li class="list-group-item">
                     <div class="d-flex">
-                        <div class="flex-grow-1">
+                        <div class="me-auto">
                             <a href="{% url 'users:profile' user.pk user.username %}">{{ user.username }}</a>
                         </div>
                         <div>

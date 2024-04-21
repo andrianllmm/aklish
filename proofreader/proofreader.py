@@ -1,12 +1,18 @@
+import lemminflect
 import re
+import string
 from spellchecker import SpellChecker
 from nltk.tokenize import word_tokenize, sent_tokenize
-import string
 from .stemmer import akl_stemmer
 from tabulate import tabulate
 
 
-def proofread_text(text, max_suggestions=5):
+def proofread_text(text, lang="akl", max_suggestions=5):
+    if lang == "akl":
+        spell = get_spellchecker("dictionary/data/akl_freq.json")
+    else:
+        spell = get_spellchecker()
+
     checks = []
 
     sents = sent_tokenize(text.strip())
@@ -18,7 +24,7 @@ def proofread_text(text, max_suggestions=5):
             suggestions = []
 
             if all(char in string.punctuation for char in token):
-                cls = "punc"
+                cls = "punct"
             
             elif token.replace(".", "").isnumeric():
                 cls = "num"
@@ -28,13 +34,14 @@ def proofread_text(text, max_suggestions=5):
                     valid = False
                     suggestions = [token.capitalize()]
                 elif clean(token.lower()) not in spell:
-                    cls = "NE"
+                    cls = "propn"
 
             elif token[0].isupper():
-                cls = "NE"
+                cls = "propn"
             
             elif clean(token) not in spell:
-                if not akl_stemmer.get_stems(clean(token), spell):
+                if (lang == "akl" and not akl_stemmer.get_stems(clean(token), spell)) or \
+                    (lang == "eng" and not lemminflect.getAllLemmas(clean(token))):
                     valid = False
                     suggestions = spell.candidates(clean(token))
                 else:
@@ -53,19 +60,17 @@ def proofread_text(text, max_suggestions=5):
 
 
 def clean(token):
-    return re.sub(r"[^a-zA-Z-']", "", token.strip())
+    return re.sub(r"[^a-zA-Z'-]", "", token.strip())
 
 
 def get_spellchecker(file_path=None):
     if file_path:
         spell = SpellChecker(language=None)
-        spell.word_frequency.load_text_file(file_path)
+        spell.word_frequency.load_dictionary(file_path)
     else:
         spell = SpellChecker()
+
     return spell
-
-
-spell = get_spellchecker("dictionary/files/akl_words.txt")
 
 
 if __name__ == "__main__":

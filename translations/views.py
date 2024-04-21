@@ -22,7 +22,7 @@ def catalog(request):
         })
     
     return render(request, "translations/catalog.html", {
-        "entries": Entry.objects.all().order_by("?")
+        "entries": Entry.objects.all()
     })
 
 
@@ -68,10 +68,6 @@ def entry(request, entry_id):
         "bookmarked": bookmarked,
         "translations_votes": translations_votes,
     })
-
-
-def search(request):
-    return render(request, "translations/search.html")
 
 
 @login_required(login_url="users:login")

@@ -6,28 +6,80 @@
     </div>
     <div class="container pb-3 mb-3">
         <ul class="list-group mb-3">
-            {% for attribute in attributes %}
+            {% regroup attributes by pos as pos_list %}
+
+            {% for pos in pos_list %}
                 <div class="mb-3">
-                    <ul class="list-group list-group-horizontal mb-1">
-                        {% if attribute.pos %}
-                            <li class="list-group-item p-1 px-2 fst-italic">
-                                {{ attribute.pos.meaning|lower }}
-                            </li>
-                        {% endif %}
-                        {% if attribute.classification %}
-                            <li class="list-group-item p-1 px-2 fst-italic">
-                                {{ attribute.classification.meaning|lower }}
-                            </li>
-                        {% endif %}
-                    </ul>
+                    <span class="me-1 fst-italic">
+                        {{ pos.grouper.meaning }}
+                    </span>
+                    <ol class="list-group list-group-numbered mb-1">
+                    {% for attribute in pos.list %}
+                        <li class="list-group-item border-0">
+                            {% if attribute.classification %}
+                                <span class="badge text-bg-secondary p-1 px-2 me-1">
+                                    {{ attribute.classification.meaning|lower }}
+                                </span>
+                            {% endif %}
+                            
+                            <span>{{ attribute.definition }}</span>
 
-                    <ol class="list-group list-group-numbered mb-2">
-                        <li class="list-group-item border-0">{{ attribute.definition }}</li>
+                            {% if attribute.examples.all %}
+                                <div class="ms-3">
+                                {% for entry in attribute.examples.all %}
+                                    <a href="{% url 'translations:entry' entry.pk %}"
+                                    class="me-1"
+                                    style="font-size: medium; text-decoration: none; color: grey;">
+                                        "{{ entry.content }}"
+                                    </a>
+                                {% endfor %}
+                                </div>
+                            {% endif %}
+
+                            <div class="mt-2 ms-3">
+                                {% if attribute.similar.all %}
+                                    <p class="text-muted mb-1" style="font-size: small;">
+                                        <strong class="fw-normal me-1" style="color: green;">Similar:</strong>
+                                        {% for entry in attribute.similar.all %}
+                                            <a href="{% url 'dictionary:entry' entry.lang.code entry.word %}"
+                                            class="btn btn-sm btn-outline-secondary rounded-pill me-1"
+                                            style="font-size: small;">
+                                                {{ entry.word }}
+                                            </a>
+                                        {% endfor %}
+                                    </p>
+                                {% endif %}
+
+                                {% if attribute.opposite.all %}
+                                    <p class="text-muted mb-1" style="font-size: small;">
+                                        <strong class="fw-normal me-1" style="color: red;">Opposite:</strong>
+                                        {% for entry in attribute.opposite.all %}
+                                            <a href="{% url 'dictionary:entry' entry.lang.code entry.word %}
+                                            class="btn btn-sm btn-outline-secondary rounded-pill me-1"
+                                            style="font-size: small;">
+                                                {{ entry.word }}
+                                            </a>
+                                        {% endfor %}
+                                    </p>
+                                {% endif %}
+
+                                {% if attribute.origin %}
+                                    <p class="text-muted mb-1 border-start border-4 ps-2">
+                                        <strong class="fw-normal fst-italic">Origin:</strong>
+                                        {{ attribute.origin.meaning }}
+                                    </p>
+                                {% endif %}
+
+                                {% if attribute.source %}
+                                    <p class="text-muted mb-1" style="font-size: smaller;">
+                                        <strong class="fw-normal fst-italic">Source:</strong>
+                                        {{ attribute.source }}
+                                    </p>
+                                {% endif %}
+                            </div>
+                        </li>
+                    {% endfor %}
                     </ol>
-
-                    {% if attribute.etymology %}
-                        <p class="text-muted"><strong>Etymology:</strong> {{ attribute.etymology.meaning }}</p>
-                    {% endif %}
                 </div>
             {% endfor %}
         </ul>

@@ -49,7 +49,7 @@
                     {% for entry in user.bookmarks.all %}
                         <li class="list-group-item d-flex align-items-center">
                             <a href="{% url 'translations:entry' entry.id %}"
-                            class="flex-grow-1 text-decoration-none">
+                            class="me-auto text-decoration-none">
                                 {{ entry.content|slice:100 }}...
                             </a>
                             {% if request.user == user %}
@@ -76,7 +76,7 @@
                     {% for entry in user.entries.all %}
                         <li class="list-group-item d-flex align-items-center">
                             <a href="{% url 'translations:entry' entry.id %}"
-                            class="flex-grow-1 text-decoration-none">
+                            class="me-auto text-decoration-none">
                                 {{ entry.content|slice:100 }}...
                             </a>
                             {% if request.user == user %}
@@ -103,7 +103,7 @@
                     {% for translation in user.translations.all %}
                         <li class="list-group-item d-flex align-items-center">
                             <a href="{% url 'translations:entry' translation.entry.pk %}"
-                            class="flex-grow-1 text-decoration-none">
+                            class="me-auto text-decoration-none">
                                 {{ translation.content|slice:100 }}...
                             </a>
                             {% if request.user == user %}

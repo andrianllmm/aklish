@@ -54,14 +54,14 @@
                             </li>
                         </ul>
         
-                        <form action="{% url 'translations:catalog' %}" class="d-flex w-50 mx-auto">
+                        <form action="{% url 'translations:catalog' %}" class="d-flex w-100 ms-4 me-5">
                             <button class="btn btn-tertiary">
                                 <i class="bi bi-search"></i>
                             </button>
                             <input name="q" type="search" class="form-control form-control-sm" placeholder="Search entries">
                         </form>
 
-                        <ul class="navbar-nav">
+                        <ul class="navbar-nav d-flex align-items-center">
                             {% if request.user.is_authenticated %}
                                 <li class="nav-item">
                                     <a href="{% url 'users:profile' request.user.id request.user.username %}"
@@ -72,7 +72,7 @@
                                     <a href="{% url 'users:login' %}" class="btn btn-sm btn-outline-primary">Login</a>
                                 </li>
                                 <li class="nav-item active m-1">
-                                    <a href="{% url 'users:register' %}" class="btn btn-sm btn-primary">Sign up</a>
+                                    <a href="{% url 'users:register' %}" class="btn btn-sm btn-primary text-nowrap">Sign up</a>
                                 </li>
                             {% endif %}
                         </ul>

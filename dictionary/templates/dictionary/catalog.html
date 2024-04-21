@@ -1,12 +1,30 @@
 {% extends 'dictionary/base.html' %}
 
 {% block content %}
-    <div class="container d-flex align-items-center pb-3 mb-3 border-bottom">
-        <div class="flex-grow-1">
+    <div class="container d-flex flex-wrap align-items-center pb-3 mb-3 border-bottom">
+        <div class="me-auto">
             <h1>Dictionary Entries</h1>
         </div>
-        <div>
-            <a href="{% url 'dictionary:search' %}" class="btn btn-primary">Search</a>
+        <form action="{% url 'dictionary:catalog' lang.code %}" class="d-flex align-items-center me-2">
+            <div class="input-group d-flex flex-nowrap">
+                <input name="q" type="search" class="form-control" style="min-width: 250px;" placeholder="Search" autofocus>
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </form>
+        <div class="dropdown">
+            <a class="btn btn-primary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                Language
+            </a>
+            <ul class="dropdown-menu">
+                <li><a id="akl" href="{% url 'dictionary:catalog' 'akl' %}" class="dropdown-item">
+                    Aklanon
+                </a></li>
+                <li><a id="eng" href="{% url 'dictionary:catalog' 'eng' %}" class="dropdown-item">
+                    English
+                </a></li>
+            </ul>
         </div>
     </div>
 
@@ -15,7 +33,7 @@
             <ul class="list-group">
                 {% for entry in entries %}
                     <li class="list-group-item">
-                        <a href="{% url 'dictionary:entry' entry.word %}">{{ entry.word }}</a>
+                        <a href="{% url 'dictionary:entry' lang.code entry.word %}">{{ entry.word }}</a>
                     </li>
                 {% empty %}
                     No entries
@@ -28,7 +46,7 @@
                 <ul class="list-group">
                     {% for entry in as_definitions %}
                         <li class="list-group-item">
-                            <a href="{% url 'dictionary:entry' entry.word %}">{{ entry.word }}</a>
+                            <a href="{% url 'dictionary:entry' lang.code entry.word %}">{{ entry.word }}</a>
                         </li>
                     {% endfor %}
                 </ul>

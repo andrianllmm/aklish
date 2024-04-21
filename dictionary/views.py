@@ -1,34 +1,40 @@
 from django.shortcuts import render, redirect
-from .models import PartsOfSpeech, Etymology, Classification, Attribute, DictEntry
+from .models import PartsOfSpeech, Origin, Classification, Attribute, DictEntry
+from translations.models import Language
 
 
 def index(request):
-    return redirect("dictionary:catalog")
+    return redirect("dictionary:catalog", "akl")
 
 
-def catalog(request):
+def catalog(request, lang):
+    lang_object = Language.objects.get(code=lang)
+    dict_entries = DictEntry.objects.filter(lang=lang_object)
+
     if query := request.GET.get("q"):
         return render(request, "dictionary/catalog.html", {
             "query": query,
-            "entries": DictEntry.objects.filter(word__icontains=query),
-            "as_definitions": DictEntry.objects.filter(attributes__definition__icontains=query),
+            "entries": dict_entries.filter(word__icontains=query),
+            "as_definitions": dict_entries.filter(attributes__definition__icontains=query),
+            "lang": lang_object,
         })
 
     return render(request, "dictionary/catalog.html", {
-        "entries": DictEntry.objects.all().extra(select={"lower_word": "lower(word)"}).order_by("lower_word"),
+        "entries": dict_entries
+        .extra(select={"lower_word": "lower(word)"})
+        .order_by("lower_word"),
+        "lang": lang_object,
     })
 
 
-def entry(request, word):
-    entry = DictEntry.objects.get(word=word)
-    word = entry.word
-    attributes = entry.attributes.all()
+def entry(request, lang, word):
+    lang_object = Language.objects.get(code=lang)
+    dict_entries = DictEntry.objects.filter(lang=lang_object)
+
+    entry = dict_entries.get(word=word)
 
     return render(request, "dictionary/entry.html", {
-        "word": word,
-        "attributes": attributes.order_by("pos", "classification"),
+        "word": entry.word,
+        "attributes": entry.attributes.all().order_by("pos", "classification"),
+        "lang": lang_object,
     })
-
-
-def search(request):
-    return render(request, "dictionary/search.html")
