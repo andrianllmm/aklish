@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from .forms import AddEntryForm, AddTranslationForm
 from .models import Language, Entry, Translation, Vote
 from dictionary.models import DictEntry
@@ -14,16 +15,49 @@ def homepage(request):
 
 
 def catalog(request):
-    if query := request.GET.get("q"):
-        return render(request, "translations/catalog.html", {
-            "query": query,
-            "entries": Entry.objects.filter(content__icontains=query),
-            "as_translation": Entry.objects.filter(translations__content__icontains=query),
-        })
-    
+    entries = Entry.objects.all().order_by("created_at")
+
+    p = Paginator(entries, 15)
+    page = request.GET.get("page") if request.GET.get("page") else 1
+    entries = p.get_page(page)
+
+    start = max(1, entries.number - 3)
+    end = min(start + 6, entries.paginator.num_pages)
+    page_nums = (range(start, end + 1))
+
     return render(request, "translations/catalog.html", {
-        "entries": Entry.objects.all()
+        "entries": entries,
+        "page_nums": [str(page_num) for page_num in page_nums],
     })
+
+
+def search(request):
+    if query := request.GET.get("q"):
+        entries = Entry.objects.filter(content__icontains=query).order_by("content")
+        as_translations = Entry.objects.filter(translations__content__icontains=query).order_by("content")
+
+        entries_paginator = Paginator(entries, 30)
+        as_translations_paginator = Paginator(as_translations, 30)
+        page = request.GET.get("page") if request.GET.get("page") else 1
+        entries = entries_paginator.get_page(page)
+        if int(page) > entries.paginator.num_pages:
+            entries = None
+        as_translations = as_translations_paginator.get_page(page)
+        if int(page) > as_translations.paginator.num_pages:
+            as_translations = None
+
+        start = max(1, entries.number - 3)
+        end = min(start + 6, entries.paginator.num_pages)
+        page_nums = (range(start, end + 1))
+
+        return render(request, "translations/search.html", {
+            "query": query,
+            "entries": entries,
+            "as_translations": as_translations,
+            "page_nums": [str(page_num) for page_num in page_nums]
+        })
+    else:
+        return render(request, "translations/search.html")
 
 
 def entry(request, entry_id):
@@ -52,7 +86,7 @@ def entry(request, entry_id):
     if entry.bookmarks.filter(pk=request.user.id).exists():
         bookmarked = True
     
-    translations = sorted(entry.translations.all(), key=lambda t: t.vote_count(), reverse=True)
+    translations = sorted(entry.translations.all(), key=lambda t: t.vote_count, reverse=True)
     translations_votes = []
     for translation in translations:
         if request.user.is_authenticated:

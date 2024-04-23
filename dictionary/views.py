@@ -1,30 +1,78 @@
 from django.shortcuts import render, redirect
+from django.core.paginator import Paginator
 from .models import PartsOfSpeech, Origin, Classification, Attribute, DictEntry
 from translations.models import Language
 
 
 def index(request):
-    return redirect("dictionary:catalog", "akl")
+    return redirect("dictionary:catalog", "akl", "a")
 
 
-def catalog(request, lang):
+def catalog(request, lang, letter=None):
     lang_object = Language.objects.get(code=lang)
-    dict_entries = DictEntry.objects.filter(lang=lang_object)
+    entries = DictEntry.objects.filter(lang=lang_object)
 
-    if query := request.GET.get("q"):
+    if letter and letter in "abcdefghijklmnopqrstuvwxyz":
+        entries = entries.filter(word__startswith=letter) \
+        .extra(select={"lower_word": "lower(word)"}) \
+        .order_by("lower_word")
+
+        p = Paginator(entries, 45)
+        page = request.GET.get("page") if request.GET.get("page") else 1
+        entries = p.get_page(page)
+
+        start = max(1, entries.number - 3)
+        end = min(start + 6, entries.paginator.num_pages)
+        page_nums = (range(start, end + 1))
+
         return render(request, "dictionary/catalog.html", {
-            "query": query,
-            "entries": dict_entries.filter(word__icontains=query),
-            "as_definitions": dict_entries.filter(attributes__definition__icontains=query),
+            "entries": entries,
+            "lang": lang_object,
+            "current_letter": letter,
+            "page_nums": [str(page_num) for page_num in page_nums]
+        })
+    else:
+        entries = entries.order_by("?")[:45]
+    
+        return render(request, "dictionary/catalog.html", {
+            "entries": entries,
             "lang": lang_object,
         })
 
-    return render(request, "dictionary/catalog.html", {
-        "entries": dict_entries
-        .extra(select={"lower_word": "lower(word)"})
-        .order_by("lower_word"),
-        "lang": lang_object,
-    })
+
+def search(request, lang):
+    if query := request.GET.get("q"):
+        lang_object = Language.objects.get(code=lang)
+        entries = DictEntry.objects.filter(lang=lang_object) \
+        .filter(word__icontains=query) \
+        .order_by("word")
+        as_definitions = DictEntry.objects.filter(lang=lang_object) \
+        .filter(attributes__definition__icontains=query) \
+        .order_by("word")
+
+        entries_paginator = Paginator(entries, 30)
+        as_definitions_paginator = Paginator(as_definitions, 30)
+        page = request.GET.get("page") if request.GET.get("page") else 1
+        entries = entries_paginator.get_page(page)
+        if int(page) > entries.paginator.num_pages:
+            entries = None
+        as_definitions = as_definitions_paginator.get_page(page)
+        if int(page) > as_definitions.paginator.num_pages:
+            as_definitions = None
+
+        start = max(1, entries.number - 3)
+        end = min(start + 6, entries.paginator.num_pages)
+        page_nums = (range(start, end + 1))
+
+        return render(request, "dictionary/search.html", {
+            "query": query,
+            "entries": entries,
+            "as_definitions": as_definitions,
+            "lang": lang_object,
+            "page_nums": [str(page_num) for page_num in page_nums]
+        })
+    else:
+        return render(request, "dictionary/search.html")
 
 
 def entry(request, lang, word):

@@ -22,5 +22,7 @@ urlpatterns = [
     path("users/", include("users.urls")),
     path("", include("translations.urls")),
     path("dictionary/", include("dictionary.urls")),
-    path("proofreader/", include("proofreader.urls"),)
+    path("dictionary/api/", include("dictionary.api.urls")),
+    path("proofreader/", include("proofreader.urls")),
+    path("proofreader/api/", include("proofreader.api.urls")),
 ]

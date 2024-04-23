@@ -14,17 +14,18 @@ def to_model(file_path, lang):
         errors = []
 
         for entry in entries:
-            print(entry)
+            print(f"{entry['word']}:", end=" ")
 
             lang_object = Language.objects.get(code=lang)
             entry_object, created = DictEntry.objects.get_or_create(word=entry["word"].strip(), lang=lang_object)
 
             for attribute in entry["attributes"]:
+                print(f"{attribute['pos']};", end=" ")
                 if attribute["pos"]:
                     if PartsOfSpeech.objects.filter(code=attribute["pos"].strip()).exists():
                         pos = PartsOfSpeech.objects.get(code=attribute["pos"].strip())
                     else:
-                        errors.append(attribute)
+                        errors.append({"error": "pos", "word": entry["word"], "attribute": attribute["pos"]})
                         continue
                 else:
                     pos = None
@@ -33,7 +34,7 @@ def to_model(file_path, lang):
                     if Origin.objects.filter(code=attribute["origin"].strip()).exists():
                         origin = Origin.objects.get(code=attribute["origin"].strip())
                     else:
-                        errors.append(attribute)
+                        errors.append({"error": "origin", "word": entry["word"], "attribute": attribute["origin"]})
                         continue
                 else:
                     origin = None
@@ -42,7 +43,7 @@ def to_model(file_path, lang):
                     if Classification.objects.filter(code=attribute["classification"].strip()).exists():
                         classification = Classification.objects.get(code=attribute["classification"].strip())
                     else:
-                        errors.append(attribute)
+                        errors.append({"error": "classification", "word": entry["word"], "attribute": attribute["classification"]})
                         continue
                 else:
                     classification = None
@@ -73,7 +74,7 @@ def to_model(file_path, lang):
                             similar_entry = DictEntry.objects.get(word=similar_word.strip())
                             attribute_object.similar.add(similar_entry)
                         else:
-                            errors.append(attribute)
+                            errors.append({"error": "similar", "word": entry["word"], "attribute": attribute["similar"]})
                             continue
 
                 if attribute["opposite"]:
@@ -82,13 +83,16 @@ def to_model(file_path, lang):
                             opposite_entry = DictEntry.objects.get(word=opposite_word.strip())
                             attribute_object.opposite.add(opposite_entry)
                         else:
-                            errors.append(attribute)
+                            errors.append({"error": "opposite", "word": entry["word"], "attribute": attribute["opposite"]})
                             continue
                 
                 if not entry_object.attributes.filter(pk=attribute_object.pk).exists():
                     entry_object.attributes.add(attribute_object)
-
-        print(f"Errors:\n{errors}")
+            print()
+        
+        print("Errors:")
+        for error in errors:
+            print(f"{error['error']} error from {error['word']} ({error['attribute']})")   
 
 
 def delete_all_objects(Model):

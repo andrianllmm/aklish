@@ -27,18 +27,18 @@
         <div class="flex-grow-1">
             <p class="fs-5">{{ entry.content }}</p>
 
-            <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center justify-content-between">
                 <div class="me-auto">
-                    <span class="badge bg-primary p-2">{{ entry.lang.name }}</span>
+                    <span class="badge bg-primary mb-1">{{ entry.lang.name }}</span>
                 </div>
-                <div class="text-muted">
-                    <small class="me-3">
+                <div class="flex-wrap text-muted">
+                    <small class="text-nowrap ms-3">
                         by
                         <a href="{% url 'users:profile' entry.user.id entry.user.username %}"
                         class="text-decoration-none">{{ entry.user.username }}</a>
                         <span class="fw-bold">{{ entry.user.profile.reputation }}</span>
                     </small>
-                    <small>on {{ entry.created_at|date:"d M y" }}</small>
+                    <small class="text-nowrap ms-3">on {{ entry.created_at|date:"d M y" }}</small>
                 </div>
             </div>
         </div>
@@ -89,18 +89,18 @@
                 <div class="flex-grow-1">
                     <p>{{ translation.content }}</p>
 
-                    <div class="d-flex align-items-center">
+                    <div class="d-flex align-items-center justify-content-between">
                         <div class="me-auto">
-                            <span class="badge bg-primary p-2">{{ translation.lang.name }}</span>
+                            <span class="badge bg-primary mb-1">{{ translation.lang.name }}</span>
                         </div>
-                        <div class="text-muted">
-                            <small class="me-3">
+                        <div class="flex-wrap text-muted">
+                            <small class="text-nowrap ms-3">
                                 by
                                 <a href="{% url 'users:profile' entry.user.id entry.user.username %}"
                                 class="text-decoration-none">{{ translation.user.username }}</a>
                                 <span class="fw-bold">{{ translation.user.profile.reputation }}</span>
                             </small>
-                            <small>on {{ translation.created_at|date:"d M y" }}</small>
+                            <small class="text-nowrap ms-3">on {{ translation.created_at|date:"d M y" }}</small>
                         </div>
                     </div>
                 </div>

@@ -5,9 +5,10 @@ from . import views
 app_name = "translations"
 urlpatterns = [
     path("", views.homepage, name="homepage"),
-    path("entries", views.catalog, name="catalog"),
+    path("entries/", views.catalog, name="catalog"),
+    path("search/", views.search, name="search"),
     path("entry/<int:entry_id>", views.entry, name="entry"),
-    path("add", views.add, name="add"),
-    path("bookmark/<int:entry_id>", views.bookmark, name="bookmark"),
-    path("vote/<int:translation_id>", views.vote, name="vote")
+    path("add/", views.add, name="add"),
+    path("bookmark/<int:entry_id>/", views.bookmark, name="bookmark"),
+    path("vote/<int:translation_id>/", views.vote, name="vote")
 ]

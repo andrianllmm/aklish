@@ -9,7 +9,7 @@ from tabulate import tabulate
 
 def proofread_text(text, lang="akl", max_suggestions=5):
     if lang == "akl":
-        spell = get_spellchecker("dictionary/data/akl_freq.json")
+        spell = get_spellchecker("dictionary/raw_data/akl_freq.json")
     else:
         spell = get_spellchecker()
 

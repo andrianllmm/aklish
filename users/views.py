@@ -9,7 +9,7 @@ from .forms import RegisterForm, LoginForm
 
 def index(request):
     return render(request, "users/index.html", {
-        "users": sorted(User.objects.all(), key=lambda user: user.profile.reputation(), reverse=True)
+        "users": sorted(User.objects.all(), key=lambda user: user.profile.reputation, reverse=True)
     })
 
 

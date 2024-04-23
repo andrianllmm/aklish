@@ -54,11 +54,11 @@
                             </li>
                         </ul>
         
-                        <form action="{% url 'translations:catalog' %}" class="d-flex w-100 ms-4 me-5">
+                        <form action="{% url 'translations:search' %}" class="d-flex w-100 ms-4 me-5">
                             <button class="btn btn-tertiary">
                                 <i class="bi bi-search"></i>
                             </button>
-                            <input name="q" type="search" class="form-control form-control-sm" placeholder="Search entries">
+                            <input name="q" type="search" required class="form-control form-control-sm" placeholder="Search entries">
                         </form>
 
                         <ul class="navbar-nav d-flex align-items-center">

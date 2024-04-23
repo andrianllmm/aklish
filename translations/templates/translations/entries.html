@@ -1,0 +1,60 @@
+{% extends 'translations/base.html' %}
+
+{% block content %}
+    <div class="container d-flex flex-wrap align-items-center pb-3 mb-3 border-bottom">
+        <div class="me-auto">
+            <h1>Entries</h1>
+        </div>
+        <div class="d-flex flex-wrap align-items-center">
+            <form action="{% url 'translations:search' %}" class="me-2">
+                <div class="input-group d-flex flex-nowrap mb-1">
+                    <input name="q" type="search" required class="form-control" style="min-width: 250px;" placeholder="Search" autofocus>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </form>
+            <a href="{% url 'translations:add' %}" class="btn btn-primary mb-1">Add</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="mb-3">
+            {% for entry in entries %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <small class="card-subtitle text-muted">
+                            <span class="me-2">{{ entry.translations.count }} translations</span>
+                            <span></span>{{ entry.bookmarks.count }} bookmarks</span>
+                        </small>
+
+                        <h2 class="card-title mb-3 fs-6 fw-normal">
+                            <a href="{% url 'translations:entry' entry.id %}" class="text-decoration-none">
+                                {{ entry.content|slice:125 }}...
+                            </a>
+                        </h2>
+
+                        <div class="d-flex align-items-center">
+                            <div class="me-auto">
+                                <span class="badge bg-primary mb-1">{{ entry.lang.name }}</span>
+                            </div>
+                            <div class="d-flex text-muted">
+                                <small class="me-3">
+                                    by
+                                    <a href="{% url 'users:profile' entry.user.id entry.user.username %}"
+                                    class="text-decoration-none">{{ entry.user.username }}</a>
+                                    <span class="fw-bold">{{ entry.user.profile.reputation }}</span>
+                                </small>
+                                <small>on {{ entry.created_at|date:"d M y" }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                No entries
+            {% endfor %}
+        </div>
+        
+        {% block additional %}{% endblock %}
+    </div>
+{% endblock %}

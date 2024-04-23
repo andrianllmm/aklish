@@ -1,16 +1,34 @@
-{% extends 'translations/entries.html' %}
+{% extends 'dictionary/entries.html' %}
 
 {% block additional %}
+    {% if as_definitions %}
+        <div class="mb-3">
+            <h2 class="h4">"{{ query }}" as definition</h2>
+            <ul class="list-group">
+                {% for entry in as_definitions %}
+                    <li class="list-group-item">
+                        <a href="{% url 'dictionary:entry' lang.code entry.word %}">{{ entry.word }}</a>
+                        <div>
+                            <span class="badge text-bg-secondary" style="font-size: xx-small;">
+                                {{ entry.attributes.count }}
+                            </span>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
     <nav id="page-pagination">
         <ul class="pagination pagination-sm flex-wrap justify-content-center">
             {% if entries.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?page=1">
+                    <a class="page-link" href="?q={{ request.GET.q }}&page=1">
                         <span>&laquo;</span>
                     </a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ entries.previous_page_number }}">
+                    <a class="page-link" href="?q={{ request.GET.q }}&page={{ entries.previous_page_number }}">
                         <span>&lsaquo;</span>
                     </a>
                 </li>
@@ -26,13 +44,13 @@
             {% for page_num in page_nums %}
                 {% if page_num == request.GET.page %}
                     <li class="page-item">
-                        <a href="?page={{ page_num }}" class="page-link active mb-1">
+                        <a href="?q={{ request.GET.q }}&page={{ page_num }}" class="page-link active mb-1">
                             {{ page_num }}
                         </a>
                     </li>
                 {% else %}
                     <li class="page-item">
-                        <a href="?page={{ page_num }}" class="page-link mb-1">
+                        <a href="?q={{ request.GET.q }}&page={{ page_num }}" class="page-link mb-1">
                             {{ page_num }}
                         </a>
                     </li>
@@ -41,12 +59,12 @@
 
             {% if entries.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ entries.next_page_number }}">
+                    <a class="page-link" href="?q={{ request.GET.q }}&page={{ entries.next_page_number }}">
                         <span>&rsaquo;</span>
                     </a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ entries.paginator.num_pages }}">
+                    <a class="page-link" href="?q={{ request.GET.q }}&page={{ entries.paginator.num_pages }}">
                         <span>&raquo;</span>
                     </a>
                 </li>

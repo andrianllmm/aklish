@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "translations",
     "dictionary",
     "proofreader",
+    "rest_framework",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

@@ -22,7 +22,7 @@ class Entry(models.Model):
 
     class Meta:
         unique_together = ("content", "lang")
-    
+
     def __str__(self):
         return f"{self.content} ({self.lang.code}) by {self.user.username}"
 
@@ -32,12 +32,13 @@ class Translation(models.Model):
     content = models.TextField()
     lang = models.ForeignKey(Language, on_delete=models.PROTECT, related_name="translations")
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name="translations")
+    vote_count = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ("content", "lang", "entry")
     
-    def vote_count(self):
+    def update_vote_count(self):
         total = 0
         for vote in self.votes.all():
             total += vote.direction
@@ -65,6 +66,12 @@ class Vote(models.Model):
 
     class Meta:
         unique_together = ("translation", "user")
+    
+    def save(self, *args, **kwargs):
+        super(Vote, self).save(*args, **kwargs)
+
+        self.translation.update_vote_count()
+        self.translation.user.profile.update_reputation()
 
     def __str__(self):
         return f"{self.direction} ({self.user.username}) ({self.translation.content})"
