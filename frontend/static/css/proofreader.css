@@ -1,0 +1,35 @@
+#proofreader-field {
+    position: relative;
+    width: 100%;
+    height: 250px;
+}
+
+#proofreader-text-input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    white-space-collapse: true;
+    background-color: transparent;
+}
+
+#proofreader-text-marks {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    background-color: transparent;
+    color: transparent;
+}
+
+#proofreader-text-marks > .mispelled {
+    text-decoration-color: red;
+}
+
+#proofreader-suggestions {
+    max-height: 220px;
+    overflow: auto;
+}

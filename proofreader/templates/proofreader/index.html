@@ -1,11 +1,5 @@
 {% extends 'proofreader/base.html' %}
 
-{% block head_additional %}
-    {% load static %}
-    <script src="{% static 'js/proofreader.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'css/proofreader.css' %}">
-{% endblock %}
-
 {% block content %}
     <div class="container d-flex align-items-center mb-3 border-bottom">
         <div class="me-auto">
@@ -20,22 +14,22 @@
         <div class="row mb-2">
             <div class="col p-0">
                 <div class="form-group">
-                    <div id="spellcheck-field">
-                        <textarea name="text-input" id="text-input" cols="30" rows="10"
+                    <div id="proofreader-field">
+                        <textarea id="proofreader-text-input" cols="30" rows="10"
                         placeholder="Start writing here." autofocus
                         class="form-control px-4 py-3 m-0"></textarea>
 
-                        <div name="text-marks" id="text-marks"
+                        <div id="proofreader-text-marks"
                         class="form-control px-4 py-3 m-0"></div>
                     </div>
                 </div>
             </div>
-            <div id="suggestions-col" class="col p-0 ms-3">
+            <div id="proofreader-suggestions-col" class="col p-0 ms-3">
                 <div>
-                    <h5 id="suggestions-header">Suggestions</h5>
+                    <h5 id="proofreader-suggestions-header">Suggestions</h5>
                 </div>
                 <div>
-                    <ul id="suggestions" class="list-group"></ul>
+                    <ul id="proofreader-suggestions" class="list-group"></ul>
                 </div>
             </div>
         </div>

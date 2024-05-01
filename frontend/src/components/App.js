@@ -1,17 +1,24 @@
 import React from 'react';
-import { createRoot } from "react-dom/client";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter as Router, Routes, Route, Link, Redirect } from "react-router-dom";
+import Wordle from "./Games/Wordle/Wordle"
 
 
-function App() {
+export default function App() {
     return (
-        <div>
-            <h1>Hello world</h1>
-        </div>
+        <Router>
+            <Routes>
+                <Route exact path="/games/wordle/" element={<Wordle />}></Route>
+            </Routes>
+        </Router>
     );
 }
 
-const appDiv = document.querySelector("#app");
-const root = createRoot(appDiv);
-root.render(
-    <App />
-);
+window.addEventListener("DOMContentLoaded", function (e) {
+    ReactDOM.createRoot(
+        document.querySelector("#app")
+    )
+    .render(
+        <App />
+    );
+})
