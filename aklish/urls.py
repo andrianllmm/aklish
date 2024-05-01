@@ -25,4 +25,6 @@ urlpatterns = [
     path("dictionary/api/", include("dictionary.api.urls")),
     path("proofreader/", include("proofreader.urls")),
     path("proofreader/api/", include("proofreader.api.urls")),
+    path("games/", include("games.urls")),
+    path("frontend/", include("frontend.urls")),
 ]

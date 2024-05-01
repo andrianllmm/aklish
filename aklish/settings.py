@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     "translations",
     "dictionary",
     "proofreader",
+    "games",
+    "frontend",
     "rest_framework",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -121,7 +123,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    BASE_DIR / "frontend" / "static",
 ]
 
 
