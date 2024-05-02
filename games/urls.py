@@ -4,5 +4,5 @@ from . import views
 
 app_name = "games"
 urlpatterns = [
-    path("wordle/", views.wordle, name="wordle")
+    path("wordle/<str:lang>/", views.wordle, name="wordle")
 ]

@@ -8,7 +8,7 @@ export default function App() {
     return (
         <Router>
             <Routes>
-                <Route exact path="/games/wordle/" element={<Wordle />}></Route>
+                <Route exact path="/games/wordle/:lang" element={<Wordle />}></Route>
             </Routes>
         </Router>
     );

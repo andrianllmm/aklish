@@ -1,27 +1,29 @@
 import React from "react";
+import { useParams } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
 
 export default function Endgame({ show, isCorrect, solution, turn, numGuesses}) {
+    const { lang } = useParams();
+
     return (
         <Modal
         show={show}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
+        size="sm"
         centered
         >
             {isCorrect && 
             <>
                 <Modal.Header>
-                    <Modal.Title id="contained-modal-title-vcenter">
+                    <Modal.Title>
                         You guessed right!
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <h6>The word is "{solution}"</h6>
+                    <h6><a href={`/dictionary/akl/entry/${solution}`}>{solution}</a></h6>
                     <p>
-                    You got it right in {turn} guesses.
+                    You got it in {turn} guesses.
                     </p>
                 </Modal.Body>
             </>
@@ -29,20 +31,20 @@ export default function Endgame({ show, isCorrect, solution, turn, numGuesses}) 
             {!isCorrect && 
             <>
                 <Modal.Header>
-                    <Modal.Title id="contained-modal-title-vcenter">
+                    <Modal.Title>
                         You ran out of guesses!
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <h6>The word is "{solution}"</h6>
+                <h6><a href={`/dictionary/akl/entry/${solution}`}>{solution}</a></h6>
                     <p>
-                    You got it right in {numGuesses} guesses.
+                    You only have {numGuesses} guesses.
                     </p>
                 </Modal.Body>
             </>
             }
             <Modal.Footer>
-                <Button href="/games/wordle">Next</Button>
+                <Button href={`/games/wordle/${lang}`}>Next</Button>
             </Modal.Footer>
         </Modal>
     )

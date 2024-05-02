@@ -1,11 +1,16 @@
 import React from "react";
+import { useParams } from "react-router-dom";
+import Header from "./Header";
 import Grid from "./Grid";
 import Keyboard from "./Keyboard";
+import Message from "./Message";
 import Endgame from "./Endgame";
 
 
 export default function Wordle() {
     const numGuesses = 6;
+    const wordLen = [4, 6];
+    const [lang, setLang] = React.useState(useParams().lang);
     const [solution, setSolution] = React.useState("");
     const [hint, setHint] = React.useState("");
     const [currentGuess, setCurrentGuess] = React.useState("");
@@ -13,10 +18,15 @@ export default function Wordle() {
     const [guesses, setGuesses] = React.useState([...Array(numGuesses)]);
     const [history, setHistory] = React.useState([]);
     const [isCorrect, setIsCorrect] = React.useState(false);
+    const [message, setMessage] = React.useState(null);
     const [endgame, setEndgame] = React.useState(false);
 
     React.useEffect(() => {
-        fetch('/dictionary/api/akl')
+        fetch(
+            `/dictionary/api/${lang}/?` + 
+            `word_len=${wordLen[0]}-${wordLen[1]}&` +
+            `classification!=vul&`
+        )
             .then(response => response.json())
             .then(data => {
                 setSolution(data.word.toLowerCase());
@@ -72,12 +82,12 @@ export default function Wordle() {
     function handleKeyup({key}) {
         if (key === "Enter") {
             if (history.includes(currentGuess)) {
-                console.log("You already tried that word.");
+                setMessage("you already tried that word");
                 return;
             }
 
             if (currentGuess.length !== solution.length) {
-                console.log(`Word must be ${solution.length} long`);
+                setMessage(`word must be ${solution.length} characters long`);
                 return;
             }
 
@@ -120,13 +130,29 @@ export default function Wordle() {
         };
     }, [handleKeyup]);
 
+    React.useEffect(() => {
+        if (message) {
+            const timer = setTimeout(() => {
+                setMessage(null);
+            }, 1500);
+
+            return () => clearTimeout(timer);
+        }
+    }, [message]);
+
     return (
          <>
             {solution && (
                 <div style={{textAlign: "center"}}>
+                    <Header />
                     <div>
-                        <p>Hint: {hint}</p>
+                        <p className="m-2">Hint: <strong>{hint}</strong></p>
                     </div>
+                    {message &&
+                        <div className="d-flex justify-content-center">
+                            <Message message={message} />
+                        </div>
+                    }
                     <Grid solutionLen={solution.length} currentGuess={currentGuess} guesses={guesses} turn={turn}></Grid>
                     <Keyboard handleKeyup={handleKeyup}></Keyboard>
                     {endgame && (

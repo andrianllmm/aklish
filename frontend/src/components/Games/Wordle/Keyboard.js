@@ -1,25 +1,32 @@
 import React from 'react';
 
+
 export default function Keyboard({handleKeyup}) {
     const [keys, setKeys] = React.useState([
         [..."QWERTYUIOP"],
         [..."-ASDFGHJKL'"],
-        ["Backspace", ..."ZXCVBNM", "Enter"]
+        ["Enter", ..."ZXCVBNM", "Backspace"]
     ]);
 
     return (
         <div className="keyboard">
             {keys && keys.map((row, i) => (
-                <div className="row" key={i}>
+                <div className="row my-1" key={i}>
                     {row.map((key, j) => (
-                        <div className="col m-1 p-0" key={j}>
-                            <button
-                            className="key btn btn-secondary"
-                            onClick={() => handleKeyup({ key })}
-                            >
-                                {key}
-                            </button>
-                        </div>
+                        <button
+                        value={key}
+                        className="key col btn btn-secondary p-1 mx-1"
+                        onClick={() => handleKeyup({ key })}
+                        key={j}
+                        >
+                            {key === "Backspace" ? (
+                                <i className="bi bi-backspace"></i>
+                            ) : key === "Enter" ? (
+                                <i className="bi bi-arrow-return-left"></i>
+                            ) : (
+                                key
+                            )}
+                        </button>
                     ))}
                 </div>
             ))}
