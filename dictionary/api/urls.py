@@ -1,9 +1,10 @@
 from django.urls import path
-from .views import DefineWordAPIView
+from . import views
 
 
 app_name = "dictionary_api"
 urlpatterns = [
-    path("<str:lang>/<str:word>", DefineWordAPIView.as_view(), name="define_word"),
-    path("<str:lang>/", DefineWordAPIView.as_view(), name="define_word"),
+    path("<str:lang>/entries/", views.ListDictEntryAPIView.as_view(), name="list_entries"),
+    path("<str:lang>/entry/<str:word>/", views.RetrieveDictEntryAPIView.as_view(), name="retrieve_entry"),
+    path("<str:lang>/entry/", views.RetrieveDictEntryAPIView.as_view(), name="retrieve_entry"),
 ]

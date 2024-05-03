@@ -4,5 +4,5 @@ from . import views
 
 app_name = "proofreader"
 urlpatterns = [
-    path("", views.index, name="index")
+    path("<str:lang>/", views.index, name="index"),
 ]

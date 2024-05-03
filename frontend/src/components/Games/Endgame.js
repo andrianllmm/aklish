@@ -44,7 +44,7 @@ export default function Endgame({ show, isCorrect, solution, turn, numGuesses}) 
             </>
             }
             <Modal.Footer>
-                <Button href={`/games/wordle/${lang}`}>Next</Button>
+                <Button onClick={() => {window.location.reload()}}>Next</Button>
             </Modal.Footer>
         </Modal>
     )

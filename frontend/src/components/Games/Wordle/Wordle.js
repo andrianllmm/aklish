@@ -1,10 +1,10 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import Header from "./Header";
+import Header from "../../Header";
+import Keyboard from "../Keyboard";
+import Message from "../Message";
+import Endgame from "../Endgame";
 import Grid from "./Grid";
-import Keyboard from "./Keyboard";
-import Message from "./Message";
-import Endgame from "./Endgame";
 
 
 export default function Wordle() {
@@ -23,7 +23,7 @@ export default function Wordle() {
 
     React.useEffect(() => {
         fetch(
-            `/dictionary/api/${lang}/?` + 
+            `/dictionary/api/${lang}/entry/?` + 
             `word_len=${wordLen[0]}-${wordLen[1]}&` +
             `classification!=vul&`
         )
@@ -82,12 +82,12 @@ export default function Wordle() {
     function handleKeyup({key}) {
         if (key === "Enter") {
             if (history.includes(currentGuess)) {
-                setMessage("you already tried that word");
+                setMessage(["you already tried that word", "warning"]);
                 return;
             }
 
             if (currentGuess.length !== solution.length) {
-                setMessage(`word must be ${solution.length} characters long`);
+                setMessage([`word must be ${solution.length} characters long`, "warning"]);
                 return;
             }
 
@@ -141,30 +141,32 @@ export default function Wordle() {
     }, [message]);
 
     return (
-         <>
+        <>
             {solution && (
-                <div style={{textAlign: "center"}}>
-                    <Header />
-                    <div>
-                        <p className="m-2">Hint: <strong>{hint}</strong></p>
-                    </div>
-                    {message &&
-                        <div className="d-flex justify-content-center">
-                            <Message message={message} />
+                <>
+                    <Header title="Wordle" />
+                    <div className="text-center">
+                        <div>
+                            <p className="m-2">Hint: <strong>{hint}</strong></p>
                         </div>
-                    }
-                    <Grid solutionLen={solution.length} currentGuess={currentGuess} guesses={guesses} turn={turn}></Grid>
-                    <Keyboard handleKeyup={handleKeyup}></Keyboard>
-                    {endgame && (
-                        <Endgame
-                        show={endgame}
-                        isCorrect={isCorrect}
-                        solution={solution}
-                        turn={turn}
-                        numGuesses={numGuesses}
-                        />
-                    )}
-                </div>
+                        {message &&
+                            <div className="d-flex justify-content-center">
+                                <Message message={message[0]} variant={message[1]}/>
+                            </div>
+                        }
+                        <Grid solutionLen={solution.length} currentGuess={currentGuess} guesses={guesses} turn={turn}></Grid>
+                        <Keyboard handleKeyup={handleKeyup}></Keyboard>
+                        {endgame && (
+                            <Endgame
+                            show={endgame}
+                            isCorrect={isCorrect}
+                            solution={solution}
+                            turn={turn}
+                            numGuesses={numGuesses}
+                            />
+                        )}
+                    </div>
+                </>
             )}
         </>
     )

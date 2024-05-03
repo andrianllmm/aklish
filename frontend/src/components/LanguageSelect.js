@@ -1,14 +1,21 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { Link, useLocation, useParams, useNavigate } from "react-router-dom";
 import Form from "react-bootstrap/Form";
-
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 
 export default function LanguageSelect() {
     const { lang } = useParams();
 
+    const location = useLocation();
+    const parentPath = location.pathname.split("/").filter(Boolean).slice(0, -1).join("/");
+
+    const navigate = useNavigate();
+
     function handleChange(event) {
         const selectedLang = event.target.value;
-        window.location.href = `/games/wordle/${selectedLang}`;
+        navigate(`../${parentPath}/${selectedLang}`);
+        navigate(0);
     };
 
     return (

@@ -1,52 +1,5 @@
 {% extends 'proofreader/base.html' %}
 
 {% block content %}
-    <div class="container d-flex align-items-center mb-3 border-bottom">
-        <div class="me-auto">
-            <h1>Proofreader</h1>
-        </div>
-        <select name="lang" id="lang" class="form-select" style="width: 25%; min-width: 150px;">
-            <option value="akl" selected>Aklanon</option>
-            <option value="eng">English</option>
-        </select>
-    </div>
-    <div class="container mb-3">
-        <div class="row mb-2">
-            <div class="col p-0">
-                <div class="form-group">
-                    <div id="proofreader-field">
-                        <textarea id="proofreader-text-input" cols="30" rows="10"
-                        placeholder="Start writing here." autofocus
-                        class="form-control px-4 py-3 m-0"></textarea>
-
-                        <div id="proofreader-text-marks"
-                        class="form-control px-4 py-3 m-0"></div>
-                    </div>
-                </div>
-            </div>
-            <div id="proofreader-suggestions-col" class="col p-0 ms-3">
-                <div>
-                    <h5 id="proofreader-suggestions-header">Suggestions</h5>
-                </div>
-                <div>
-                    <ul id="proofreader-suggestions" class="list-group"></ul>
-                </div>
-            </div>
-        </div>
-        <div class="d-flex align-items-center">
-            <div class="me-auto">
-                <small class="me-2"><strong id="word-count"></strong> words</small>
-                <small class="me-2"><strong id="mistake-count"></strong> mistakes</small>
-                <small><strong id="correctness"></strong> correct</small>
-            </div>
-            <div>
-                <button id="hide-suggestions" class="btn">
-                    <i class="bi bi-eye-slash"></i>
-                </button>
-                <button id="show-suggestions" class="btn btn-outline-secondary me-2">
-                    <i class="bi bi-spellcheck"></i> <small>Proofread</small>
-                </button>
-            </div>
-        </div>
-    </div>
+    <div id="app"></div>
 {% endblock %}

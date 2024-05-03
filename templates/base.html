@@ -6,7 +6,6 @@
         <title>{% block title %} Aklish {% endblock %}</title>
         {% load static %}
         <link rel="stylesheet" href="{% static 'css/main.css' %}">
-        <link rel="stylesheet" href="{% static 'css/proofreader.css' %}">
         <link rel="stylesheet" href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}">
         <link rel="stylesheet" href="{% static 'bootstrap-icons/font/bootstrap-icons.min.css' %}">
         {% block head_additional %}{% endblock %}
@@ -37,7 +36,7 @@
                                   Tools
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="{% url 'proofreader:index' %}" class="dropdown-item">Proofreader</a></li>
+                                    <li><a href="{% url 'proofreader:index' 'akl' %}" class="dropdown-item">Proofreader</a></li>
                                 </ul>
                             </li>
                             <li class="nav-item dropdown">
@@ -45,7 +44,12 @@
                                   Games
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="{% url 'games:wordle' 'akl' %}" class="dropdown-item">Wordle</a></li>
+                                    <li><a href="{% url 'games:wordle' 'akl' %}" class="dropdown-item">
+                                        Wordle
+                                    </a></li>
+                                    <li><a href="{% url 'games:match' 'akl' %}" class="dropdown-item">
+                                        Match
+                                    </a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -91,7 +95,6 @@
         <footer class="container"></footer>
 
         <script src="{% static 'js/main.js' %}"></script>
-        <script src="{% static 'js/proofreader.js' %}"></script>
         <script src="{% static 'bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
         <script>
             const switchTheme = document.querySelector("#switch-theme");
