@@ -63,8 +63,13 @@ def to_model(file_path, lang):
                             content=example, lang=lang_object, user=user_object
                         )
                         if example_translation:
+                            match lang_object.code:
+                                case "akl":
+                                    example_translation_lang = Language.objects.get(code="eng")
+                                case "eng":
+                                    example_translation_lang = Language.objects.get(code="akl")
                             Translation.objects.create(
-                                entry=example_entry, content=example_translation, lang=lang_object, user=user_object
+                                entry=example_entry, content=example_translation, lang=example_translation_lang, user=user_object
                             )
                         attribute_object.examples.add(example_entry)
 
