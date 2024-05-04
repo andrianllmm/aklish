@@ -1,0 +1,26 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+    <div class="container px-4">
+        <div class="container pb-3 mb-3 border-bottom">
+            <div class="mb-2">
+                <h1>{{ user.username }}</h1>
+            </div>
+            <div class="text-muted">
+                <div class="mb-1">
+                    <small class="me-2">Member since {{ user.date_joined|date:'d M y' }}</small>
+                    <small class="me-2">Last active {{ user.last_login|date:'d M y' }}</small>
+                </div>
+                <div class="mb-1">
+                    <small class="me-2">{{ user.email }}</small>
+                </div>
+            </div>
+            {% if user == request.user %}
+                <a href="{% url 'users:logout' %}" class="btn btn-sm btn-warning">Logout</a>
+            {% endif %}
+        </div>
+        <div class="container">
+            {% block body %}{% endblock %}
+        </div>
+    </div>
+{% endblock %}

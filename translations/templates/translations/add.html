@@ -9,9 +9,12 @@
             {% csrf_token %}
             <div class="form-group mb-3 border-bottom">
                 <label for="lang" class="fw-bold mb-2">Language</label>
-                {{ form.lang }}
+                <select name="lang" id="lang" class="form-select mb-2">
+                    <option value="akl">Aklanon</option>
+                    <option value="eng">English</option>
+                </select>
                 <label for="content" class="fw-bold mb-2">Content</label>
-                {{ form.content }}
+                <div id="proofreader-field"></div>
             </div>
             <input type="submit" value="Add entry" class="btn btn-primary">
         </form>

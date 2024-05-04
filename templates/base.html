@@ -79,7 +79,7 @@
 
                         <div class="mx-2">
                             <button id="switch-theme" class="btn">
-                                <i class="bi bi-moon"></i>
+                                <i class="bi bi-moon-fill"></i>
                             </button>
                         </div>
                     </div>
@@ -100,22 +100,40 @@
             const switchTheme = document.querySelector("#switch-theme");
             const switchThemeIcon = document.createElement("i");
             switchThemeIcon.classList.add("bi");
-
-            switchTheme.addEventListener("click", () => {
-                console.log("clicked");
+        
+            const toggleTheme = () => {
                 const htmlElement = document.documentElement;
                 if (htmlElement.dataset.bsTheme == "light") {
                     htmlElement.dataset.bsTheme = "dark";
                     switchThemeIcon.classList.remove("bi-moon");
                     switchThemeIcon.classList.add("bi-moon-fill");
+                    localStorage.setItem("theme", "dark");
                 } else {
                     htmlElement.dataset.bsTheme = "light";
                     switchThemeIcon.classList.remove("bi-moon-fill");
                     switchThemeIcon.classList.add("bi-moon");
+                    localStorage.setItem("theme", "light");
                 }
+            };
+        
+            const setThemeFromLocalStorage = () => {
+                const storedTheme = localStorage.getItem("theme");
+                if (storedTheme) {
+                    const htmlElement = document.documentElement;
+                    htmlElement.dataset.bsTheme = storedTheme;
+                    if (storedTheme === "dark") {
+                        switchThemeIcon.classList.add("bi-moon-fill");
+                    }
+                }
+            };
+        
+            switchTheme.addEventListener("click", () => {
+                toggleTheme();
                 switchTheme.innerHTML = "";
                 switchTheme.appendChild(switchThemeIcon);
             });
-        </script>
+        
+            setThemeFromLocalStorage();
+        </script>        
     </body>
 </html>

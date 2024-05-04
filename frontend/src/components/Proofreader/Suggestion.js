@@ -4,6 +4,7 @@ import escapeRegExp from "./escapeRegExp";
 
 export default function Suggestion({ check, setGenerateSuggestions, setTextInput }) {
     const handleSuggestionClick = (event) => {
+        event.preventDefault();
         const changefrom = event.target.getAttribute("data-changefrom");
         const changeto = event.target.getAttribute("data-changeto");
         const replaceMode = event.target.parentNode.parentNode.querySelector(".replace-mode").value;
@@ -20,11 +21,11 @@ export default function Suggestion({ check, setGenerateSuggestions, setTextInput
     return (
         <li className="list-group-item">
             <div className="d-flex mb-2">
-                <u style={{ textDecorationColor: "red" }}>{check.token}</u>
+                <span>{check.token}</span>
             </div>
             {check.suggestions && (
                 <div className="d-flex mb-2">
-                    <select className="replace-mode form-select form-select-sm me-auto" style={{ width: "150px" }}>
+                    <select className="replace-mode form-select form-select-sm me-auto" style={{maxWidth: "110px", fontSize: "small"}}>
                         <option value="replace">Replace</option>
                         <option value="replace-all">Replace all</option>
                     </select>

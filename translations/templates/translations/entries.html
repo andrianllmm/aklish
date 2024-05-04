@@ -36,9 +36,10 @@
 
                         <div class="d-flex align-items-center">
                             <div class="me-auto">
-                                <span class="badge bg-primary mb-1">{{ entry.lang.name }}</span>
+                                <small class="me-1"><strong>{{ entry.correctness }}%</strong></small>
+                                <span class="badge bg-primary">{{ entry.lang.name }}</span>
                             </div>
-                            <div class="d-flex text-muted">
+                            <div class="d-flex flex-wrap justify-conent-end text-muted">
                                 <small class="me-3">
                                     by
                                     <a href="{% url 'users:profile' entry.user.id entry.user.username %}"

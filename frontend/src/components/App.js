@@ -18,7 +18,7 @@ export default function App() {
     );
 }
 
-window.addEventListener("DOMContentLoaded", function (e) {
+window.addEventListener("DOMContentLoaded", function (event) {
     ReactDOM.createRoot(
         document.querySelector("#app")
     )

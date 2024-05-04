@@ -14,8 +14,10 @@ class Profile(models.Model):
 
         reputation = 0
         for translation in user.translations.all():
-            reputation += translation.upvote_count() * 10
-            reputation -= translation.downvote_count() * 5
+            upvote_points = translation.upvote_count() * 10
+            reputation += upvote_points + upvote_points * (translation.correctness / 100)
+            downvote_points = (translation.downvote_count() * 5)
+            reputation -= downvote_points - downvote_points * (translation.correctness / 100)
 
         self.reputation = reputation
         self.save()

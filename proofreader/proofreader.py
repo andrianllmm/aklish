@@ -13,7 +13,7 @@ def proofread_text(text, lang="akl", max_suggestions=5):
     else:
         spell = get_spellchecker()
 
-    checks = []
+    data = {"checks": [], "word_count": 0, "mistake_count": 0, "correctness": None}
 
     sents = sent_tokenize(text.strip())
     for s, sent in enumerate(sents):
@@ -49,18 +49,49 @@ def proofread_text(text, lang="akl", max_suggestions=5):
 
             suggestions = list(suggestions) if suggestions else []
             suggestions = suggestions[:max_suggestions] if len(suggestions) > max_suggestions else suggestions
-            checks.append({
+            data["checks"].append({
                 "token": token,
                 "cls": cls,
                 "valid": valid,
                 "suggestions": suggestions,
             })
+    
+    data["word_count"] = cal_word_count(data["checks"])
+    data["mistake_count"] = cal_mistake_count(data["checks"])
+    data["correctness"] = cal_correctness(data["word_count"], data["mistake_count"])
 
-    return checks
+    return data
 
 
 def clean(token):
     return re.sub(r"[^a-zA-Z'-]", "", token.strip())
+
+
+def cal_word_count(checks):
+    word_count = 0
+    for check in checks:
+        if check["cls"] in ["word", "propn"]:
+            word_count += 1
+    return word_count
+
+
+def cal_mistake_count(checks):
+    mistake_count = 0
+    for check in checks:
+        if check["valid"] == False:
+            mistake_count += 1
+    return mistake_count
+
+
+def cal_correctness(word_count, mistake_count):
+    correctness = None
+    if word_count == 0:
+        pass
+    elif mistake_count == 0:
+        correctness = 100
+    else:
+        correctness = round(100 * (1 - mistake_count / word_count))
+    return correctness
 
 
 def get_spellchecker(file_path=None):
@@ -75,5 +106,5 @@ def get_spellchecker(file_path=None):
 
 if __name__ == "__main__":
     text = input("text: ")
-    checks = proofread_text(text)
-    print("\n" + tabulate(checks, headers="keys") + "\n")
+    data = proofread_text(text)
+    print("\n" + tabulate(data, headers="keys") + "\n")

@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from .forms import AddEntryForm, AddTranslationForm
 from .models import Language, Entry, Translation, Vote
 from dictionary.models import DictEntry
 
@@ -64,23 +63,11 @@ def entry(request, entry_id):
     entry = Entry.objects.get(pk=entry_id)
 
     if request.method == "POST":
-        form = AddTranslationForm(request.POST)
-        if form.is_valid():
-            content = form.cleaned_data["content"]
-            lang = form.cleaned_data["lang"]
-            if content and lang:
-                translation, created = Translation.objects.get_or_create(
-                    entry=entry, content=content, lang=lang, user=request.user
-                )
-                if request.POST.get("reverse"):
-                    entry_reverse, created = Entry.objects.get_or_create(
-                        content=content, lang=lang, user=request.user
-                    )
-                    translation_reverse, created = Translation.objects.get_or_create(
-                        entry=entry_reverse, content=entry.content, lang=entry.lang, user=request.user
-                    )
-    else:
-        form = AddTranslationForm()
+        if lang := request.POST.get("lang"):
+            if content := request.POST.get("content"):
+                lang_object = Language.objects.get(code=lang)
+                if lang_object != entry.lang:
+                    Translation.objects.create(entry=entry, lang=lang_object, content=content.strip(), user=request.user)
     
     bookmarked = False
     if entry.bookmarks.filter(pk=request.user.id).exists():
@@ -97,7 +84,6 @@ def entry(request, entry_id):
         translations_votes.append(translation_vote)
 
     return render(request, "translations/entry.html", {
-        "form": form,
         "entry": entry,
         "bookmarked": bookmarked,
         "translations_votes": translations_votes,
@@ -107,18 +93,14 @@ def entry(request, entry_id):
 @login_required(login_url="users:login")
 def add(request):
     if request.method == "POST":
-        form = AddEntryForm(request.POST)
-        if form.is_valid():
-            entry = form.save(commit=False)
-            entry.user = request.user
-            entry.save()
-            return redirect("translations:entry", entry.pk)
-    else:
-        form = AddEntryForm()
+        if lang := request.POST.get("lang"):
+            if content := request.POST.get("content"):
+                lang_object = Language.objects.get(code=lang)
+                entry = Entry.objects.create(lang=lang_object, content=content.strip(), user=request.user)
+                return redirect("translations:entry", entry.pk)
+    
 
-    return render(request, "translations/add.html", {
-        "form": form
-    })
+    return render(request, "translations/add.html")
 
 
 def bookmark(request, entry_id):
@@ -140,10 +122,13 @@ def vote(request, translation_id):
         if request.user.is_authenticated:
             vote, created = Vote.objects.get_or_create(translation=translation, user=request.user)
             if request.POST.get("upvote"):
-                vote.direction = 1 if vote.direction != 1 else 0
+                vote.direction = 1
+                vote.save()
             elif request.POST.get("downvote"):
-                vote.direction = -1 if vote.direction != -1 else 0
-            vote.save()
+                vote.direction = -1
+                vote.save()
+            elif request.POST.get("remove"):
+                vote.delete()
         else:
             return redirect("users:login")
     return redirect("translations:entry", translation.entry.pk)

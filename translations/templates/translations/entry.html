@@ -29,9 +29,10 @@
 
             <div class="d-flex align-items-center justify-content-between">
                 <div class="me-auto">
-                    <span class="badge bg-primary mb-1">{{ entry.lang.name }}</span>
+                    <small class="me-1"><strong>{{ entry.correctness }}%</strong></small>
+                    <span class="badge bg-primary">{{ entry.lang.name }}</span>
                 </div>
-                <div class="flex-wrap text-muted">
+                <div class="d-flex flex-wrap justify-content-end text-muted">
                     <small class="text-nowrap ms-3">
                         by
                         <a href="{% url 'users:profile' entry.user.id entry.user.username %}"
@@ -53,7 +54,7 @@
                         {% csrf_token %}
                         {% if vote %}
                             {% if vote.direction == 1 %}
-                                <button type="submit" name="upvote" value="1"
+                                <button type="submit" name="remove" value="1"
                                 class="btn btn-sm btn-primary rounded-circle">
                                     <i class="bi bi-caret-up-fill"></i>
                                 </button>
@@ -65,7 +66,7 @@
                             {% endif %}
                             <div class="my-1">{{ translation.vote_count }}</div>
                             {% if vote.direction == -1 %}
-                                <button type="submit" name="downvote" value="-1"
+                                <button type="submit" name="remove" value="-1"
                                 class="btn btn-sm btn-primary rounded-circle">
                                     <i class="bi bi-caret-down-fill"></i>
                                 </button>
@@ -91,9 +92,10 @@
 
                     <div class="d-flex align-items-center justify-content-between">
                         <div class="me-auto">
-                            <span class="badge bg-primary mb-1">{{ translation.lang.name }}</span>
+                            <small class="me-1"><strong>{{ translation.correctness }}%</strong></small>
+                            <span class="badge bg-primary">{{ translation.lang.name }}</span>
                         </div>
-                        <div class="flex-wrap text-muted">
+                        <div class="d-flex flex-wrap justify-content-end text-muted">
                             <small class="text-nowrap ms-3">
                                 by
                                 <a href="{% url 'users:profile' entry.user.id entry.user.username %}"
@@ -112,16 +114,19 @@
         {% endfor %}
     </div>
 
-    <div class="container w-75 pb-3 mb-3">
+    <div class="container pb-3 mb-3">
         <h2 class="h5 mb-3">Add translation</h2>
         <form action="{% url 'translations:entry' entry.id %}" method="POST" id="add-translation">
             {% csrf_token %}
-            <input type="hidden" name="entry_lang" value="{{ entry.lang }}" id="entry_lang">
+            <input type="hidden" name="entry_lang" value="{{ entry.lang.code }}" id="entry_lang">
             <div class="form-group pb-3 mb-3">
-                <label for="lang" class="mb-2">Language</label>
-                {{ form.lang }}
-                <label for="content" class="mb-2">Content</label>
-                {{ form.content }}
+                <label for="lang" class="fw-bold mb-2">Language</label>
+                <select name="lang" id="lang" class="form-select mb-2">
+                    <option value="akl">Aklanon</option>
+                    <option value="eng">English</option>
+                </select>
+                <label for="content" class="fw-bold mb-2">Content</label>
+                <div id="proofreader-field"></div>
                 <input type="checkbox" name="reverse" id="reverse">
                 <label for="reverse">Also add translation as entry</label>
             </div>
@@ -130,11 +135,13 @@
     </div>
 
     <script>
-        const targetSelect = document.querySelector("#lang")
-        const sourceLang = document.querySelector("#entry_lang")
-    
-        for (let option of targetSelect.options) {
-            option.disabled = option.innerHTML === sourceLang.value
+        const translationLangSelect = document.querySelector("#lang");
+        const entryLang = document.querySelector("#entry_lang");
+        console.log(entryLang);
+
+        for (const option of translationLangSelect.options) {
+            option.selected = option.value !== entryLang.value;
+            option.disabled = option.value === entryLang.value;
         }
     </script>
 {% endblock %}

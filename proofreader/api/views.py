@@ -1,11 +1,15 @@
-from django.http import JsonResponse
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from ..proofreader import proofread_text
 
 
-def proofread(request, lang="akl"):
-    if text := request.GET.get("text"):
-        checks = proofread_text(text, lang=lang, max_suggestions=3)
+class ProofreadAPIView(APIView):
+    def get(self, request, *args, **kwargs):
+        lang = kwargs.get('lang', 'akl')
+        text = request.GET.get("text")
 
-        return JsonResponse({
-            "checks": checks,
-        })
+        if text:
+            data = proofread_text(text, lang=lang, max_suggestions=3)
+            return Response(data)
+        else:
+            return Response({"error": "Text parameter is required."}, status=400)
