@@ -69,7 +69,7 @@
                                 </li>
                             {% else %}
                                 <li class="nav-item m-1">
-                                    <a href="{% url 'users:login' %}" class="btn btn-sm btn-outline-primary">Login</a>
+                                    <a href="{% url 'users:login' %}?next={{ request.path }}" class="btn btn-sm btn-outline-primary">Login</a>
                                 </li>
                                 <li class="nav-item active m-1">
                                     <a href="{% url 'users:register' %}" class="btn btn-sm btn-primary text-nowrap">Sign up</a>

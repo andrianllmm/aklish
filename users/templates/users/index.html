@@ -1,8 +1,10 @@
 {% extends 'users/base.html' %}
 
+{% load humanize %}
+
 {% block content %}
     <div class="container pb-3 mb-3 border-bottom">
-        <h1>Users</h1>
+        <h1>{{ users.count }} users</h1>
     </div>
 
     <div class="container pb-3 mb-3">
@@ -11,10 +13,24 @@
                 <li class="list-group-item">
                     <div class="d-flex">
                         <div class="me-auto">
-                            <a href="{% url 'users:profile' user.pk user.username %}">{{ user.username }}</a>
+                            <i class="bi bi-award"></i>
+                            <span class="me-2">Rank #{{ forloop.counter }}</span>
                         </div>
                         <div>
                             {{ user.profile.reputation }} reputation
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="me-auto">
+                            <a href="{% url 'users:profile' user.pk user.username %}" class="text-decoration-none">
+                                {{ user.username }}
+                            </a>
+                        </div>
+                        <div class="text-end text-muted">
+                            <small>
+                                <span class="text-nowrap">member for</span>
+                                <span class="text-nowrap">{{ user.date_joined|timesince }}</span>
+                            </small>
                         </div>
                     </div>
                 </li>

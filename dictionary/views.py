@@ -1,7 +1,8 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from .models import PartsOfSpeech, Origin, Classification, Attribute, DictEntry
-from translations.models import Language
+from translations.models import Language, Entry
 
 
 def index(request):
@@ -77,12 +78,35 @@ def search(request, lang):
 
 def entry(request, lang, word):
     lang_object = Language.objects.get(code=lang)
-    dict_entries = DictEntry.objects.filter(lang=lang_object)
-
-    entry = dict_entries.get(word=word)
+    entry = DictEntry.objects.get(word=word, lang=lang_object)
 
     return render(request, "dictionary/entry.html", {
         "word": entry.word,
         "attributes": entry.attributes.all().order_by("pos", "classification"),
+        "lang": lang_object,
+    })
+
+
+@login_required(login_url="users:login")
+def add_example(request, lang, word, attribute_pk):
+    lang_object = Language.objects.get(code=lang)
+    entry = DictEntry.objects.get(word=word, lang=lang_object)
+    attribute = Attribute.objects.get(pk=attribute_pk)
+
+    if request.method == "POST":
+        if content := request.POST.get("content"):
+            example_entry, created = Entry.objects.get_or_create(
+                content=content.strip(),
+                lang=lang_object,
+                user=request.user,
+            )
+
+            attribute.examples.add(example_entry)
+        
+            return redirect("dictionary:entry", lang, word)
+
+    return render(request, "dictionary/add_example.html", {
+        "word": entry.word,
+        "attribute": attribute,
         "lang": lang_object,
     })

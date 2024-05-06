@@ -18,7 +18,7 @@ export default function ProofreaderField({ defaultShowSuggestions }) {
     const [whiteSpaceCount, setWhiteSpaceCount] = useState(0);
     const [showSuggestions, setShowSuggestions] = useState(defaultShowSuggestions || false);
     const [generateSuggestions, setGenerateSuggestions] = useState(false);
-    const fetchUrl = `/proofreader/api/${lang}/?text=${textInput}`;
+    const fetchUrl = `/proofreader/api/${lang}/?text=${textInput.replaceAll("\n", " ")}`;
 
     const langSelect = document.querySelector("#lang");
     if (langSelect) {
@@ -37,10 +37,6 @@ export default function ProofreaderField({ defaultShowSuggestions }) {
     }, [lang]);
 
     useEffect(() => {
-        localStorage.setItem("proofreaderTextInput", textInput);
-    }, [textInput])
-
-    useEffect(() => {
         if (textInput.trim().length > 0) {
             fetch(fetchUrl)
                 .then(response => response.json())
@@ -49,23 +45,7 @@ export default function ProofreaderField({ defaultShowSuggestions }) {
                     setWordCount(data.word_count);
                     setMistakeCount(data.mistake_count);
                     setCorrectness(data.correctness);
-                })
-                .catch(error => {
-                    console.error("Error fetching data: ", error);
-                });
-        } else {
-            setWordCount(0);
-            setMistakeCount(0);
-            setCorrectness(null);
-            setTextMarks("");
-        }
-    }, [textInput, lang]);
 
-    useEffect(() => {
-        if (textInput.trim().length > 0) {
-            fetch(fetchUrl)
-                .then(response => response.json())
-                .then(data => {
                     let markedText = textInput;
                     data.checks.forEach(check => {
                         if (!check.valid) {
@@ -81,6 +61,9 @@ export default function ProofreaderField({ defaultShowSuggestions }) {
                     console.error("Error fetching data: ", error);
                 });
         } else {
+            setWordCount(0);
+            setMistakeCount(0);
+            setCorrectness(null);
             setTextMarks("");
         }
     }, [whiteSpaceCount, generateSuggestions, lang]);
@@ -117,9 +100,21 @@ export default function ProofreaderField({ defaultShowSuggestions }) {
 
     const handleInputChange = (event) => {
         const value = event.target.value;
-        setTextInput(value);
-        setWhiteSpaceCount(value.split(" ").length - 1);
-        setSuggestions(["Typing..."])
+        localStorage.setItem("proofreaderTextInput", value);
+
+        if (value.length > 0) {
+            setTextInput(value);
+            setWhiteSpaceCount(value.split(/\s+/).length - 1);
+            setSuggestions(["Typing..."])
+        } else {
+            setTextInput("");
+            setWhiteSpaceCount(0);
+            setWordCount(0);
+            setMistakeCount(0);
+            setCorrectness(null);
+            setTextMarks("");
+            setSuggestions(["Start typing to get suggestions."]);
+        }
     };
 
     const handleGenerateSuggestions = (event) => {

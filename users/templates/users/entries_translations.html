@@ -13,12 +13,16 @@
                         {{ entry.content|slice:100 }}...
                     </a>
                     {% if request.user == user %}
-                        <form method="POST">
-                            {% csrf_token %}
-                            <input type="hidden" name="entry_to_delete_pk" value="{{ entry.pk }}">
-                            <input type="submit" name="delete_entry" value="Delete"
-                            class="btn btn-sm btn-danger">
-                        </form>
+                        <div class="d-flex flex-nowrap">
+                            <a href="{% url 'translations:edit_entry' entry.pk %}"
+                            class="ms-3 text-decoration-none">
+                                <i class="bi bi-pen"></i>
+                            </a>
+                            <a href="{% url 'translations:delete_entry' entry.pk %}?next={{ request.path }}"
+                            class="text-danger ms-3 text-decoration-none">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
                     {% endif %}
                 </li>
             {% empty %}
@@ -40,12 +44,16 @@
                         {{ translation.content|slice:100 }}...
                     </a>
                     {% if request.user == user %}
-                        <form method="POST">
-                            {% csrf_token %}
-                            <input type="hidden" name="translation_to_delete_pk" value="{{ translation.pk }}">
-                            <input type="submit" name="delete_translation" value="Delete"
-                            class="btn btn-sm btn-danger">
-                        </form>
+                        <div class="d-flex flex-nowrap">
+                            <a href="{% url 'translations:edit_translation' translation.pk %}"
+                            class="ms-3 text-decoration-none">
+                                <i class="bi bi-pen"></i>
+                            </a>
+                            <a href="{% url 'translations:delete_translation' translation.pk %}?next={{ request.path }}"
+                            class="text-danger ms-3 text-decoration-none">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
                     {% endif %}
                 </li>
             {% empty %}

@@ -23,20 +23,18 @@ class Entry(models.Model):
     mistake_count = models.IntegerField(default=0)
     correctness = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
 
     def update_word_count(self):
         data = proofreader.proofread_text(self.content, lang=self.lang.code)
         self.word_count = proofreader.cal_word_count(data["checks"])
-        self.save()
 
     def update_mistake_count(self):
         data = proofreader.proofread_text(self.content, lang=self.lang.code)
         self.mistake_count = proofreader.cal_mistake_count(data["checks"])
-        self.save()
 
     def update_correctness(self):
         self.correctness = proofreader.cal_correctness(self.word_count, self.mistake_count)
-        self.save()
 
     def save(self, *args, **kwargs):
         self.update_word_count()
@@ -61,6 +59,7 @@ class Translation(models.Model):
     mistake_count = models.IntegerField(default=0)
     correctness = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         unique_together = ("content", "lang", "entry")

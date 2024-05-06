@@ -8,7 +8,7 @@ class Profile(models.Model):
 
     def __str__(self):
         return f"{self.user.username}"
-    
+
     def update_reputation(self):
         user = self.user
 
@@ -19,5 +19,5 @@ class Profile(models.Model):
             downvote_points = (translation.downvote_count() * 5)
             reputation -= downvote_points - downvote_points * (translation.correctness / 100)
 
-        self.reputation = reputation
+        self.reputation = round(reputation)
         self.save()

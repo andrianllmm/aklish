@@ -5,12 +5,12 @@
         <ul class="pagination pagination-sm flex-wrap justify-content-center">
             {% if entries.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?page=1">
+                    <a class="page-link" href="?page=1&sort={{ sort }}">
                         <span>&laquo;</span>
                     </a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ entries.previous_page_number }}">
+                    <a class="page-link" href="?page={{ entries.previous_page_number }}&sort={{ sort }}">
                         <span>&lsaquo;</span>
                     </a>
                 </li>
@@ -26,13 +26,13 @@
             {% for page_num in page_nums %}
                 {% if page_num == request.GET.page %}
                     <li class="page-item">
-                        <a href="?page={{ page_num }}" class="page-link active mb-1">
+                        <a href="?page={{ page_num }}&sort={{ sort }}" class="page-link active mb-1">
                             {{ page_num }}
                         </a>
                     </li>
                 {% else %}
                     <li class="page-item">
-                        <a href="?page={{ page_num }}" class="page-link mb-1">
+                        <a href="?page={{ page_num }}&sort={{ sort }}" class="page-link mb-1">
                             {{ page_num }}
                         </a>
                     </li>
@@ -41,12 +41,12 @@
 
             {% if entries.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ entries.next_page_number }}">
+                    <a class="page-link" href="?page={{ entries.next_page_number }}&sort={{ sort }}">
                         <span>&rsaquo;</span>
                     </a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ entries.paginator.num_pages }}">
+                    <a class="page-link" href="?page={{ entries.paginator.num_pages }}&sort={{ sort }}">
                         <span>&raquo;</span>
                     </a>
                 </li>

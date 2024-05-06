@@ -1,11 +1,13 @@
 {% extends 'translations/base.html' %}
 
+{% load humanize %}
+
 {% block content %}
     <div class="container d-flex pb-3 mb-4 border-bottom">
         <div class="me-3 text-center">
             <form action="{% url 'translations:bookmark' entry.pk %}" method="POST">
                 {% csrf_token %}
-                {% if request.user.is_authenticated %}
+                {% if request.user.is_authenticated and request.user != entry.user %}
                     {% if bookmarked %}
                         <button type="submit" class="btn btn-sm">
                             <i class="bi bi-bookmark-fill text-primary"></i>
@@ -25,7 +27,7 @@
         </div>
         
         <div class="flex-grow-1">
-            <p class="fs-5">{{ entry.content }}</p>
+            {{ entry.content|linebreaks }}
 
             <div class="d-flex align-items-center justify-content-between">
                 <div class="me-auto">
@@ -34,12 +36,21 @@
                 </div>
                 <div class="d-flex flex-wrap justify-content-end text-muted">
                     <small class="text-nowrap ms-3">
+                    {% if entry.user == request.user %}
+                        <a href="{% url 'translations:edit_entry' entry.pk %}">
+                            <i class="bi bi-pen"></i>
+                        </a>
+                    {% else %}
+                        <i class="bi bi-pen"></i>
+                    {% endif %}
+                    </small>
+                    <small class="text-nowrap ms-3">
                         by
                         <a href="{% url 'users:profile' entry.user.id entry.user.username %}"
                         class="text-decoration-none">{{ entry.user.username }}</a>
                         <span class="fw-bold">{{ entry.user.profile.reputation }}</span>
                     </small>
-                    <small class="text-nowrap ms-3">on {{ entry.created_at|date:"d M y" }}</small>
+                    <small class="text-nowrap ms-3">{{ entry.modified_at|naturaltime }}</small>
                 </div>
             </div>
         </div>
@@ -52,7 +63,7 @@
                 <div class="me-3 text-center">
                     <form action="{% url 'translations:vote' translation.pk %}" method="POST">
                         {% csrf_token %}
-                        {% if vote %}
+                        {% if request.user.is_authenticated and request.user != entry.user %}
                             {% if vote.direction == 1 %}
                                 <button type="submit" name="remove" value="1"
                                 class="btn btn-sm btn-primary rounded-circle">
@@ -88,7 +99,7 @@
                     </form>
                 </div>
                 <div class="flex-grow-1">
-                    <p>{{ translation.content }}</p>
+                    {{ translation.content|linebreaks }}
 
                     <div class="d-flex align-items-center justify-content-between">
                         <div class="me-auto">
@@ -97,12 +108,21 @@
                         </div>
                         <div class="d-flex flex-wrap justify-content-end text-muted">
                             <small class="text-nowrap ms-3">
+                            {% if translation.user == request.user %}
+                                <a href="{% url 'translations:edit_translation' translation.pk %}">
+                                    <i class="bi bi-pen"></i>
+                                </a>
+                            {% else %}
+                                <i class="bi bi-pen"></i>
+                            {% endif %}
+                            </small>
+                            <small class="text-nowrap ms-3">
                                 by
                                 <a href="{% url 'users:profile' entry.user.id entry.user.username %}"
                                 class="text-decoration-none">{{ translation.user.username }}</a>
                                 <span class="fw-bold">{{ translation.user.profile.reputation }}</span>
                             </small>
-                            <small class="text-nowrap ms-3">on {{ translation.created_at|date:"d M y" }}</small>
+                            <small class="text-nowrap ms-3">{{ translation.modified_at|naturaltime }}</small>
                         </div>
                     </div>
                 </div>
@@ -130,7 +150,13 @@
                 <input type="checkbox" name="reverse" id="reverse">
                 <label for="reverse">Also add translation as entry</label>
             </div>
-            <input type="submit" value="Add Translation" class="btn btn-primary">
+            {% if user.is_authenticated %}
+                <input type="submit" value="Add Translation" class="btn btn-primary">
+            {% else %}
+                <a href="{% url 'users:login' %}?next={{ request.path }}"class="btn btn-secondary">
+                    Login to add Translation
+                </a>
+            {% endif %}
         </form>
     </div>
 

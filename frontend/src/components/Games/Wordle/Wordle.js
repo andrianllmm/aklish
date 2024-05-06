@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import Header from "../../Header";
 import Keyboard from "../Keyboard";
 import Message from "../Message";
-import Endgame from "../Endgame";
+import Endgame from "./Endgame";
 import Grid from "./Grid";
 
 
@@ -21,36 +21,15 @@ export default function Wordle() {
     const [message, setMessage] = React.useState(null);
     const [endgame, setEndgame] = React.useState(false);
 
-    const updateGameStats = async (won, solution, lang) => {
-        try {
-            const response = await fetch(`/games/api/stats/`, {
-                method: "POST",
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({won: won, solution: solution, lang: lang})
-            });
-    
-            if (!response.ok) {
-                throw new Error("Failed to update user stats");
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    };
-    
-    React.useEffect(() => {
-        if (endgame) {
-            updateGameStats(isCorrect, solution, lang);
-        }
-    }, [endgame]);
-
     React.useEffect(() => {
         fetch(
             `/dictionary/api/${lang}/entry/?` + 
             `word_len=${wordLen[0]}-${wordLen[1]}&` +
-            `classification!=vul&`
+            `definition_len=3-20&` +
+            `word_case=lower&` +
+            `definition!^=(&` +
+            `classification!=vul&` +
+            `origin!=eng&`
         )
             .then(response => response.json())
             .then(data => {
@@ -59,6 +38,9 @@ export default function Wordle() {
                 const attributes = data.attributes;
                 const definition = attributes[Math.floor(Math.random() * attributes.length)].definition;
                 setHint(definition);
+            })
+            .catch(error => {
+                console.error("Error fetching data: ", error);
             });
     }, []);
 
@@ -116,8 +98,18 @@ export default function Wordle() {
                 return;
             }
 
-            const formattedGuess = formatGuess();
-            addNewGuess(formattedGuess);
+            fetch(`/dictionary/api/${lang}/entry/?levenshtein=${currentGuess}&distance=1/`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Response was not ok");
+                }
+                const formattedGuess = formatGuess();
+                addNewGuess(formattedGuess);
+            })
+            .catch(error => {
+                setMessage([`${currentGuess} is not in the dictionary`, "warning"]);
+                return;
+            });            
         }
 
         else if (key === "Backspace") {
@@ -164,6 +156,31 @@ export default function Wordle() {
             return () => clearTimeout(timer);
         }
     }, [message]);
+
+    const updateGameStats = async (won, solution, lang) => {
+        try {
+            const response = await fetch(`/games/api/stats/`, {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({won: won, solution: solution, lang: lang})
+            });
+    
+            if (!response.ok) {
+                throw new Error("Failed to update user stats");
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    
+    React.useEffect(() => {
+        if (endgame) {
+            updateGameStats(isCorrect, solution, lang);
+        }
+    }, [endgame]);
 
     return (
         <>

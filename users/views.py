@@ -9,7 +9,7 @@ from .forms import RegisterForm, LoginForm
 
 def index(request):
     return render(request, "users/index.html", {
-        "users": sorted(User.objects.all(), key=lambda user: user.profile.reputation, reverse=True)
+        "users": User.objects.order_by("-profile__reputation", "date_joined")
     })
 
 
@@ -87,7 +87,9 @@ def login(request):
             if user is not None:
                 auth.login(request, user)
 
-                return redirect("translations:homepage")
+                next = request.GET.get("next", "/")
+
+                return redirect(next)
     else:
         form = LoginForm()
 

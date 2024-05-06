@@ -22,6 +22,7 @@ export default function Match() {
             `/dictionary/api/${lang}/entry/?` + 
             `has=similar&` +
             `word_len=${wordLen[0]}-${wordLen[1]}&` +
+            `word_case=lower&` +
             `classification!=vul&`
         )
             .then(response => response.json())
@@ -36,23 +37,50 @@ export default function Match() {
                 similar_list = similar_list.filter(Boolean);
                 const similar_word = similar_list[Math.floor(Math.random() * similar_list.length)];
                 setMatchWord(similar_word.toLowerCase());
+            })
+            .catch(error => {
+                console.error("Error fetching data: ", error);
             });
     }, []);
 
     React.useEffect(() => {
         fetch(
-            `/dictionary/api/${lang}/entries/?` + 
-            `num=3&`
+            `/dictionary/api/${lang}/entries/?` +
+            `word!=${word}&` +
+            `num=3&` +
+            `levenshtein=${matchWord}&` +
+            `distance=3&`
         )
             .then(response => response.json())
             .then(data => {
+                let fetched_choices = [];
                 for (let entry of data) {
-                    setChoices((prev) => {
-                        return [...prev, entry.word.toLowerCase()].sort(() => Math.random() - 0.5);
-                    });
+                    fetched_choices.push(entry.word.toLowerCase());
                 }
+                if (fetched_choices.length < 3) {
+                    fetch(
+                        `/dictionary/api/${lang}/entries/?` +
+                        `word!=${word}&` +
+                        `num=${3 - fetched_choices.length}&`
+                    )
+                        .then(response => response.json())
+                        .then(data => {
+                            for (let entry of data) {
+                                fetched_choices.push(entry.word.toLowerCase());
+                            }
+                            setChoices([...fetched_choices, matchWord].filter(Boolean).sort(() => Math.random() - 0.5));
+                        })
+                        .catch(error => {
+                            console.error("Error fetching data: ", error);
+                        });
+                } else {
+                    setChoices([...fetched_choices, matchWord].filter(Boolean).sort(() => Math.random() - 0.5));
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching data: ", error);
             });
-    }, []);
+    }, [matchWord]);
 
     React.useEffect(() => {
         { matchWord &&
@@ -61,16 +89,6 @@ export default function Match() {
             });
         }
     }, [matchWord]);
-
-    // React.useEffect(() => {
-    //     if (isCorrect !== null) {
-    //         if (isCorrect) {
-    //             setMessage(["Correct", "info"]);
-    //         } else {
-    //             setMessage(["Incorrect", "info"]);
-    //         }
-    //     }
-    // }, [isCorrect]);
 
     const handleChoiceClick = (choice) => {
         if (!answerSelected) {

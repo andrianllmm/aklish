@@ -3,6 +3,7 @@
 {% block content %}
     <div class="container pb-3 mb-3 border-bottom">
         <h1>{{ word }}</h1>
+        <span class="badge bg-primary">{{ lang.name }}</span>
     </div>
     <div class="container pb-3 mb-3">
         <ul class="list-group mb-3">
@@ -24,17 +25,21 @@
                             
                             <span>{{ attribute.definition }}</span>
 
-                            {% if attribute.examples.all %}
-                                <div class="ms-3">
-                                {% for entry in attribute.examples.all %}
-                                    <a href="{% url 'translations:entry' entry.pk %}"
-                                    class="me-1"
-                                    style="font-size: medium; text-decoration: none; color: grey;">
-                                        "{{ entry.content }}"
-                                    </a>
-                                {% endfor %}
-                                </div>
-                            {% endif %}
+                            <div class="d-flex flex-wrap align-items-center ms-3">
+                            {% for entry in attribute.examples.all %}
+                                <a href="{% url 'translations:entry' entry.pk %}"
+                                class="me-2 text-decoration-none"
+                                style="font-size: medium; color: grey;">
+                                    "{{ entry.content }}"
+                                </a>
+                            {% empty %}
+                                <span class="me-2" style="font-size: medium; color: grey;">
+                                    Add an example
+                                </span>
+                            {% endfor %}
+                                <a href="{% url 'dictionary:add_example' lang.code word attribute.pk %}"
+                                class="btn btn-sm btn-outline-secondary px-2 py-0 rounded-pill">+</a>
+                            </div>
 
                             <div class="mt-2 ms-3">
                                 {% if attribute.similar.all %}

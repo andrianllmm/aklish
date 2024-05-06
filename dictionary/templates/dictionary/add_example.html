@@ -1,0 +1,26 @@
+{% extends 'dictionary/base.html' %}
+
+{% block content %}
+    <div class="container pb-3 mb-3 border-bottom">
+        <h1 class="fw-normal">Add an example for
+            <a href="{% url 'dictionary:entry' lang.code word %}" class="text-decoration-none">
+                <strong>"{{ word }}"</strong>
+            </a>
+        </h1>
+        <div>
+            <span class="badge bg-primary me-2">{{ lang.name }}</span>
+            <span class="me-2 fst-italic text-muted">{{ attribute.pos.meaning }}</span>
+            <span class="me-2">{{ attribute.definition }}</span>
+        </div>
+    </div>
+    <div class="container mb-3">
+        <form action="{% url 'dictionary:add_example' lang.code word attribute.pk %}" method="POST">
+            {% csrf_token %}
+            <div class="form-group mb-3 border-bottom">
+                <label for="content" class="fw-bold mb-2">Content</label>
+                <div id="proofreader-field"></div>
+            </div>
+            <input type="submit" value="Add example" class="btn btn-primary">
+        </form>
+    </div>
+{% endblock %}

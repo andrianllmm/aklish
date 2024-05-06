@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "corsheaders",
+    "django.contrib.humanize",
     "django_filters",
+    "django_limits",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -58,6 +60,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
+    "django_limits.middleware.LimitExceededMiddleware",
 ]
 
 ROOT_URLCONF = "aklish.urls"
@@ -163,3 +166,5 @@ CSRF_TRUSTED_ORIGINS = (
     "http://localhost:8000",
     "http://127.0.0.1:8000",
 )
+
+MODEL_LIMIT_CLASS = "users.limiter.UserLimiter"

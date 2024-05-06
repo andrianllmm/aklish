@@ -26,7 +26,12 @@ def proofread_text(text, lang="akl", max_suggestions=5):
             if all(char in string.punctuation for char in token):
                 cls = "punct"
             
-            elif token.replace(".", "").isnumeric():
+            elif token.replace(".", "").isnumeric() \
+            or token.startswith("ika-") and token.replace("ika-", "").isnumeric() \
+            or token.endswith("st") and token.replace("st", "") == "1" \
+            or token.endswith("nd") and token.replace("nd", "") == "2" \
+            or token.endswith("rd") and token.replace("rd", "") == "3" \
+            or token.endswith("th") and token.replace("th", "").isnumeric():
                 cls = "num"
 
             elif len(sents) > 1 and t == 0:
