@@ -1,5 +1,7 @@
+import datetime
+import random
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from .models import PartsOfSpeech, Origin, Classification, Attribute, DictEntry
 from translations.models import Language, Entry
@@ -10,8 +12,15 @@ def index(request):
 
 
 def catalog(request, lang, letter=None):
-    lang_object = Language.objects.get(code=lang)
+    lang_object = get_object_or_404(Language, code=lang)
     entries = DictEntry.objects.filter(lang=lang_object)
+
+    today = datetime.date.today()
+    entry_today = entries.filter(last_selected=today).first()
+    if not entry_today:
+        entry_today = random.choice(entries.all())
+        entry_today.last_selected = today
+        entry_today.save()
 
     if letter and letter in "abcdefghijklmnopqrstuvwxyz":
         entries = entries.filter(word__startswith=letter) \
@@ -30,7 +39,8 @@ def catalog(request, lang, letter=None):
             "entries": entries,
             "lang": lang_object,
             "current_letter": letter,
-            "page_nums": [str(page_num) for page_num in page_nums]
+            "page_nums": [str(page_num) for page_num in page_nums],
+            "entry_today": entry_today,
         })
     else:
         entries = entries.order_by("?")[:45]
@@ -38,14 +48,23 @@ def catalog(request, lang, letter=None):
         return render(request, "dictionary/catalog.html", {
             "entries": entries,
             "lang": lang_object,
+            "entry_today": entry_today,
         })
 
 
 def search(request, lang):
     if query := request.GET.get("q"):
-        lang_object = Language.objects.get(code=lang)
-        entries = DictEntry.objects.filter(lang=lang_object) \
-        .filter(word__icontains=query) \
+        lang_object = get_object_or_404(Language, code=lang)
+        entries = DictEntry.objects.filter(lang=lang_object)
+
+        today = datetime.date.today()
+        entry_today = entries.filter(last_selected=today).first()
+        if not entry_today:
+            entry_today = random.choice(entries.all())
+            entry_today.last_selected = today
+            entry_today.save()
+        
+        entries = entries.filter(word__icontains=query) \
         .order_by("word")
         as_definitions = DictEntry.objects.filter(lang=lang_object) \
         .filter(attributes__definition__icontains=query) \
@@ -70,15 +89,17 @@ def search(request, lang):
             "entries": entries,
             "as_definitions": as_definitions,
             "lang": lang_object,
-            "page_nums": [str(page_num) for page_num in page_nums]
+            "page_nums": [str(page_num) for page_num in page_nums],
+            "entry_today": entry_today,
         })
     else:
-        return render(request, "dictionary/search.html")
+        return render(request, "dictionary/catalog.html")
 
 
+@login_required(login_url="users:login")
 def entry(request, lang, word):
-    lang_object = Language.objects.get(code=lang)
-    entry = DictEntry.objects.get(word=word, lang=lang_object)
+    lang_object = get_object_or_404(Language, code=lang)
+    entry = get_object_or_404(DictEntry, word=word, lang=lang_object)
 
     return render(request, "dictionary/entry.html", {
         "word": entry.word,
@@ -89,9 +110,9 @@ def entry(request, lang, word):
 
 @login_required(login_url="users:login")
 def add_example(request, lang, word, attribute_pk):
-    lang_object = Language.objects.get(code=lang)
-    entry = DictEntry.objects.get(word=word, lang=lang_object)
-    attribute = Attribute.objects.get(pk=attribute_pk)
+    lang_object = get_object_or_404(Language, code=lang)
+    entry = get_object_or_404(DictEntry, word=word, lang=lang_object)
+    attribute = get_object_or_404(Attribute, pk=attribute_pk)
 
     if request.method == "POST":
         if content := request.POST.get("content"):
@@ -109,4 +130,25 @@ def add_example(request, lang, word, attribute_pk):
         "word": entry.word,
         "attribute": attribute,
         "lang": lang_object,
+    })
+
+
+def word_of_the_day(request, lang):
+    lang_object = get_object_or_404(Language, code=lang)
+    entries = DictEntry.objects.filter(lang=lang_object)
+    
+    today = datetime.date.today()
+
+    entry = entries.filter(last_selected=today).first()
+
+    if not entry:
+        entry = random.choice(entries.all())
+        entry.last_selected = today
+        entry.save()
+
+    return render(request, "dictionary/entry.html", {
+        "word": entry.word,
+        "attributes": entry.attributes.all().order_by("pos", "classification"),
+        "lang": lang_object,
+        "word_of_the_day": True,
     })

@@ -4,6 +4,9 @@
     <div class="container pb-3 mb-3 border-bottom">
         <h1>{{ word }}</h1>
         <span class="badge bg-primary">{{ lang.name }}</span>
+        {% if word_of_the_day %}
+            <span class="badge bg-secondary">Word of the day</span>
+        {% endif %}
     </div>
     <div class="container pb-3 mb-3">
         <ul class="list-group mb-3">
@@ -76,10 +79,12 @@
                                 {% endif %}
 
                                 {% if attribute.source %}
-                                    <p class="text-muted mb-1" style="font-size: smaller;">
+                                    <a href="{% url 'main:sources' %}"
+                                    class="text-decoration-none text-muted mb-1"
+                                    style="font-size: smaller;">
                                         <strong class="fw-normal fst-italic">Source:</strong>
                                         {{ attribute.source }}
-                                    </p>
+                                    </a>
                                 {% endif %}
                             </div>
                         </li>

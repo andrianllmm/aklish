@@ -1,6 +1,6 @@
 {% extends 'dictionary/entries.html' %}
 
-{% block additional %}
+{% block list_additional %}
     {% if as_definitions %}
         <div class="mb-3">
             <h2 class="h4">"{{ query }}" as definition</h2>
@@ -20,7 +20,9 @@
             </ul>
         </div>
     {% endif %}
+{% endblock %}
 
+{% block additional %}
     <nav id="page-pagination">
         <ul class="pagination pagination-sm flex-wrap justify-content-center">
             {% if entries.has_previous %}

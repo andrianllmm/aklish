@@ -49,26 +49,49 @@
             </ul>
         </nav>
 
-        {% if entries %}
-            <div class="mb-3">
-                <ul class="list-group">
-                    {% for entry in entries %}
-                        <li class="list-group-item d-flex">
-                            <a href="{% url 'dictionary:entry' lang.code entry.word %}" class="me-auto text-decoration-none">
-                                {{ entry.word }}
-                            </a>
-                            <div>
-                                <span class="badge text-bg-secondary" style="font-size: xx-small;">
-                                    {{ entry.attributes.count }}
-                                </span>
-                            </div>
-                        </li>
-                    {% empty %}
-                        No entries
-                    {% endfor %}
-                </ul>
+        <div class="row g-3">
+            <div class="col-sm-3">
+                <div class="card">
+                    <div class="card-header">
+                        Word of the day
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ entry_today.word }}</h5>
+                        <p class="card-text">
+                            <span class="badge text-bg-secondary">
+                                {{ entry_today.attributes.first.pos.meaning }}
+                            </span>
+                            {{ entry_today.attributes.first.definition }}
+                        </p>
+                        <a href="{% url 'dictionary:entry' entry_today.lang.code entry_today.word %}"
+                        class="btn btn-sm btn-primary">
+                            See entry
+                        </a>
+                    </div>
+                </div>
             </div>
-        {% endif %}
+            <div class="col-sm-9 mb-3">
+                {% if entries %}
+                    <ul class="list-group">
+                        {% for entry in entries %}
+                            <li class="list-group-item d-flex">
+                                <a href="{% url 'dictionary:entry' lang.code entry.word %}" class="me-auto text-decoration-none">
+                                    {{ entry.word }}
+                                </a>
+                                <div>
+                                    <span class="badge text-bg-secondary" style="font-size: xx-small;">
+                                        {{ entry.attributes.count }}
+                                    </span>
+                                </div>
+                            </li>
+                        {% empty %}
+                            No entries
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                {% block list_additional %}{% endblock %}
+            </div>
+        </div>
 
         {% block additional %}{% endblock %}
     </div>

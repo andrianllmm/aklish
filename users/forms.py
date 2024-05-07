@@ -5,13 +5,16 @@ from django.forms.widgets import TextInput, PasswordInput
 
 
 class RegisterForm(UserCreationForm):
+
     class Meta:
         model = User
-        fields = ["username", "email"]
+        fields = ["username", "email", "first_name", "last_name"]
 
         widgets = {
             "username": forms.TextInput(attrs={"class": "form-control mb-2", "autofocus": "true"}),
-            "email": forms.TextInput(attrs={"class": "form-control mb-2"}),
+            "email": forms.TextInput(attrs={"required": "true", "class": "form-control mb-2"}),
+            "first_name": forms.TextInput(attrs={"required": "true", "class": "form-control mb-2"}),
+            "last_name": forms.TextInput(attrs={"required": "true", "class": "form-control mb-2"}),
         }
     
     password1 = forms.CharField(

@@ -4,7 +4,7 @@
     <div class="container px-4">
         <div class="container pb-3 mb-3 border-bottom">
             <div class="mb-2">
-                <h1>{{ user.username }}</h1>
+                <h1>{{ user.first_name }} {{ user.last_name }}</h1>
             </div>
             <div class="text-muted">
                 <div class="mb-1">
@@ -12,6 +12,7 @@
                     <small class="me-2">Last active {{ user.last_login|date:'d M y' }}</small>
                 </div>
                 <div class="mb-1">
+                    <small class="me-2">@{{ user.username }}</small>
                     <small class="me-2">{{ user.email }}</small>
                 </div>
             </div>

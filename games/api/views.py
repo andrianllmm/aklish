@@ -9,15 +9,22 @@ from .serializers import GameStatsSerializer
 class GameStatsAPIView(APIView):
     permission_classes = [AllowAny]
 
+
     def get(self, request, *args, **kwargs):
-        user = self.request.user
+        if not request.user.is_authenticated:
+            return Response({"error": "User not authenticated"}, status=status.HTTP_403_FORBIDDEN)
+
+        user = request.user
         queryset = GameStats.objects.filter(user=user)
         serializer = GameStatsSerializer(queryset, many=True)
         return Response(serializer.data)
     
     def post(self, request, *args, **kwargs):
-        user = self.request.user
-        game_stats, created = GameStats.objects.get_or_create(user=user)
+        if not request.user.is_authenticated:
+            return Response({"error": "User not authenticated"}, status=status.HTTP_403_FORBIDDEN)
+
+        user = request.user
+        game_stats = GameStats.objects.get_or_create(user=user)[0]
         
         won = request.data.get("won")
         solution = request.data.get("solution")

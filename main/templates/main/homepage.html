@@ -1,0 +1,213 @@
+{% extends 'main/base.html' %}
+
+{% load humanize %}
+
+{% block title %}
+    Aklish: From Lingua Franca to Mother Tongue
+{% endblock %}
+
+{% block content %}
+    <div class="container text-center py-2 mb-1 border-bottom">
+        <h1 class="display-1 fw-bold">Aklish</h1>
+        <p class="lead fst-italic">
+            <span class="d-flex flex-nowrap justify-content-center">From Lingua Franca </span>
+            <span class="d-flex flex-nowrap justify-content-center">to Mother Tongue</span>
+        </p>
+    </div>
+
+    <div class="mb-1 d-flex align-items-center justify-content-center border-bottom">
+        <div class="row m-3 d-flex flex-wrap align-items-center justify-content-center"
+        style="max-width: 800px;">
+
+            <div class="col-sm w-100 p-4 m-3 rounded bg-body-tertiary shadow">
+                <h5 class="text-center mb-3">
+                    Imong <strong class="text-primary">hambae</strong>, their translation
+                </h5>
+                <div class="d-flex flex-column justify-content-center">
+                    <textarea id="entry-text-example" name="content" class="form-control mb-2" style="height: 100px;">Ro anwang nagaeugaeog sa eugan-eugan.</textarea>
+                    <a id="add-entry-example" href="{% url 'translations:add' %}" class="btn btn-primary">
+                        Add an entry
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-sm w-100 p-4 m-3 rounded bg-body-tertiary shadow">
+                <h5 class="text-center mb-3">
+                    Their words, imong <strong class="text-primary">pagsalin</strong>
+                </h5>
+                <div class="d-flex flex-column justify-content-center">
+                    <div class="d-flex align-items-center mb-2" style="height: 100px;">
+                        <a href="#"
+                        class="d-flex text-decoration-none">
+                            <i class="bi bi-quote fs-1 m-1"></i>
+                            <p class="p-2">The carabao is swimming in the mud.</p>
+                        </a>
+                    </div>
+                    <a href="{% url 'translations:catalog' %}" class="btn btn-primary">
+                        Translate an entry
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="container p-3 mb-1 border-bottom">
+        <h2 class="h5 text-center mb-1">Contribute to our growing numbers!</h2>
+        <div class="row justify-content-center">
+            <div class="col text-center">
+                <a href="{% url 'translations:add' %}" class="text-decoration-none">
+                    <p class="fs-2 mb-0">{{ entries.count }}</p>
+                    <p class="fs-6">Entries</p>
+                </a>
+            </div>
+            <div class="col text-center">
+                <a href="{% url 'translations:catalog' %}" class="text-decoration-none">
+                    <p class="fs-2 mb-0">{{ translations.count }}</p>
+                    <p class="fs-6">Translations</p>
+                </a>
+            </div>
+            <div class="col text-center">
+                <a href="{% url 'dictionary:catalog' 'akl' %}" class="text-decoration-none">
+                    <p class="fs-2 mb-0">{{ dict_entries.count }}</p>
+                    <p class="fs-6">Words</p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 p-3 mb-1">
+        <h2 class="h5 text-center mb-1">Featured</h2>
+        <div class="col-sm">
+            <div class="card">
+                <div class="card-header">
+                    <i class="bi bi-nut"></i>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Aklanon Spellchecker</h5>
+                    <p class="card-text">
+                        <span class="badge text-bg-secondary mb-2">
+                            proofreader
+                        </span><br>
+                        Are your Aklanon spellings correct?
+                        <div class="p-2 text-center bg-body-tertiary rounded">
+                            saea <u class="link-underline-danger">run</u> hay!
+                        </div>
+                    </p>
+                    <a href="{% url 'proofreader:index' 'akl' %}"
+                    class="btn btn-sm btn-primary">
+                        Try now!
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="card">
+                <div class="card-header">
+                    <i class="bi bi-controller"></i>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Aklanon Wordle</h5>
+                    <p class="card-text">
+                        <span class="badge text-bg-secondary mb-2">
+                            games
+                        </span><br>
+                        Can you guess the secret Aklanon word in 6 turns?
+                        <div class="grid">
+                            <div class="row d-flex">
+                                <div class="misplaced">
+                                    K
+                                </div>
+                                <div class="misplaced">
+                                    A
+                                </div>
+                                <div class="absent">
+                                    L
+                                </div>
+                                <div class="correct">
+                                    A
+                                </div>
+                                <div class="correct">
+                                    N
+                                </div>
+                            </div>
+                        </div>
+                    </p>
+                    <a href="{% url 'games:wordle' 'akl' %}"
+                    class="btn btn-sm btn-primary">
+                        Play now!
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="card">
+                <div class="card-header">
+                    <i class="bi bi-controller"></i>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Aklanon Match</h5>
+                    <p class="card-text">
+                        <span class="badge text-bg-secondary mb-2">
+                            games
+                        </span><br>
+                        Can you identify the synonym of an Aklanon word?
+                        <div class="p-2 d-flex justify-content-center bg-body-tertiary rounded">
+                            <button class="btn btn-sm btn-outline-primary me-1 rounded-pill">
+                                bahoe
+                            </button>
+                            <button class="btn btn-sm btn-danger me-1 rounded-pill">
+                                isot
+                            </button>
+                            <button class="btn btn-sm btn-outline-success me-1 rounded-pill">
+                                eagko
+                            </button>
+                        </div>
+                    </p>
+                    <a href="{% url 'games:match' 'akl' %}"
+                    class="btn btn-sm btn-primary">
+                        Play now!
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="card">
+                <div class="card-header">
+                    <i class="bi bi-people"></i>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Top Users</h5>
+                    <p class="card-text">
+                        <span class="badge text-bg-secondary mb-2">
+                            users
+                        </span><br>
+                        Thanks to all contributors!
+                        {% for user in top_users %}
+                            <div>
+                                <span class="me-1">#{{ forloop.counter }}</span>
+                                <a href="{% url 'users:profile' user.pk user.username %}" class="text-decoration-none">
+                                    <i class="bi bi-person"></i>
+                                    {{ user.username }}
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </p>
+                    <a href="{% url 'users:index' %}"
+                    class="btn btn-sm btn-primary">
+                        See leaderboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const addEntryExample = document.querySelector("#add-entry-example");
+        const entryTextExample = document.querySelector("#entry-text-example");
+
+        addEntryExample.addEventListener("click", (event) => {
+            localStorage.setItem("proofreaderTextInput", entryTextExample.value)
+        })
+    </script>
+{% endblock %}

@@ -31,13 +31,13 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "main",
     "users",
     "translations",
     "dictionary",
     "proofreader",
     "games",
     "rest_framework",
-    "rest_framework.authtoken",
     "corsheaders",
     "django.contrib.humanize",
     "django_filters",

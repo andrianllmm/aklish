@@ -57,6 +57,7 @@ class DictEntry(models.Model):
     word = models.CharField(max_length=100)
     lang = models.ForeignKey(Language, on_delete=models.PROTECT, related_name="dict_entries")
     attributes = models.ManyToManyField(Attribute, blank=True, related_name="entry")
+    last_selected = models.DateField(null=True, blank=True)
 
     class Meta:
         unique_together = ("word", "lang")

@@ -6,14 +6,6 @@ from .models import Language, Entry, Translation, Vote
 from dictionary.models import DictEntry
 
 
-def homepage(request):
-    return render(request, "translations/homepage.html", {
-        "entries": Entry.objects.all(),
-        "translations": Translation.objects.all(),
-        "dict_entries": DictEntry.objects.all(),
-    })
-
-
 def catalog(request):
     sort = request.GET.get("sort", "latest")
 
@@ -101,12 +93,12 @@ def search(request):
 
 
 def entry(request, entry_id):
-    entry = Entry.objects.get(pk=entry_id)
+    entry = get_object_or_404(Entry, pk=entry_id)
 
     if request.method == "POST":
         if lang := request.POST.get("lang"):
             if content := request.POST.get("content"):
-                lang_object = Language.objects.get(code=lang)
+                lang_object = get_object_or_404(Language, code=lang)
                 if lang_object != entry.lang:
                     Translation.objects.create(entry=entry, lang=lang_object, content=content.strip(), user=request.user)
     
@@ -136,7 +128,7 @@ def add(request):
     if request.method == "POST":
         if lang := request.POST.get("lang"):
             if content := request.POST.get("content"):
-                lang_object = Language.objects.get(code=lang)
+                lang_object = get_object_or_404(Language, code=lang)
                 entry = Entry.objects.create(lang=lang_object, content=content.strip(), user=request.user)
                 return redirect("translations:entry", entry.pk)
 
