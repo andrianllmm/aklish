@@ -25,6 +25,9 @@ class Entry(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        unique_together = ("content", "lang")
+
     def update_word_count(self):
         data = proofreader.proofread_text(self.content, lang=self.lang.code)
         self.word_count = proofreader.cal_word_count(data["checks"])
@@ -40,10 +43,8 @@ class Entry(models.Model):
         self.update_word_count()
         self.update_mistake_count()
         self.update_correctness()
+        self.user.profile.update_reputation()
         super().save(*args, **kwargs)
-
-    class Meta:
-        unique_together = ("content", "lang")
 
     def __str__(self):
         return f"{self.content} ({self.lang.code}) by {self.user.username}"
@@ -92,6 +93,7 @@ class Translation(models.Model):
         self.update_word_count()
         self.update_mistake_count()
         self.update_correctness()
+        self.user.profile.update_reputation()
         super().save(*args, **kwargs)
 
     def __str__(self):

@@ -53,6 +53,14 @@
     </div>
 
     <div class="container">
+        <div class="alert p-1 px-2 alert-info alert-dismissible fade show" role="alert">
+            <small>
+                <strong>Note: </strong>
+                The following entries and translations are user-generated;
+                they are not guaranteed for validity.
+            </small>
+            <button type="button" class="btn-close p-2" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         <div class="mb-3">
             {% for entry in entries %}
                 <div class="card mb-3">

@@ -7,8 +7,45 @@
         <h1>{{ users.count }} users</h1>
     </div>
 
-    <div class="container pb-3 mb-3">
-        <ul class="list-group">
+    <div class="row container pb-3 mb-3">
+        <div class="col-md-4 p-3 me-3 mb-3 alert alert-info alert-dismissible fade show">
+            <h5>What is reputation?</h5>
+            <button type="button" class="btn-close p-3" data-bs-dismiss="alert" aria-label="Close"></button>
+            <ul>
+                <li class="mb-2">
+                    <small>It is a rough measurement of how much the community trusts you.</small>
+                </li>
+                <li class="mb-2">
+                    <small>It is displayed next to your username.</small>
+                </li>
+            </ul>
+            <h6>You earn reputation when:</h6>
+            <ul>
+                <li class="mb-2">
+                    <small>add an entry or translation: +1</small>
+                </li>
+                <li class="mb-2">
+                    <small>entry is bookmarked: +2</small>
+                </li>
+                <li class="mb-2">
+                    <small>translation is upvoted: +10</small>
+                </li>
+                <li class="mb-2">
+                    <small>translation is well-proofread: x correctness %</small>
+                </li>
+            </ul>
+            <h6>You lose reputation when:</h6>
+            <ul>
+                <li class="mb-2">
+                    <small>translation is downvoted: -5</small>
+                </li>
+                <li class="mb-2">
+                    <small>translation is not well-proofread: x correctness %</small>
+                </li>
+            </ul>
+            <small>Rise the ranks now!</small>
+        </div>
+        <ul class="col-md list-group">
             {% for user in users %}
                 <li class="list-group-item">
                     <div class="d-flex">

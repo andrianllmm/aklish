@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Profiler } from "react";
 import ReactDOM from "react-dom/client";
 import { useParams } from "react-router-dom";
 import Suggestion from "./Suggestion";
@@ -170,11 +170,14 @@ export default function ProofreaderField({ defaultShowSuggestions }) {
     );
 }
 
-window.addEventListener("DOMContentLoaded", function (event) {
-    ReactDOM.createRoot(
-        document.querySelector("#proofreader-field")
-    )
-    .render(
-        <ProofreaderField />
-    );
-})
+const proofreaderFieldElement = document.querySelector("#proofreader-field");
+if (proofreaderFieldElement) {
+    window.addEventListener("DOMContentLoaded", function (event) {
+        ReactDOM.createRoot(
+            proofreaderFieldElement
+        )
+        .render(
+            <ProofreaderField />
+        );
+    })
+}

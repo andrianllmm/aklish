@@ -17,5 +17,9 @@ def about(request):
     return render(request, "main/about.html")
 
 
+def contact(request):
+    return render(request, "main/contact.html")
+
+
 def sources(request):
     return render(request, "main/sources.html")

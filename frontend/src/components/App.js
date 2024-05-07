@@ -18,11 +18,14 @@ export default function App() {
     );
 }
 
-window.addEventListener("DOMContentLoaded", function (event) {
-    ReactDOM.createRoot(
-        document.querySelector("#app")
-    )
-    .render(
-        <App />
-    );
-})
+const appElement = document.querySelector("#app");
+if (appElement) {
+    window.addEventListener("DOMContentLoaded", () => {
+        ReactDOM.createRoot(
+            appElement
+        )
+        .render(
+            <App />
+        );
+    })
+}
