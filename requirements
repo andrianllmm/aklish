@@ -9,11 +9,13 @@ django-limits==0.0.6
 django-ratelimit==4.1.0
 django-rest-framework==0.1.0
 djangorestframework==3.15.1
+gunicorn==22.0.0
 joblib==1.4.2
 lemminflect==0.2.3
 Levenshtein==0.25.1
 nltk==3.8.1
 numpy==1.26.4
+packaging==24.0
 pandas==2.2.2
 pyspellchecker==0.8.1
 python-dateutil==2.9.0.post0
