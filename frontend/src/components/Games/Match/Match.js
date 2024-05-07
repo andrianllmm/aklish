@@ -39,6 +39,9 @@ export default function Match() {
                 setMatchWord(similar_word.toLowerCase());
             })
             .catch(error => {
+                if (error.response && error.response.status == 403) {
+                    setMessage(["Too many retries. Try again later.", "warning"]);
+                }
                 console.error("Error fetching data: ", error);
             });
     }, []);
@@ -71,6 +74,9 @@ export default function Match() {
                             setChoices([...fetched_choices, matchWord].filter(Boolean).sort(() => Math.random() - 0.5));
                         })
                         .catch(error => {
+                            if (error.response && error.response.status == 403) {
+                                setMessage(["Too many retries. Try again later.", "warning"]);
+                            }
                             console.error("Error fetching data: ", error);
                         });
                 } else {
@@ -78,6 +84,9 @@ export default function Match() {
                 }
             })
             .catch(error => {
+                if (error.respones && error.response.status == 403) {
+                    setMessage(["Too many retries. Try again later.", "warning"]);
+                }
                 console.error("Error fetching data: ", error);
             });
     }, [matchWord]);

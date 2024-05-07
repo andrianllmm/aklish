@@ -40,7 +40,7 @@
                 </div>
             </div>
             <div class="col-md">
-                <form action="{% url 'translations:search' %}">
+                <form action="{% url 'translations:search' %}?sort={{ sort }}">
                     <div class="input-group d-flex flex-nowrap">
                         <input name="q" type="search" required class="form-control" placeholder="Start searching..." autofocus>
                         <button type="submit" class="btn btn-primary">

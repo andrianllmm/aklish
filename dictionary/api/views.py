@@ -138,7 +138,7 @@ class DictEntryFilter:
 
 
 class ListDictEntryAPIView(APIView):
-    @method_decorator(ratelimit(key="user_or_ip", rate="1/s"))
+    @method_decorator(ratelimit(key="user_or_ip", rate="60/m"))
     def get(self, request, lang):
         try:
             lang_object = Language.objects.get(code=lang)

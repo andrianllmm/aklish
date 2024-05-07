@@ -3,6 +3,8 @@ from django.contrib.auth.models import auth
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.utils import timezone
+from .models import Profile, LoginSession
 from translations.models import Language, Entry, Translation, Vote
 from .forms import RegisterForm, LoginForm
 
@@ -11,6 +13,10 @@ def index(request):
     return render(request, "users/index.html", {
         "users": User.objects.order_by("-profile__reputation", "date_joined")
     })
+
+
+def about_reputation(request):
+    return render(request, "users/about_reputation.html")
 
 
 def profile(request, user_id, username):
@@ -60,19 +66,38 @@ def entries_translations(request, user_id, username):
     })
 
 
+@login_required(login_url="users:login")
+def survey(request):
+    # items = [
+    #     "I think that I would like to use Aklish frequently.",
+    #     "I found Aklish unnecessarily complex.",
+    #     "I thought Aklish was easy to use.",
+    #     "I think that I would need the support of a technical person to be able to use Aklish.",
+    #     "I found the various functions in Aklish were well integrated.",
+    #     "I thought there was too much inconsistency in Aklish.",
+    #     "I would imagine that most people would learn to use Aklish very quickly.",
+    #     "I found Aklish very cumbersome to use.",
+    #     "I felt very confident using Aklish.",
+    #     "I needed to learn a lot of things before I could get going with Aklish.",
+    # ]
+    # options = [1, 2, 3, 4, 5]
+
+    return render(request, "users/survey.html", {
+        # "items": items,
+        # "options": options,
+    })
+
+
 def register(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
         if form.is_valid():
             form.save()
-
             return redirect("users:login")
     else:
         form = RegisterForm()
 
-    return render(request, "users/register.html", {
-        "form": form
-    })
+    return render(request, "users/register.html", {"form": form})
 
 
 def login(request):
@@ -87,18 +112,29 @@ def login(request):
             if user is not None:
                 auth.login(request, user)
 
-                next = request.GET.get("next", "/")
+                user.profile.login_count += 1
+                user.profile.save()
 
-                return redirect(next)
+                LoginSession.objects.create(
+                    user=user,
+                    login_at=timezone.now(),
+                )
+
+                next_page = request.GET.get("next", "/")
+                return redirect(next_page)
     else:
         form = LoginForm()
 
-    return render(request, "users/login.html", {
-        "form": form
-    })
+    return render(request, "users/login.html", {"form": form})
 
 
 def logout(request):
+    if request.user.is_authenticated:
+        last_login_session = LoginSession.objects.filter(user=request.user, logout_at=None).order_by("-login_at").first()
+        if last_login_session:
+            last_login_session.logout_at = timezone.now()
+            last_login_session.save()
+    
     auth.logout(request)
 
     return redirect("main:homepage")

@@ -40,6 +40,7 @@ export default function Wordle() {
                 setHint(definition);
             })
             .catch(error => {
+                setMessage(["Too many retries. Try again later.", "warning"]);
                 console.error("Error fetching data: ", error);
             });
     }, []);
@@ -98,7 +99,7 @@ export default function Wordle() {
                 return;
             }
 
-            fetch(`/dictionary/api/${lang}/entry/?levenshtein=${currentGuess}&distance=1/`)
+            fetch(`/dictionary/api/${lang}/entry/?word=${currentGuess}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error("Response was not ok");

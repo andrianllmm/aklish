@@ -13,14 +13,22 @@
             <span class="me-2">{{ attribute.definition }}</span>
         </div>
     </div>
-    <div class="container mb-3">
-        <form action="{% url 'dictionary:add_example' lang.code word attribute.pk %}" method="POST">
-            {% csrf_token %}
-            <div class="form-group mb-3 border-bottom">
-                <label for="content" class="fw-bold mb-2">Content</label>
-                <div id="proofreader-field"></div>
-            </div>
-            <input type="submit" value="Add example" class="btn btn-primary">
-        </form>
-    </div>
+    {% if request.user.profile.reputation < 30 %}
+        <div class="alert alert-warning">
+        You need at least 30 reputation points to add an example. Learn how to gain reputation
+        <a href="{% url 'users:about_reputation' %}">here</a>.
+        </div>
+        <br><br><br><br><br>
+    {% else %}
+        <div class="container mb-3">
+            <form action="{% url 'dictionary:add_example' lang.code word attribute.pk %}" method="POST">
+                {% csrf_token %}
+                <div class="form-group mb-3 border-bottom">
+                    <label for="content" class="fw-bold mb-2">Content</label>
+                    <div id="proofreader-field"></div>
+                </div>
+                <input type="submit" value="Add example" class="btn btn-primary">
+            </form>
+        </div>
+    {% endif %}
 {% endblock %}

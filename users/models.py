@@ -1,9 +1,17 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
+
+
+class LoginSession(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="login_session")
+    login_at = models.DateTimeField(default=timezone.now)
+    logout_at = models.DateTimeField(null=True)
 
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    login_count = models.IntegerField(default=0)
     reputation = models.IntegerField(default=0)
 
     def __str__(self):
