@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -36,6 +37,7 @@ INSTALLED_APPS = [
     "dictionary",
     "proofreader",
     "games",
+    "whitenoise.runserver_nostatic",
     "rest_framework",
     "corsheaders",
     "django_filters",
@@ -51,6 +53,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -135,13 +138,16 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-
 STATIC_URL = "/static/"
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
@@ -152,6 +158,7 @@ REST_FRAMEWORK = {
     ],
 }
 
+
 CORS_ALLOWED_ORIGINS = (
     "http://localhost:3000",
     "http://127.0.0.1:3000",
@@ -159,11 +166,13 @@ CORS_ALLOWED_ORIGINS = (
     "http://127.0.0.1:8000",
 )
 
+
 CSRF_TRUSTED_ORIGINS = (
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
 )
+
 
 MODEL_LIMIT_CLASS = "users.limiter.UserLimiter"
