@@ -3,7 +3,7 @@ import re
 import string
 import nltk
 
-nltk.data.path.append("nltk_data/")
+nltk.data.path.append("/nltk_data/")
 
 from nltk.tokenize import word_tokenize, sent_tokenize
 from spellchecker import SpellChecker
