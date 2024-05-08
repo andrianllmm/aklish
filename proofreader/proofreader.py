@@ -1,8 +1,12 @@
 import lemminflect
 import re
 import string
-from spellchecker import SpellChecker
+import nltk
+
+nltk.data.path.append("nltk_data/")
+
 from nltk.tokenize import word_tokenize, sent_tokenize
+from spellchecker import SpellChecker
 from .stemmer import akl_stemmer
 from tabulate import tabulate
 
