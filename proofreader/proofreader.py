@@ -15,51 +15,52 @@ def proofread_text(text, lang="akl", max_suggestions=5):
 
     data = {"checks": [], "word_count": 0, "mistake_count": 0, "correctness": None}
 
-    sents = sent_tokenize(text.strip())
-    for s, sent in enumerate(sents):
-        words = word_tokenize(sent.strip())
-        for t, token in enumerate(words):
-            cls = "word"
-            valid = True
-            suggestions = []
+    # sents = sent_tokenize(text.strip())
+    # for s, sent in enumerate(sents):
+    #     words = word_tokenize(sent.strip())
+    words = word_tokenize(text.strip())
+    for t, token in enumerate(words):
+        cls = "word"
+        valid = True
+        suggestions = []
 
-            if all(char in string.punctuation for char in token):
-                cls = "punct"
-            
-            elif token.replace(".", "").isnumeric() \
-            or token.startswith("ika-") and token.replace("ika-", "").isnumeric() \
-            or token.endswith("st") and token.replace("st", "") == "1" \
-            or token.endswith("nd") and token.replace("nd", "") == "2" \
-            or token.endswith("rd") and token.replace("rd", "") == "3" \
-            or token.endswith("th") and token.replace("th", "").isnumeric():
-                cls = "num"
+        if all(char in string.punctuation for char in token):
+            cls = "punct"
+        
+        elif token.replace(".", "").isnumeric():
+        # or token.startswith("ika-") and token.replace("ika-", "").isnumeric() \
+        # or token.endswith("st") and token.replace("st", "") == "1" \
+        # or token.endswith("nd") and token.replace("nd", "") == "2" \
+        # or token.endswith("rd") and token.replace("rd", "") == "3" \
+        # or token.endswith("th") and token.replace("th", "").isnumeric():
+            cls = "num"
 
-            elif len(sents) > 1 and t == 0:
-                if token[0].islower():
-                    valid = False
-                    suggestions = [token.capitalize()]
-                elif clean(token.lower()) not in spell:
-                    cls = "propn"
+        # elif len(sents) > 1 and t == 0:
+        #     if token[0].islower():
+        #         valid = False
+        #         suggestions = [token.capitalize()]
+        #     elif clean(token.lower()) not in spell:
+        #         cls = "propn"
 
-            elif token[0].isupper():
-                cls = "propn"
-            
-            elif clean(token) not in spell:
-                if (lang == "akl" and not akl_stemmer.get_stems(clean(token), spell)) or \
-                    (lang == "eng" and not lemminflect.getAllLemmas(clean(token))):
-                    valid = False
-                    suggestions = spell.candidates(clean(token))
-                else:
-                    cls = "stemmed"
+        elif token[0].isupper():
+            cls = "propn"
+        
+        elif clean(token) not in spell:
+            if (lang == "akl" and not akl_stemmer.get_stems(clean(token), spell)) or \
+                (lang == "eng" and not lemminflect.getAllLemmas(clean(token))):
+                valid = False
+                suggestions = spell.candidates(clean(token))
+            else:
+                cls = "stemmed"
 
-            suggestions = list(suggestions) if suggestions else []
-            suggestions = suggestions[:max_suggestions] if len(suggestions) > max_suggestions else suggestions
-            data["checks"].append({
-                "token": token,
-                "cls": cls,
-                "valid": valid,
-                "suggestions": suggestions,
-            })
+        suggestions = list(suggestions) if suggestions else []
+        suggestions = suggestions[:max_suggestions] if len(suggestions) > max_suggestions else suggestions
+        data["checks"].append({
+            "token": token,
+            "cls": cls,
+            "valid": valid,
+            "suggestions": suggestions,
+        })
     
     data["word_count"] = cal_word_count(data["checks"])
     data["mistake_count"] = cal_mistake_count(data["checks"])

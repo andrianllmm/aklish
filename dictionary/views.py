@@ -15,12 +15,16 @@ def catalog(request, lang, letter=None):
     lang_object = get_object_or_404(Language, code=lang)
     entries = DictEntry.objects.filter(lang=lang_object)
 
-    today = datetime.date.today()
-    entry_today = entries.filter(last_selected=today).first()
-    if not entry_today:
-        entry_today = random.choice(entries.all())
-        entry_today.last_selected = today
-        entry_today.save()
+    if entries:
+        today = datetime.date.today()
+        entry_today = entries.filter(last_selected=today).first()
+
+        if not entry_today:
+            entry_today = random.choice(entries.all())
+            entry_today.last_selected = today
+            entry_today.save()
+    else:
+        entry_today = None
 
     if letter and letter in "abcdefghijklmnopqrstuvwxyz":
         entries = entries.filter(word__startswith=letter) \
@@ -57,12 +61,15 @@ def search(request, lang):
         lang_object = get_object_or_404(Language, code=lang)
         entries = DictEntry.objects.filter(lang=lang_object)
 
-        today = datetime.date.today()
-        entry_today = entries.filter(last_selected=today).first()
-        if not entry_today:
-            entry_today = random.choice(entries.all())
-            entry_today.last_selected = today
-            entry_today.save()
+        if entries:
+            today = datetime.date.today()
+            entry_today = entries.filter(last_selected=today).first()
+            if not entry_today:
+                entry_today = random.choice(entries.all())
+                entry_today.last_selected = today
+                entry_today.save()
+        else:
+            entry_today = False
         
         entries = entries.filter(word__icontains=query) \
         .order_by("word")

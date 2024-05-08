@@ -3,7 +3,7 @@ from translations.models import Language, Entry
 
 
 class PartsOfSpeech(models.Model):
-    code = models.CharField(max_length=5, unique=True)
+    code = models.CharField(max_length=10, unique=True)
     meaning = models.CharField(max_length=64)
 
     class Meta:
@@ -14,7 +14,7 @@ class PartsOfSpeech(models.Model):
 
 
 class Origin(models.Model):
-    code = models.CharField(max_length=3, unique=True, null=True)
+    code = models.CharField(max_length=5, unique=True, null=True)
     meaning = models.CharField(max_length=64)
 
     def __str__(self):
@@ -22,7 +22,7 @@ class Origin(models.Model):
 
 
 class Classification(models.Model):
-    code = models.CharField(max_length=4, unique=True)
+    code = models.CharField(max_length=5, unique=True)
     meaning = models.CharField(max_length=64)
 
     class Meta:
