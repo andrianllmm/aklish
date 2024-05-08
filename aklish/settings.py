@@ -151,7 +151,7 @@ USE_TZ = True
 
 STATICFILES_DIRS = [
     BASE_DIR / "frontend/static",
-    BASE_DIR / "frontend/node_modules/",
+    # BASE_DIR / "frontend/node_modules/",
 ]
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
