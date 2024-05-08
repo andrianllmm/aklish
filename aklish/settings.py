@@ -14,6 +14,10 @@ from pathlib import Path
 import os
 import dj_database_url
 from dotenv import load_dotenv
+import nltk
+
+
+nltk.data.path.append("/proofreader/nltk_data")
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
