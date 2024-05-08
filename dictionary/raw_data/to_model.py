@@ -96,14 +96,33 @@ def to_model(file_path, lang):
             json.dump(errors, errors_file, indent=4, ensure_ascii=False)
 
 
-def pos_to_model(file_path):
-    with open(file_path) as infile:
-        pos_list = json.load(infile)
+def attributes_to_model(folder_path=f"{script_dir}/attributes/"):
+    with open(f"{folder_path}/pos.json") as pos_file:
+        pos_list = json.load(pos_file)
     
     for pos in pos_list:
+        print(pos)
         pos_object = PartsOfSpeech.objects.get_or_create(code=pos["code"])[0]
         pos_object.meaning = pos["meaning"]
         pos_object.save()
+    
+    with open(f"{folder_path}/origin.json") as origin_file:
+        origin_list = json.load(origin_file)
+    
+    for origin in origin_list:
+        print(origin)
+        origin_object = Origin.objects.get_or_create(code=origin["code"])[0]
+        origin_object.meaning = origin["meaning"]
+        origin_object.save()
+    
+    with open(f"{folder_path}/classification.json") as classification_file:
+        classification_list = json.load(classification_file)
+    
+    for classification in classification_list:
+        print(classification)
+        classification_object = Classification.objects.get_or_create(code=classification["code"])[0]
+        classification_object.meaning = classification["meaning"]
+        classification_object.save()
 
 
 # def delete_all_objects(Model):
