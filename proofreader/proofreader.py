@@ -2,8 +2,11 @@ import lemminflect
 import re
 import string
 import nltk
+import os
 
-nltk.data.path.append("/nltk_data/")
+script_dir = os.path.dirname(os.path.realpath(__file__))
+
+nltk.data.path.append(f"{script_dir}/nltk_data")
 
 from nltk.tokenize import word_tokenize, sent_tokenize
 from spellchecker import SpellChecker
