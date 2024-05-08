@@ -12,19 +12,29 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
+from dotenv import load_dotenv
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+env_path = load_dotenv(os.path.join(BASE_DIR, ".env"))
+load_dotenv(env_path)
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-pwxp$ki)o2@z-7xv)arm2f88n(7pmg0m6^gj&$m=z7bgrhuxw%"
+# SECRET_KEY = "django-insecure-pwxp$ki)o2@z-7xv)arm2f88n(7pmg0m6^gj&$m=z7bgrhuxw%"
+
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "django-insecure-pwxp$ki)o2@z-7xv)arm2f88n(7pmg0m6^gj&$m=z7bgrhuxw%")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+DEBUG = os.environ.get("DJANGO_DEBUG", "") != "False"
 
 ALLOWED_HOSTS = ["*"]
 
@@ -179,7 +189,10 @@ CSRF_TRUSTED_ORIGINS = (
 MODEL_LIMIT_CLASS = "users.limiter.UserLimiter"
 
 
-import dj_database_url
+SESSION_COOKIE_SECURE = True
+
+CSRF_COOKIE_SECURE = True
+
 
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
