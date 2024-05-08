@@ -3,15 +3,15 @@
 {% load humanize %}
 
 {% block title %}
-    Aklish: From Lingua Franca to Mother Tongue
+    Aklish: An Aklanon & English Platform where your words translate and are translated.
 {% endblock %}
 
 {% block content %}
     <div class="container text-center py-2 mb-1 border-bottom">
         <h1 class="display-1 fw-bold">Aklish</h1>
-        <p class="lead fst-italic">
-            <span class="d-flex flex-nowrap justify-content-center">From Lingua Franca </span>
-            <span class="d-flex flex-nowrap justify-content-center">to Mother Tongue</span>
+        <p class="lead fst-italic" style="font-size: medium;">
+            <span class="d-flex flex-nowrap justify-content-center">An Aklanon & English platform where your</span>
+            <span class="d-flex flex-nowrap justify-content-center">words translate and are translated.</span>
         </p>
     </div>
 
@@ -24,7 +24,7 @@
                     Imong <strong class="text-primary">hambae</strong>, their translation
                 </h5>
                 <div class="d-flex flex-column justify-content-center">
-                    <textarea id="entry-text-example" name="content" class="form-control mb-2" style="height: 100px;">Ro anwang nagaeugaeog sa eugan-eugan.</textarea>
+                    <textarea id="entry-text-example" name="content" autofocus class="form-control mb-2" style="height: 100px;">Ro anwang nagaeugaeog sa eugan-eugan.</textarea>
                     <a id="add-entry-example" href="{% url 'translations:add' %}" class="btn btn-primary">
                         Add an entry
                     </a>
