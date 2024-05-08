@@ -16,10 +16,10 @@ def proofread_text(text, lang="akl", max_suggestions=5):
     data = {"checks": [], "word_count": 0, "mistake_count": 0, "correctness": None}
 
     # sents = sent_tokenize(text.strip())
-    # for s, sent in enumerate(sents):
+    # for sent in sents:
     #     words = word_tokenize(sent.strip())
     words = word_tokenize(text.strip())
-    for t, token in enumerate(words):
+    for token in words:
         cls = "word"
         valid = True
         suggestions = []
