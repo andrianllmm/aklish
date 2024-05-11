@@ -158,31 +158,6 @@ export default function Wordle() {
         }
     }, [message]);
 
-    const updateGameStats = async (won, solution, lang) => {
-        try {
-            const response = await fetch(`/games/api/stats/`, {
-                method: "POST",
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({won: won, solution: solution, lang: lang})
-            });
-    
-            if (!response.ok) {
-                throw new Error("Failed to update user stats");
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    };
-    
-    React.useEffect(() => {
-        if (endgame) {
-            updateGameStats(isCorrect, solution, lang);
-        }
-    }, [endgame]);
-
     return (
         <>
             {solution && (

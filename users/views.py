@@ -66,28 +66,6 @@ def entries_translations(request, user_id, username):
     })
 
 
-@login_required(login_url="users:login")
-def survey(request):
-    # items = [
-    #     "I think that I would like to use Aklish frequently.",
-    #     "I found Aklish unnecessarily complex.",
-    #     "I thought Aklish was easy to use.",
-    #     "I think that I would need the support of a technical person to be able to use Aklish.",
-    #     "I found the various functions in Aklish were well integrated.",
-    #     "I thought there was too much inconsistency in Aklish.",
-    #     "I would imagine that most people would learn to use Aklish very quickly.",
-    #     "I found Aklish very cumbersome to use.",
-    #     "I felt very confident using Aklish.",
-    #     "I needed to learn a lot of things before I could get going with Aklish.",
-    # ]
-    # options = [1, 2, 3, 4, 5]
-
-    return render(request, "users/survey.html", {
-        # "items": items,
-        # "options": options,
-    })
-
-
 def register(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)

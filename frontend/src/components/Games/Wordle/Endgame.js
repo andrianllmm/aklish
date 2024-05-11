@@ -36,7 +36,7 @@ export default function Endgame({ show, isCorrect, solution, turn, numGuesses}) 
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                <h6><a href={`/dictionary/${lang}/entry/${solution}`}>{solution}</a></h6>
+                    <h6><a href={`/dictionary/${lang}/entry/${solution}`}>{solution}</a></h6>
                     <p>
                     You only have {numGuesses} guesses.
                     </p>

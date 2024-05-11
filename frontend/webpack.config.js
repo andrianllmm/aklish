@@ -2,6 +2,7 @@ const path = require("path");
 const webpack = require("webpack");
 
 module.exports = {
+  mode: "development",
   entry: "./src/index.js",
   output: {
     path: path.resolve(__dirname, "./static/js"),
@@ -27,5 +28,12 @@ module.exports = {
         NODE_ENV: JSON.stringify("development"),
       },
     }),
+    new webpack.HotModuleReplacementPlugin(),
   ],
+  devtool: "inline-source-map",
+  devServer: {
+    contentBase: false,
+    publicPath: '/static/js/',
+    hot: true,
+  },
 };

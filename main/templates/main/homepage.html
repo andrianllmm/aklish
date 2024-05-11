@@ -3,44 +3,53 @@
 {% load humanize %}
 
 {% block title %}
-    Aklish: An Aklanon & English Platform where your words translate and are translated.
+    Aklish: The Aklanon & English platform where your words translate and are translated.
 {% endblock %}
 
 {% block content %}
-    <div class="container text-center py-2 mb-1 border-bottom">
+    <div class="container text-center mb-1">
         <h1 class="display-1 fw-bold">Aklish</h1>
-        <p class="lead fst-italic" style="font-size: medium;">
-            <span class="d-flex flex-nowrap justify-content-center">An Aklanon & English platform where your</span>
+        <p class="m-0 lead fst-italic" style="font-size: medium;">
+            <span class="d-flex flex-nowrap justify-content-center">The Aklanon & English platform where your</span>
             <span class="d-flex flex-nowrap justify-content-center">words translate and are translated.</span>
         </p>
     </div>
+
+    <hr>
 
     <div class="mb-1 d-flex align-items-center justify-content-center border-bottom">
         <div class="row m-3 d-flex flex-wrap align-items-center justify-content-center"
         style="max-width: 800px;">
 
-            <div class="col-sm w-100 p-4 m-3 rounded bg-body-tertiary shadow">
+            <div class="col-sm w-100 h-100 p-4 m-3 rounded bg-body-tertiary shadow">
                 <h5 class="text-center mb-3">
                     Imong <strong class="text-primary">hambae</strong>, their translation
                 </h5>
                 <div class="d-flex flex-column justify-content-center">
-                    <textarea id="entry-text-example" name="content" autofocus class="form-control mb-2" style="height: 100px;">Ro anwang nagaeugaeog sa eugan-eugan.</textarea>
+                    <textarea id="entry-text-example" name="content" autofocus
+                    class="form-control mb-2" style="min-height: 100px;"
+                    placeholder="Start writing and share your words to the world here..."></textarea>
                     <a id="add-entry-example" href="{% url 'translations:add' %}" class="btn btn-primary">
                         Add an entry
                     </a>
                 </div>
             </div>
 
-            <div class="col-sm w-100 p-4 m-3 rounded bg-body-tertiary shadow">
+            <div class="col-sm w-100 h-100 p-4 m-3 rounded bg-body-tertiary shadow">
                 <h5 class="text-center mb-3">
                     Their words, imong <strong class="text-primary">pagsalin</strong>
                 </h5>
                 <div class="d-flex flex-column justify-content-center">
-                    <div class="d-flex align-items-center mb-2" style="height: 100px;">
-                        <a href="#"
-                        class="d-flex text-decoration-none">
-                            <i class="bi bi-quote fs-1 m-1"></i>
-                            <p class="p-2">The carabao is swimming in the mud.</p>
+                    <div class="mb-2">
+                        <a href="{% url 'translations:catalog' %}"
+                        class="d-flex text-decoration-none align-items-center">
+                            <i class="bi bi-chat-left-quote-fill fs-1 m-1"></i>
+                            <p class="p-1 m-0">Ro anwang nagaeungaeog sa eugan-eugan.</p>
+                        </a>
+                        <a href="{% url 'translations:catalog' %}"
+                        class="d-flex text-decoration-none align-items-center">
+                            <i class="bi bi-chat-right-quote fs-1 m-1"></i>
+                            <p class="p-1 m-0">The carabao is swimming in the mud.</p>
                         </a>
                     </div>
                     <a href="{% url 'translations:catalog' %}" class="btn btn-primary">
@@ -53,7 +62,13 @@
     </div>
 
     <div class="container p-3 mb-1 border-bottom">
-        <h2 class="h5 text-center mb-1">Contribute to our growing numbers!</h2>
+        <h2 class="h5 text-center mb-1">
+            {% if not request.user.is_authenticated %}
+            <a href="{% url 'users:register' %}">Join us</a> and contribute to our growing numbers!
+            {% else %}
+            <a href="{% url 'translations:add' %}">Contribute</a> to our growing numbers!
+            {% endif %}
+        </h2>
         <div class="row justify-content-center">
             <div class="col text-center">
                 <a href="{% url 'translations:add' %}" class="text-decoration-none">

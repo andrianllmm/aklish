@@ -62,7 +62,7 @@ class DictEntryFilter:
             target_word = levenshtein.strip()
             max_distance = 1
             if max_distance_param := request.query_params.get("max_distance"):
-                max_distance = max(int(max_distance_param), 3)
+                max_distance = max(int(max_distance_param), 5)
             queryset = queryset.filter(
                 Q(word__in=[
                     entry.word
@@ -125,13 +125,13 @@ class DictEntryFilter:
         if has := request.query_params.getlist("has"):
             if "similar" in has:
                 queryset = queryset.filter(attributes__similar__isnull=False)
-            if "oppposite" in has:
+            if "opposite" in has:
                 queryset = queryset.filter(attributes__opposite__isnull=False)
 
         if has_no := request.query_params.getlist("has!"):
             if "similar" in has_no:
                 queryset = queryset.filter(attributes__similar__isnull=True)
-            if "oppposite" in has_no:
+            if "opposite" in has_no:
                 queryset = queryset.filter(attributes__opposite__isnull=True)
 
         return queryset

@@ -1,4 +1,4 @@
-import json, os
+import json, os, sys
 from dictionary.models import PartsOfSpeech, Origin, Classification, Source, Attribute, DictEntry
 from translations.models import Language, Entry, Translation
 from django.contrib.auth.models import User
@@ -22,9 +22,7 @@ def to_model(file_path, lang):
             for attribute in entry["attributes"]:
                 print(f"{attribute['pos']};", end=" ")
 
-                attribute_object = Attribute.objects.get_or_create(
-                    definition=attribute["definition"],
-                )[0]
+                attribute_object = Attribute.objects.create(definition=attribute["definition"])
 
                 if attribute["pos"]:
                     if PartsOfSpeech.objects.filter(code=attribute["pos"].strip()).exists():
@@ -55,6 +53,8 @@ def to_model(file_path, lang):
 
                 if source_title := attribute["source"]:
                     source = Source.objects.get_or_create(title=source_title)[0]
+                else:
+                    source = None
                 
                 attribute_object.pos = pos
                 attribute_object.origin = origin
@@ -64,14 +64,18 @@ def to_model(file_path, lang):
 
                 if attribute["similar"]:
                     for similar_word in attribute["similar"]:
-                        similar_entry = DictEntry.objects.get_or_create(word=similar_word.strip(), lang=lang_object)[0]
-                        attribute_object.similar.add(similar_entry)
+                        if similar_word != entry["word"]:
+                            similar_entry = DictEntry.objects.get_or_create(word=similar_word.strip(), lang=lang_object)[0]
+                            similar_entry.save()
+                            attribute_object.similar.add(similar_entry)
                     attribute_object.save()
 
                 if attribute["opposite"]:
                     for opposite_word in attribute["opposite"]:
-                        opposite_entry = DictEntry.objects.get_or_create(word=opposite_word.strip(), lang=lang_object)[0]
-                        attribute_object.opposite.add(opposite_entry)
+                        if opposite_word != entry["word"]:
+                            opposite_entry = DictEntry.objects.get_or_create(word=opposite_word.strip(), lang=lang_object)[0]
+                            opposite_entry.save()
+                            attribute_object.opposite.add(opposite_entry)
                     attribute_object.save()
                 
                 if attribute["examples"]:
@@ -125,12 +129,6 @@ def attributes_to_model(folder_path=f"{script_dir}/attributes/"):
         classification_object.save()
 
 
-# def delete_all_objects(Model):
-#     Model.objects.all().delete()
-
-
 if __name__ == "__main__":
     pass
-    # Attribute.objects.all().delete()
-    # DictEntry.objects.all().delete()
     # to_model(f"{script_dir}/akl_dictionary.json", lang="akl")

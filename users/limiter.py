@@ -7,8 +7,8 @@ class UserLimiter(Limiter):
     rules = {
         User: [
             {
-                'limit': 70,
-                'message': "Only 70 active users allowed",
+                'limit': 100,
+                'message': "Only 100 active users allowed",
                 'filterset': Q(is_active=True)
             },
             {

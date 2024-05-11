@@ -154,7 +154,8 @@ STATICFILES_DIRS = [
     # BASE_DIR / "frontend/node_modules/",
 ]
 
-STATIC_ROOT = BASE_DIR / "staticfiles"
+if not DEBUG:
+    STATIC_ROOT = BASE_DIR / "staticfiles"
 
 STATIC_URL = "/static/"
 
