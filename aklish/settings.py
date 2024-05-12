@@ -151,7 +151,6 @@ USE_TZ = True
 
 STATICFILES_DIRS = [
     BASE_DIR / "frontend/static",
-    # BASE_DIR / "frontend/node_modules/",
 ]
 
 if not DEBUG:
