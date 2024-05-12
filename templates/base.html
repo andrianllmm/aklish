@@ -11,6 +11,17 @@
         <link rel="stylesheet" href="{% static 'bootstrap-icons/font/bootstrap-icons.min.css' %}">
         {% block head_additional %}{% endblock %}
     </head>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WNR7JSMPJ7"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag("js", new Date());
+
+        gtag("config", "G-WNR7JSMPJ7");
+    </script>
+
     <body>
         <header class="p-0 mb-4">
             <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -225,15 +236,6 @@
             });
         
             setThemeFromLocalStorage();
-        </script>      
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-WNR7JSMPJ7"></script>
-        <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'G-WNR7JSMPJ7');
         </script>
     </body>
 </html>
