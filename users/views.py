@@ -11,7 +11,7 @@ from .forms import RegisterForm, LoginForm
 
 def index(request):
     return render(request, "users/index.html", {
-        "users": User.objects.order_by("-profile__reputation", "date_joined")
+        "users": User.objects.order_by("-profile__reputation", "date_joined").filter(is_active=True).filter(is_staff=False)
     })
 
 
