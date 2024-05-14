@@ -19,11 +19,11 @@
                     {% if request.user == user %}
                         <div class="d-flex flex-nowrap">
                             <a href="{% url 'translations:edit_entry' entry.pk %}"
-                            class="ms-3 text-decoration-none">
+                            class="ms-3 text-decoration-none" aria-label="Edit">
                                 <i class="bi bi-pen"></i>
                             </a>
                             <a href="{% url 'translations:delete_entry' entry.pk %}?next={{ request.path }}"
-                            class="text-danger ms-3 text-decoration-none">
+                            class="text-danger ms-3 text-decoration-none" aria-label="Delete">
                                 <i class="bi bi-trash"></i>
                             </a>
                         </div>
@@ -50,11 +50,11 @@
                     {% if request.user == user %}
                         <div class="d-flex flex-nowrap">
                             <a href="{% url 'translations:edit_translation' translation.pk %}"
-                            class="ms-3 text-decoration-none">
+                            class="ms-3 text-decoration-none" aria-label="Edit">
                                 <i class="bi bi-pen"></i>
                             </a>
                             <a href="{% url 'translations:delete_translation' translation.pk %}?next={{ request.path }}"
-                            class="text-danger ms-3 text-decoration-none">
+                            class="text-danger ms-3 text-decoration-none" aria-label="Trash">
                                 <i class="bi bi-trash"></i>
                             </a>
                         </div>

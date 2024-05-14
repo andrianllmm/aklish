@@ -12,17 +12,11 @@
             <form action="{% url 'translations:bookmark' entry.pk %}" method="POST">
                 {% csrf_token %}
                 {% if request.user.is_authenticated and request.user != entry.user %}
-                    {% if bookmarked %}
-                        <button type="submit" class="btn btn-sm">
-                            <i class="bi bi-bookmark-fill text-primary"></i>
-                        </button>
-                    {% else %}
-                        <button type="submit" class="btn btn-sm">
-                           <i class="bi bi-bookmark text-primary"></i>
-                        </button>
-                    {% endif %}
+                    <button type="submit" class="btn btn-sm" aria-label="Bookmark">
+                        <i class="bi bi-bookmark{% if bookmarked %}-fill{% endif %} text-primary"></i>
+                    </button>
                 {% else %}
-                    <button type="submit" class="btn btn-sm">
+                    <button type="submit" class="btn btn-sm" aria-label="Bookmark">
                         <i class="bi bi-bookmark text-secondary"></i>
                     </button>
                 {% endif %}
@@ -41,11 +35,11 @@
                 <div class="d-flex flex-wrap justify-content-end text-muted">
                     <small class="text-nowrap ms-3">
                     {% if entry.user == request.user %}
-                        <a href="{% url 'translations:edit_entry' entry.pk %}">
+                        <a href="{% url 'translations:edit_entry' entry.pk %}" aria-label="Edit">
                             <i class="bi bi-pen"></i>
                         </a>
                     {% else %}
-                        <i class="bi bi-pen"></i>
+                        <i class="bi bi-pen" aria-label="Edit"></i>
                     {% endif %}
                     </small>
                     <small class="text-nowrap ms-3">
@@ -68,35 +62,29 @@
                     <form action="{% url 'translations:vote' translation.pk %}" method="POST">
                         {% csrf_token %}
                         {% if request.user.is_authenticated and request.user != entry.user %}
-                            {% if vote.direction == 1 %}
-                                <button type="submit" name="remove" value="1"
-                                class="btn btn-sm btn-primary rounded-circle">
-                                    <i class="bi bi-caret-up-fill"></i>
-                                </button>
-                            {% else %}
-                                <button type="submit" name="upvote" value="1"
-                                class="btn btn-sm btn-outline-primary rounded-circle">
-                                    <i class="bi bi-caret-up-fill"></i>
-                                </button>
-                            {% endif %}
-                            <div class="my-1">{{ translation.vote_count }}</div>
-                            {% if vote.direction == -1 %}
-                                <button type="submit" name="remove" value="-1"
-                                class="btn btn-sm btn-primary rounded-circle">
-                                    <i class="bi bi-caret-down-fill"></i>
-                                </button>
-                            {% else %}
-                                <button type="submit" name="downvote" value="-1"
-                                class="btn btn-sm btn-outline-primary rounded-circle">
-                                    <i class="bi bi-caret-down-fill"></i>
-                                </button>
-                            {% endif %}
-                        {% else %}
-                            <button type="submit" class="btn btn-sm btn-outline-secondary rounded-circle">
+                            <button type="submit" value="1"
+                            name="{% if vote.direction != 1 %}upvote{% else %}remove{% endif %}"
+                            class="btn btn-sm btn{% if vote.direction != 1 %}-outline{% endif %}-primary rounded-circle"
+                            aria-label="Upvote">
                                 <i class="bi bi-caret-up-fill"></i>
                             </button>
+
                             <div class="my-1">{{ translation.vote_count }}</div>
-                            <button type="submit"  class="btn btn-sm btn-outline-secondary rounded-circle">
+        
+                            <button type="submit" value="-1"
+                            name="{% if vote.direction != -1 %}downvote{% else %}remove{% endif %}"
+                            class="btn btn-sm btn{% if vote.direction != -1 %}-outline{% endif %}-primary rounded-circle"
+                            aria-label="Downvote">
+                                <i class="bi bi-caret-down-fill"></i>
+                            </button>
+                        {% else %}
+                            <button type="submit" class="btn btn-sm btn-outline-secondary rounded-circle" aria-label="Upwnvote">
+                                <i class="bi bi-caret-up-fill"></i>
+                            </button>
+
+                            <div class="my-1">{{ translation.vote_count }}</div>
+
+                            <button type="submit"  class="btn btn-sm btn-outline-secondary rounded-circle" aria-label="Downvote">
                                 <i class="bi bi-caret-down-fill"></i>
                             </button>
                         {% endif %}

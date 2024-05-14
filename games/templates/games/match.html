@@ -7,8 +7,8 @@
 {% block content %}
     {% if request.user.profile.reputation < 20 %}
         <div class="alert alert-warning">
-            You need at least 20 reputation points to play games. Learn how to gain reputation
-            <a href="{% url 'users:about_reputation' %}">here</a>.
+            You need at least 20 reputation points to play games. Learn how to gain reputation by visiting the
+            <a href="{% url 'users:reputation_guide' %}"  class="text-reset">reputation guide</a>.
         </div>
     {% else %}
         <div id="app"></div><br>  

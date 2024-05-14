@@ -2,6 +2,7 @@ import datetime
 import random
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
+from django.db.models import Q
 from django.core.paginator import Paginator
 from .models import PartsOfSpeech, Origin, Classification, Attribute, DictEntry
 from translations.models import Language, Entry
@@ -70,12 +71,14 @@ def search(request, lang):
                 entry_today.save()
         else:
             entry_today = False
-        
+
         entries = entries.filter(word__icontains=query) \
         .order_by("word")
-        as_definitions = DictEntry.objects.filter(lang=lang_object) \
-        .filter(attributes__definition__icontains=query) \
+        as_definitions = entries.filter(attributes__definition__icontains=query) \
         .order_by("word")
+
+        if query.lower() in ["mnhs", "maloconhs"]:
+            entries = DictEntry.objects.filter(Q(word="buot") | Q(word="hugod") | Q(word="aeam"))
 
         entries_paginator = Paginator(entries, 30)
         as_definitions_paginator = Paginator(as_definitions, 30)

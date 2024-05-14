@@ -15,8 +15,8 @@
         <div class="container pb-3 mb-3">
             {% if request.user.profile.reputation < 10 %}
                 <div class="alert alert-warning">
-                You need at least 10 reputation points to access word attributes. Learn how to gain reputation
-                <a href="{% url 'users:about_reputation' %}">here</a>.
+                    You need at least 10 reputation points to access word attributes. Learn how to gain reputation by visiting the
+                    <a href="{% url 'users:reputation_guide' %}" class="text-reset">reputation guide</a>.
                 </div>
                 <br><br><br><br><br>
             {% else %}

@@ -18,6 +18,7 @@ export default function Keyboard({handleKeyup}) {
                         className="key col btn btn-secondary p-1 mx-1"
                         onClick={() => handleKeyup({ key })}
                         key={j}
+                        aria-label={key}
                         >
                             {key === "Backspace" ? (
                                 <i className="bi bi-backspace"></i>

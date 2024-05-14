@@ -5,7 +5,7 @@ from . import views
 app_name = "users"
 urlpatterns = [
     path("", views.index, name="index"),
-    path("about_reputation/", views.about_reputation, name="about_reputation"),
+    path("reputation_guide/", views.reputation_guide, name="reputation_guide"),
     path("<int:user_id>/<str:username>/", views.profile, name="profile"),
     path("<int:user_id>/<str:username>/bookmarks_votes/", views.bookmarks_votes, name="bookmarks_votes"),
     path("<int:user_id>/<str:username>/entries_translations/", views.entries_translations, name="entries_translations"),

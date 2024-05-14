@@ -158,10 +158,10 @@ export default function ProofreaderField({ defaultShowSuggestions }) {
                     </small>
                 </div>
                 <div>
-                    <button id="toggle-suggestions" className="btn px-2 py-1" onClick={toggleSuggestions}>
+                    <button id="toggle-suggestions" className="btn px-2 py-1" onClick={toggleSuggestions} aria-label="Toggle suggestions">
                         <i className={showSuggestions ? "bi bi-eye-slash" : "bi bi-eye"}></i>
                     </button>
-                    <button id="generate-suggestions" className="btn px-2 py-1" onClick={handleGenerateSuggestions}>
+                    <button id="generate-suggestions" className="btn px-2 py-1" onClick={handleGenerateSuggestions} aria-label="Generate suggestions">
                         <i className="bi bi-spellcheck"></i>
                     </button>
                 </div>

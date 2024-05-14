@@ -15,8 +15,8 @@ def index(request):
     })
 
 
-def about_reputation(request):
-    return render(request, "users/about_reputation.html")
+def reputation_guide(request):
+    return render(request, "users/reputation_guide.html")
 
 
 def profile(request, user_id, username):
