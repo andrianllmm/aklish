@@ -9,22 +9,23 @@ from dictionary.models import DictEntry
 def catalog(request):
     sort = request.GET.get("sort", "latest")
 
+    entries = Entry.objects.filter(user__is_active=True)
+
     match sort:
         case "latest":
-            entries = Entry.objects.all().order_by("-modified_at")
+            entries = entries.order_by("-modified_at")
         case "top":
-            entries = Entry.objects.annotate(num_bookmarks=Count('bookmarks')) \
-                .order_by("-num_bookmarks")
+            entries = entries.annotate(num_bookmarks=Count('bookmarks')).order_by("-num_bookmarks")
         case "reputable":
-            entries = Entry.objects.all().order_by("-user__profile__reputation")
+            entries = entries.order_by("-user__profile__reputation")
         case "proofread":
-            entries = Entry.objects.all().order_by("-correctness")
+            entries = entries.order_by("-correctness")
         case "translated":
-            entries = Entry.objects.annotate(num_translations=Count("translations")) \
+            entries = entries.annotate(num_translations=Count("translations")) \
                 .filter(translations__isnull=False).distinct() \
                 .order_by("-num_translations", "-modified_at")
         case "untranslated":
-            entries = Entry.objects.filter(translations__isnull=True).distinct().order_by("-modified_at")
+            entries = entries.filter(translations__isnull=True).distinct().order_by("-modified_at")
 
     p = Paginator(entries, 15)
     page = request.GET.get("page") if request.GET.get("page") else 1
@@ -45,22 +46,23 @@ def catalog(request):
 def search(request):
     sort = request.GET.get("sort", "latest")
 
+    entries = Entry.objects.filter(user__is_active=True)
+
     match sort:
         case "latest":
-            entries = Entry.objects.all().order_by("-modified_at")
+            entries = entries.all().order_by("-modified_at")
         case "top":
-            entries = Entry.objects.annotate(num_bookmarks=Count('bookmarks')) \
-                .order_by("-num_bookmarks")
+            entries = entries.annotate(num_bookmarks=Count('bookmarks')).order_by("-num_bookmarks")
         case "reputable":
-            entries = Entry.objects.all().order_by("-user__profile__reputation")
+            entries = entries.all().order_by("-user__profile__reputation")
         case "proofread":
-            entries = Entry.objects.all().order_by("-correctness")
+            entries = entries.all().order_by("-correctness")
         case "translated":
-            entries = Entry.objects.annotate(num_translations=Count("translations")) \
+            entries = entries.annotate(num_translations=Count("translations")) \
                 .filter(translations__isnull=False).distinct() \
                 .order_by("-num_translations", "-modified_at")
         case "untranslated":
-            entries = Entry.objects.filter(translations__isnull=True).distinct().order_by("-modified_at")
+            entries = entries.filter(translations__isnull=True).distinct().order_by("-modified_at")
 
     if query := request.GET.get("q"):
         as_translations = entries.filter(translations__content__icontains=query).order_by("content")
