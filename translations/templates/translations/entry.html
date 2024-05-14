@@ -2,6 +2,10 @@
 
 {% load humanize %}
 
+{% block title %}
+    "{{ entry.content|slice:25 }}..." - Aklish Entry
+{% endblock title %}
+
 {% block content %}
     <div class="container d-flex pb-3 mb-4 border-bottom">
         <div class="me-3 text-center">

@@ -1,5 +1,9 @@
 {% extends 'games/base.html' %}
 
+{% block title %}
+    Play Aklish Wordle
+{% endblock title %}
+
 {% block content %}
     {% if request.user.profile.reputation < 20 %}
         <div class="alert alert-warning">
