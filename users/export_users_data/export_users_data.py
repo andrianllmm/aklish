@@ -100,7 +100,7 @@ def to_csv():
         }
         data.append(row)
     
-    with open(f"{script_dir}/aklish_raw_data.csv", "w") as outfile:
+    with open(f"{script_dir}/users_data.csv", "w") as outfile:
         writer = csv.DictWriter(outfile, fieldnames=list(data[0].keys()))
  
         writer.writeheader()
