@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import Header from "../../Header";
-import Keyboard from "../Keyboard";
+import Keyboard from "./Keyboard";
 import Message from "../Message";
 import Endgame from "./Endgame";
 import Grid from "./Grid";
@@ -23,7 +23,7 @@ export default function Wordle() {
 
     React.useEffect(() => {
         fetch(
-            `/dictionary/api/${lang}/entry/?` + 
+            `/dictionary/api/${lang}/entry/?` +
             `word_len=${wordLen[0]}-${wordLen[1]}&` +
             `definition_len=3-20&` +
             `word_case=lower&` +
@@ -110,13 +110,13 @@ export default function Wordle() {
             .catch(error => {
                 setMessage([`${currentGuess} is not in the dictionary`, "warning"]);
                 return;
-            });            
+            });
         }
 
         else if (key === "Backspace") {
             if (currentGuess.length > 0) {
                 setCurrentGuess((prevCurrentGuess) => {
-                    return (prevCurrentGuess.slice(0, -1)); 
+                    return (prevCurrentGuess.slice(0, -1));
                 });
             }
         }
@@ -124,7 +124,7 @@ export default function Wordle() {
         else if (/^[A-Za-z-']$/.test(key)) {
             if (currentGuess.length < solution.length) {
                 setCurrentGuess((prevCurrentGuess) => {
-                    return (prevCurrentGuess.toLowerCase() + key.toLowerCase()); 
+                    return (prevCurrentGuess.toLowerCase() + key.toLowerCase());
                 });
             }
         }

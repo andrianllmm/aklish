@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from "react-dom/client";
-import { BrowserRouter as Router, Routes, Route, Link, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Wordle from "./Games/Wordle/Wordle";
 import Match from "./Games/Match/Match";
 import Proofreader from "./Proofreader/Proofreader";

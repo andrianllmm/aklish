@@ -29,17 +29,17 @@ def get_stems(token, valid_words):
 
         stems_repitition = stem_repitition(all_tokens, valid_words)
         all_tokens.extend(stems_repitition)
-        
+
         stems_suffix = stem_suffix(all_tokens, valid_words)
         all_tokens.extend(stems_suffix)
 
         stems_duplication = stem_duplication(all_tokens, valid_words)
         all_tokens.extend(stems_duplication)
-        
+
         all_tokens = list(set(all_tokens))
 
     stems_valid = [token for token in all_tokens if is_valid(token, valid_words)]
-    
+
     return stems_valid # [t for t in all_tokens if t != token]
 
 
@@ -50,7 +50,7 @@ def stem_duplication(tokens, valid_words):
 	returns (list): All attempted stems.
 	"""
     stems_attempt = []
-    
+
     for token in tokens:
         if "-" in token and "-" not in [token[0], token[-1]]:
             first, second = token.split("-")
@@ -62,7 +62,7 @@ def stem_duplication(tokens, valid_words):
                 elif first[-1] == "u" and replace_letter(first, -1, "o") == second or \
                     first[-2] == "u" and replace_letter(first, -2, "o")  == second:
                     stems_attempt.append(second)
-                    
+
                 elif first[-2:] == "ng" and first[-3] == "u" and first[0:-3] + "o" == second:
                     stems_attempt.append(second)
 
@@ -76,7 +76,7 @@ def stem_repitition(tokens, valid_words):
 	returns (list): All attempted stems.
 	"""
     stems_attempt = []
-    
+
     for token in tokens:
         if "-" in token:
             token = token.replace("-", "")
@@ -88,7 +88,7 @@ def stem_repitition(tokens, valid_words):
             elif token[0:2] == token[2:4] and len(token) > 4 \
                 and is_consonant(token[0]):
                 stems_attempt.append(token[2:])
-            
+
             elif token[0:2] == token[3:5] and len(token) > 5 \
                 and is_consonant(token[0:2]) and is_vowel(token[2]):
                 stems_attempt.append(token[3:])
@@ -111,7 +111,7 @@ def stem_prefix(tokens, valid_words):
 
                 if stem[0] == "-":
                     stem = stem[1:]
-                
+
                 # consonant reduction
                 if prefix.endswith("ng") and not is_valid(stem, valid_words):
                     for consonant in CONSONANTS:
@@ -119,7 +119,7 @@ def stem_prefix(tokens, valid_words):
                             stems_attempt.append(consonant + stem)
 
                 stems_attempt.append(stem)
-        
+
         # assimilation
         for a_prefix in A_PREFIXES:
             if token.startswith(a_prefix) and len(token) > len(a_prefix):
@@ -127,20 +127,20 @@ def stem_prefix(tokens, valid_words):
 
                 if stem[0] == "-":
                     stem = stem[1:]
-                
+
                 # consonant reduction
                 if not is_valid(stem, valid_words):
                     for consonant in CONSONANTS:
                         if is_valid(consonant + stem, valid_words):
                             stems_attempt.append(consonant + stem)
-                
+
                 stems_attempt.append(stem)
-        
+
         # VeV (e.g. a-ea-bton)
         if len(token) > 2 and token[1] == "e" and token[0] == token[2]:
             stem = token[2:]
             stems_attempt.append(stem)
-    
+
     return stems_attempt
 
 
@@ -159,7 +159,7 @@ def stem_infix(tokens, valid_words):
                     stem = token[0] + token[3:]
 
                     stems_attempt.append(stem)
-                    
+
                     # consonant change
                     # l => e
                     if infix == "in" and not is_valid(stem, valid_words):
@@ -185,7 +185,7 @@ def stem_infix(tokens, valid_words):
         if len(token) > 3 and token[2] == "e" and token[1] == token[3]:
                 stem = token[0] + token[3:]
                 stems_attempt.append(stem)
-    
+
     return stems_attempt
 
 def stem_suffix(tokens, valid_words):
@@ -195,7 +195,7 @@ def stem_suffix(tokens, valid_words):
 	returns (list): All attempted stems.
 	"""
     stems_attempt = []
-    
+
     for token in tokens:
         for suffix in SUFFIXES:
             if token.endswith(suffix) and len(token) > len(suffix):
@@ -203,7 +203,7 @@ def stem_suffix(tokens, valid_words):
 
                 if stem[-1] == "-":
                     stem = stem[:-1]
-                
+
                 # contraction
                 if suffix == "t":
                     stem_contraction = stem + "n"
@@ -234,7 +234,7 @@ def stem_suffix(tokens, valid_words):
                         stem_vowel_change = replace_letter(stem, -1, "o")
                         if is_valid(stem_vowel_change, valid_words):
                             stems_attempt.append(stem_vowel_change)
-                    
+
                     # vowel loss
                     if stems_vowel_loss := stem_vowel_loss([stem], valid_words):
                         stems_attempt.extend(stems_vowel_loss)
