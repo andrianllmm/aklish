@@ -1,35 +1,15 @@
-import csv, os, sys
-# from dictionary.models import PartsOfSpeech, Origin, Classification, Source, Attribute, DictEntry
-from translations.models import Entry, Translation #, Language
-# from users.models import Profile, LoginSession
-from django.contrib.auth.models import User
+import csv
+import os
 from django.utils import timezone
+from django.contrib.auth.models import User
+
+from translations.models import Entry, Translation
 
 
 script_dir = os.path.dirname(os.path.realpath(__file__))
 
 
-def to_csv():
-    """
-    Fields to output:
-        Username
-        Firstname
-        Lastname
-        Email
-        DateJoined
-        LoginCount
-        SessionDuration
-        Reputation
-        NumEntries
-        WordCountEntries
-        CorrectnessEntries
-        NumTranslations
-        WordCountTranslations
-        CorrectnessTranslations
-        NumBookmarks
-        NumUpvotes
-        NumDownvotes
-    """
+def export():
     users = User.objects.filter(is_active=True).filter(is_staff=False).order_by("last_name")
 
     data = []
@@ -42,7 +22,7 @@ def to_csv():
                 session_duration = (timezone.now() - login_session.login_at).total_seconds()
 
             total_session_duration += session_duration
-        
+
         entries = Entry.objects.filter(user=user)
 
         num_entries = entries.count()
@@ -58,7 +38,7 @@ def to_csv():
             correctness_entries = round(correctness_entries, 2)
         else:
             correctness_entries = 0
-        
+
         translations = Translation.objects.filter(user=user)
 
         num_translations = translations.count()
@@ -99,10 +79,10 @@ def to_csv():
             "num_downvotes": num_downvotes,
         }
         data.append(row)
-    
-    with open(f"{script_dir}/users_data.csv", "w") as outfile:
-        writer = csv.DictWriter(outfile, fieldnames=list(data[0].keys()))
- 
+
+    with open(os.path.join(script_dir, "users_data.csv"), "w") as out_file:
+        writer = csv.DictWriter(out_file, fieldnames=list(data[0].keys()))
+
         writer.writeheader()
 
         writer.writerows(data)

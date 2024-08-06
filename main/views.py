@@ -1,7 +1,8 @@
 from django.shortcuts import render
+from django.contrib.auth.models import User
+
 from translations.models import Entry, Translation
 from dictionary.models import DictEntry
-from django.contrib.auth.models import User
 
 
 def homepage(request):

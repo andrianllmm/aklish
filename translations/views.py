@@ -2,8 +2,8 @@ from django.db.models import Count
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+
 from .models import Language, Entry, Translation, Vote
-from dictionary.models import DictEntry
 
 
 def catalog(request):
@@ -103,11 +103,11 @@ def entry(request, entry_id):
                 lang_object = get_object_or_404(Language, code=lang)
                 if lang_object != entry.lang:
                     Translation.objects.create(entry=entry, lang=lang_object, content=content.strip(), user=request.user)
-    
+
     bookmarked = False
     if entry.bookmarks.filter(pk=request.user.id).exists():
         bookmarked = True
-    
+
     translations = sorted(entry.translations.all(), key=lambda t: t.vote_count, reverse=True)
     translations_votes = []
     for translation in translations:
@@ -165,7 +165,7 @@ def edit_translation(request, translation_id):
             if content := request.POST.get("content"):
                 translation.content = content.strip()
                 translation.save()
-            
+
             return redirect("translations:entry", translation.entry.pk)
 
     return render(request, "translations/edit_translation.html", {
@@ -179,7 +179,7 @@ def delete_entry(request, entry_id):
 
     if entry.user == request.user:
         entry.delete()
-    
+
     if next := request.GET.get("next"):
         return redirect(next)
 
@@ -194,7 +194,7 @@ def delete_translation(request, translation_id):
 
     if translation.user == request.user:
         translation.delete()
-    
+
     if next := request.GET.get("next"):
         return redirect(next)
 

@@ -1,74 +1,64 @@
 import lemminflect
+import os
 import re
 import string
-import nltk
-import os
-
-script_dir = os.path.dirname(os.path.realpath(__file__))
-
-nltk.data.path.append(f"{script_dir}/nltk_data")
-
-from nltk.tokenize import word_tokenize, sent_tokenize
+from aklstemmer import stemmer
+from nltk.tokenize import word_tokenize
 from spellchecker import SpellChecker
-from .stemmer import akl_stemmer
 from tabulate import tabulate
 
 
+script_dir = os.path.dirname(os.path.realpath(__file__))
+
+
 def proofread_text(text, lang="akl", max_suggestions=5):
-    if lang == "akl":
-        spell = get_spellchecker("dictionary/raw_data/akl_freq.json")
-    else:
+    if lang == "eng":
         spell = get_spellchecker()
+    elif lang == "akl":
+        spell = get_spellchecker("dictionary/data/akl_freqlist.json")
 
     data = {"checks": [], "word_count": 0, "mistake_count": 0, "correctness": None}
 
-    # sents = sent_tokenize(text.strip())
-    # for sent in sents:
-    #     words = word_tokenize(sent.strip())
-    words = word_tokenize(text.strip())
+    text = text.strip()
+
+    words = word_tokenize(text)
     for token in words:
+        clean_token = clean(token)
+
         cls = "word"
         valid = True
         suggestions = []
 
         if all(char in string.punctuation for char in token):
-            cls = "punct"
-        
+            cls = "punc"
+
         elif token.replace(".", "").isnumeric():
-        # or token.startswith("ika-") and token.replace("ika-", "").isnumeric() \
-        # or token.endswith("st") and token.replace("st", "") == "1" \
-        # or token.endswith("nd") and token.replace("nd", "") == "2" \
-        # or token.endswith("rd") and token.replace("rd", "") == "3" \
-        # or token.endswith("th") and token.replace("th", "").isnumeric():
             cls = "num"
 
-        # elif len(sents) > 1 and t == 0:
-        #     if token[0].islower():
-        #         valid = False
-        #         suggestions = [token.capitalize()]
-        #     elif clean(token.lower()) not in spell:
-        #         cls = "propn"
+        elif clean_token not in spell:
+            lemmas = lemminflect.getAllLemmas(clean_token)
 
-        elif token[0].isupper():
-            cls = "propn"
-        
-        elif clean(token) not in spell:
-            if (lang == "akl" and not akl_stemmer.get_stems(clean(token), spell)) or \
-                (lang == "eng" and not lemminflect.getAllLemmas(clean(token))):
+            stems = stemmer.get_stems(clean_token, valid_words=list(spell))
+            if clean_token in stems:
+                stems.remove(clean_token)
+
+            if (lang == "eng" and not lemmas) or (lang == "akl" and not stems):
                 valid = False
-                suggestions = spell.candidates(clean(token))
+                suggestions = spell.candidates(clean_token)
             else:
                 cls = "stemmed"
 
         suggestions = list(suggestions) if suggestions else []
+
         suggestions = suggestions[:max_suggestions] if len(suggestions) > max_suggestions else suggestions
+
         data["checks"].append({
             "token": token,
             "cls": cls,
             "valid": valid,
             "suggestions": suggestions,
         })
-    
+
     data["word_count"] = cal_word_count(data["checks"])
     data["mistake_count"] = cal_mistake_count(data["checks"])
     data["correctness"] = cal_correctness(data["word_count"], data["mistake_count"])
@@ -83,7 +73,7 @@ def clean(token):
 def cal_word_count(checks):
     word_count = 0
     for check in checks:
-        if check["cls"] in ["word", "propn"]:
+        if check["cls"] not in ["punc", "num"]:
             word_count += 1
     return word_count
 
