@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 from django.core.paginator import Paginator
-from .models import PartsOfSpeech, Origin, Classification, Attribute, DictEntry
+
+from .models import Attribute, DictEntry
 from translations.models import Language, Entry
 
 
@@ -49,7 +50,7 @@ def catalog(request, lang, letter=None):
         })
     else:
         entries = entries.order_by("?")[:45]
-    
+
         return render(request, "dictionary/catalog.html", {
             "entries": entries,
             "lang": lang_object,
@@ -72,10 +73,8 @@ def search(request, lang):
         else:
             entry_today = False
 
-        entries = entries.filter(word__icontains=query) \
-        .order_by("word")
-        as_definitions = entries.filter(attributes__definition__icontains=query) \
-        .order_by("word")
+        entries = entries.filter(word__icontains=query).order_by("word")
+        as_definitions = entries.filter(attributes__definition__icontains=query).order_by("word")
 
         if query.lower() in ["mnhs", "maloconhs"]:
             entries = DictEntry.objects.filter(Q(word="buot") | Q(word="hugod") | Q(word="aeam"))
@@ -133,7 +132,7 @@ def add_example(request, lang, word, attribute_pk):
             )
 
             attribute.examples.add(example_entry)
-        
+
             return redirect("dictionary:entry", lang, word)
 
     return render(request, "dictionary/add_example.html", {
@@ -146,7 +145,7 @@ def add_example(request, lang, word, attribute_pk):
 def word_of_the_day(request, lang):
     lang_object = get_object_or_404(Language, code=lang)
     entries = DictEntry.objects.filter(lang=lang_object)
-    
+
     today = datetime.date.today()
 
     entry = entries.filter(last_selected=today).first()

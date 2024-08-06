@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+
 from proofreader import proofreader
 
 
@@ -64,20 +65,20 @@ class Translation(models.Model):
 
     class Meta:
         unique_together = ("content", "lang", "entry")
-    
+
     def update_vote_count(self):
         total = 0
         for vote in self.votes.all():
             total += vote.direction
         self.vote_count = total
         self.save()
-    
+
     def upvote_count(self):
         return self.votes.filter(direction=1).count()
-    
+
     def downvote_count(self):
         return self.votes.filter(direction=-1).count()
-    
+
     def update_word_count(self):
         data = proofreader.proofread_text(self.content, lang=self.lang.code)
         self.word_count = proofreader.cal_word_count(data["checks"])
@@ -112,13 +113,13 @@ class Vote(models.Model):
 
     class Meta:
         unique_together = ("translation", "user")
-    
+
     def save(self, *args, **kwargs):
         super(Vote, self).save(*args, **kwargs)
 
         self.translation.update_vote_count()
         self.translation.user.profile.update_reputation()
-    
+
         if self.direction == 0:
             self.delete()
 

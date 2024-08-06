@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import auth
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.utils import timezone
-from .models import Profile, LoginSession
-from translations.models import Language, Entry, Translation, Vote
+
+from .models import LoginSession
+from translations.models import Entry, Translation, Vote
 from .forms import RegisterForm, LoginForm
 
 
@@ -32,12 +32,12 @@ def bookmarks_votes(request, user_id, username):
             entry_to_unbookmark_pk = request.POST.get("entry_to_unbookmark_pk")
             entry_to_unbookmark = get_object_or_404(Entry, pk=entry_to_unbookmark_pk)
             entry_to_unbookmark.bookmarks.remove(request.user)
-        
+
         if request.POST.get("remove_vote"):
             vote_to_unvote_pk = request.POST.get("vote_to_unvote_pk")
             vote_to_unvote = get_object_or_404(Vote, pk=vote_to_unvote_pk)
             vote_to_unvote.delete()
-        
+
         return redirect("users:bookmarks_votes", request.user.pk, request.user.username)
 
     user = get_object_or_404(User, pk=user_id, username=username)
@@ -52,12 +52,12 @@ def entries_translations(request, user_id, username):
             entry_to_delete_pk = request.POST.get("entry_to_delete_pk")
             entry_to_delete = get_object_or_404(Entry, pk=entry_to_delete_pk)
             entry_to_delete.delete()
-        
+
         if request.POST.get("delete_translation"):
             translation_to_delete_pk = request.POST.get("translation_to_delete_pk")
             translation_to_delete = get_object_or_404(Translation, pk=translation_to_delete_pk)
             translation_to_delete.delete()
-        
+
         return redirect("users:entries_translations", request.user.pk, request.user.username)
 
     user = get_object_or_404(User, pk=user_id, username=username)
@@ -112,7 +112,7 @@ def logout(request):
         if last_login_session:
             last_login_session.logout_at = timezone.now()
             last_login_session.save()
-    
+
     auth.logout(request)
 
     return redirect("main:homepage")
