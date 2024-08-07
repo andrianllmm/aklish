@@ -10,16 +10,22 @@ script_dir = os.path.dirname(os.path.realpath(__file__))
 
 
 def export():
-    users = User.objects.filter(is_active=True).filter(is_staff=False).order_by("last_name")
+    users = (
+        User.objects.filter(is_active=True).filter(is_staff=False).order_by("last_name")
+    )
 
     data = []
     for user in users:
         total_session_duration = 0
         for login_session in user.login_session.all():
             if login_session.logout_at:
-                session_duration = (login_session.logout_at - login_session.login_at).total_seconds()
+                session_duration = (
+                    login_session.logout_at - login_session.login_at
+                ).total_seconds()
             else:
-                session_duration = (timezone.now() - login_session.login_at).total_seconds()
+                session_duration = (
+                    timezone.now() - login_session.login_at
+                ).total_seconds()
 
             total_session_duration += session_duration
 
@@ -34,7 +40,9 @@ def export():
             list_correctness_entries.append(entry.correctness)
 
         if list_correctness_entries:
-            correctness_entries = (sum(list_correctness_entries) / len(list_correctness_entries)) / 100
+            correctness_entries = (
+                sum(list_correctness_entries) / len(list_correctness_entries)
+            ) / 100
             correctness_entries = round(correctness_entries, 2)
         else:
             correctness_entries = 0
@@ -54,7 +62,9 @@ def export():
             num_downvotes += translation.downvote_count()
 
         if list_correctness_translations:
-            correctness_translations = (sum(list_correctness_translations) / len(list_correctness_translations)) / 100
+            correctness_translations = (
+                sum(list_correctness_translations) / len(list_correctness_translations)
+            ) / 100
             correctness_translations = round(correctness_translations, 2)
         else:
             correctness_translations = 0

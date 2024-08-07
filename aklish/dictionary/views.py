@@ -29,9 +29,11 @@ def catalog(request, lang, letter=None):
         entry_today = None
 
     if letter and letter in "abcdefghijklmnopqrstuvwxyz":
-        entries = entries.filter(word__startswith=letter) \
-        .extra(select={"lower_word": "lower(word)"}) \
-        .order_by("lower_word")
+        entries = (
+            entries.filter(word__startswith=letter)
+            .extra(select={"lower_word": "lower(word)"})
+            .order_by("lower_word")
+        )
 
         p = Paginator(entries, 45)
         page = request.GET.get("page") if request.GET.get("page") else 1
@@ -39,23 +41,31 @@ def catalog(request, lang, letter=None):
 
         start = max(1, entries.number - 3)
         end = min(start + 6, entries.paginator.num_pages)
-        page_nums = (range(start, end + 1))
+        page_nums = range(start, end + 1)
 
-        return render(request, "dictionary/catalog.html", {
-            "entries": entries,
-            "lang": lang_object,
-            "current_letter": letter,
-            "page_nums": [str(page_num) for page_num in page_nums],
-            "entry_today": entry_today,
-        })
+        return render(
+            request,
+            "dictionary/catalog.html",
+            {
+                "entries": entries,
+                "lang": lang_object,
+                "current_letter": letter,
+                "page_nums": [str(page_num) for page_num in page_nums],
+                "entry_today": entry_today,
+            },
+        )
     else:
         entries = entries.order_by("?")[:45]
 
-        return render(request, "dictionary/catalog.html", {
-            "entries": entries,
-            "lang": lang_object,
-            "entry_today": entry_today,
-        })
+        return render(
+            request,
+            "dictionary/catalog.html",
+            {
+                "entries": entries,
+                "lang": lang_object,
+                "entry_today": entry_today,
+            },
+        )
 
 
 def search(request, lang):
@@ -74,10 +84,14 @@ def search(request, lang):
             entry_today = False
 
         entries = entries.filter(word__icontains=query).order_by("word")
-        as_definitions = entries.filter(attributes__definition__icontains=query).order_by("word")
+        as_definitions = entries.filter(
+            attributes__definition__icontains=query
+        ).order_by("word")
 
         if query.lower() in ["mnhs", "maloconhs"]:
-            entries = DictEntry.objects.filter(Q(word="buot") | Q(word="hugod") | Q(word="aeam"))
+            entries = DictEntry.objects.filter(
+                Q(word="buot") | Q(word="hugod") | Q(word="aeam")
+            )
 
         entries_paginator = Paginator(entries, 30)
         as_definitions_paginator = Paginator(as_definitions, 30)
@@ -91,16 +105,20 @@ def search(request, lang):
 
         start = max(1, entries.number - 3)
         end = min(start + 6, entries.paginator.num_pages)
-        page_nums = (range(start, end + 1))
+        page_nums = range(start, end + 1)
 
-        return render(request, "dictionary/search.html", {
-            "query": query,
-            "entries": entries,
-            "as_definitions": as_definitions,
-            "lang": lang_object,
-            "page_nums": [str(page_num) for page_num in page_nums],
-            "entry_today": entry_today,
-        })
+        return render(
+            request,
+            "dictionary/search.html",
+            {
+                "query": query,
+                "entries": entries,
+                "as_definitions": as_definitions,
+                "lang": lang_object,
+                "page_nums": [str(page_num) for page_num in page_nums],
+                "entry_today": entry_today,
+            },
+        )
     else:
         return render(request, "dictionary/catalog.html")
 
@@ -110,11 +128,15 @@ def entry(request, lang, word):
     lang_object = get_object_or_404(Language, code=lang)
     entry = get_object_or_404(DictEntry, word=word, lang=lang_object)
 
-    return render(request, "dictionary/entry.html", {
-        "word": entry.word,
-        "attributes": entry.attributes.all().order_by("pos", "classification"),
-        "lang": lang_object,
-    })
+    return render(
+        request,
+        "dictionary/entry.html",
+        {
+            "word": entry.word,
+            "attributes": entry.attributes.all().order_by("pos", "classification"),
+            "lang": lang_object,
+        },
+    )
 
 
 @login_required(login_url="users:login")
@@ -135,11 +157,15 @@ def add_example(request, lang, word, attribute_pk):
 
             return redirect("dictionary:entry", lang, word)
 
-    return render(request, "dictionary/add_example.html", {
-        "word": entry.word,
-        "attribute": attribute,
-        "lang": lang_object,
-    })
+    return render(
+        request,
+        "dictionary/add_example.html",
+        {
+            "word": entry.word,
+            "attribute": attribute,
+            "lang": lang_object,
+        },
+    )
 
 
 def word_of_the_day(request, lang):
@@ -155,9 +181,13 @@ def word_of_the_day(request, lang):
         entry.last_selected = today
         entry.save()
 
-    return render(request, "dictionary/entry.html", {
-        "word": entry.word,
-        "attributes": entry.attributes.all().order_by("pos", "classification"),
-        "lang": lang_object,
-        "word_of_the_day": True,
-    })
+    return render(
+        request,
+        "dictionary/entry.html",
+        {
+            "word": entry.word,
+            "attributes": entry.attributes.all().order_by("pos", "classification"),
+            "lang": lang_object,
+            "word_of_the_day": True,
+        },
+    )

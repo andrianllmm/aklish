@@ -6,7 +6,7 @@ from ..proofreader import proofread_text
 
 class ProofreadAPIView(APIView):
     def get(self, request, *args, **kwargs):
-        lang = kwargs.get('lang', 'akl')
+        lang = kwargs.get("lang", "akl")
         text = request.GET.get("text")
 
         if text:

@@ -15,17 +15,26 @@ def catalog(request):
         case "latest":
             entries = entries.order_by("-modified_at")
         case "top":
-            entries = entries.annotate(num_bookmarks=Count('bookmarks')).order_by("-num_bookmarks")
+            entries = entries.annotate(num_bookmarks=Count("bookmarks")).order_by(
+                "-num_bookmarks"
+            )
         case "reputable":
             entries = entries.order_by("-user__profile__reputation")
         case "proofread":
             entries = entries.order_by("-correctness")
         case "translated":
-            entries = entries.annotate(num_translations=Count("translations")) \
-                .filter(translations__isnull=False).distinct() \
+            entries = (
+                entries.annotate(num_translations=Count("translations"))
+                .filter(translations__isnull=False)
+                .distinct()
                 .order_by("-num_translations", "-modified_at")
+            )
         case "untranslated":
-            entries = entries.filter(translations__isnull=True).distinct().order_by("-modified_at")
+            entries = (
+                entries.filter(translations__isnull=True)
+                .distinct()
+                .order_by("-modified_at")
+            )
 
     p = Paginator(entries, 15)
     page = request.GET.get("page") if request.GET.get("page") else 1
@@ -33,14 +42,18 @@ def catalog(request):
 
     start = max(1, entries_paginated.number - 3)
     end = min(start + 6, entries_paginated.paginator.num_pages)
-    page_nums = (range(start, end + 1))
+    page_nums = range(start, end + 1)
 
-    return render(request, "translations/catalog.html", {
-        "entries": entries_paginated,
-        "entries_count": entries.count(),
-        "page_nums": [str(page_num) for page_num in page_nums],
-        "sort": sort,
-    })
+    return render(
+        request,
+        "translations/catalog.html",
+        {
+            "entries": entries_paginated,
+            "entries_count": entries.count(),
+            "page_nums": [str(page_num) for page_num in page_nums],
+            "sort": sort,
+        },
+    )
 
 
 def search(request):
@@ -52,20 +65,31 @@ def search(request):
         case "latest":
             entries = entries.all().order_by("-modified_at")
         case "top":
-            entries = entries.annotate(num_bookmarks=Count('bookmarks')).order_by("-num_bookmarks")
+            entries = entries.annotate(num_bookmarks=Count("bookmarks")).order_by(
+                "-num_bookmarks"
+            )
         case "reputable":
             entries = entries.all().order_by("-user__profile__reputation")
         case "proofread":
             entries = entries.all().order_by("-correctness")
         case "translated":
-            entries = entries.annotate(num_translations=Count("translations")) \
-                .filter(translations__isnull=False).distinct() \
+            entries = (
+                entries.annotate(num_translations=Count("translations"))
+                .filter(translations__isnull=False)
+                .distinct()
                 .order_by("-num_translations", "-modified_at")
+            )
         case "untranslated":
-            entries = entries.filter(translations__isnull=True).distinct().order_by("-modified_at")
+            entries = (
+                entries.filter(translations__isnull=True)
+                .distinct()
+                .order_by("-modified_at")
+            )
 
     if query := request.GET.get("q"):
-        as_translations = entries.filter(translations__content__icontains=query).order_by("content")
+        as_translations = entries.filter(
+            translations__content__icontains=query
+        ).order_by("content")
         entries = entries.filter(content__icontains=query).order_by("content")
 
         entries_paginator = Paginator(entries, 30)
@@ -80,16 +104,20 @@ def search(request):
 
         start = max(1, entries_paginated.number - 3)
         end = min(start + 6, entries_paginated.paginator.num_pages)
-        page_nums = (range(start, end + 1))
+        page_nums = range(start, end + 1)
 
-        return render(request, "translations/search.html", {
-            "query": query,
-            "entries": entries_paginated,
-            "entries_count": entries.count(),
-            "as_translations": as_translations_paginated,
-            "page_nums": [str(page_num) for page_num in page_nums],
-            "sort": sort,
-        })
+        return render(
+            request,
+            "translations/search.html",
+            {
+                "query": query,
+                "entries": entries_paginated,
+                "entries_count": entries.count(),
+                "as_translations": as_translations_paginated,
+                "page_nums": [str(page_num) for page_num in page_nums],
+                "sort": sort,
+            },
+        )
     else:
         return render(request, "translations/search.html")
 
@@ -102,27 +130,40 @@ def entry(request, entry_id):
             if content := request.POST.get("content"):
                 lang_object = get_object_or_404(Language, code=lang)
                 if lang_object != entry.lang:
-                    Translation.objects.create(entry=entry, lang=lang_object, content=content.strip(), user=request.user)
+                    Translation.objects.create(
+                        entry=entry,
+                        lang=lang_object,
+                        content=content.strip(),
+                        user=request.user,
+                    )
 
     bookmarked = False
     if entry.bookmarks.filter(pk=request.user.id).exists():
         bookmarked = True
 
-    translations = sorted(entry.translations.all(), key=lambda t: t.vote_count, reverse=True)
+    translations = sorted(
+        entry.translations.all(), key=lambda t: t.vote_count, reverse=True
+    )
     translations_votes = []
     for translation in translations:
         if request.user.is_authenticated:
-            vote, created = translation.votes.get_or_create(translation=translation, user=request.user)
+            vote, created = translation.votes.get_or_create(
+                translation=translation, user=request.user
+            )
         else:
             vote = False
         translation_vote = (translation, vote)
         translations_votes.append(translation_vote)
 
-    return render(request, "translations/entry.html", {
-        "entry": entry,
-        "bookmarked": bookmarked,
-        "translations_votes": translations_votes,
-    })
+    return render(
+        request,
+        "translations/entry.html",
+        {
+            "entry": entry,
+            "bookmarked": bookmarked,
+            "translations_votes": translations_votes,
+        },
+    )
 
 
 @login_required(login_url="users:login")
@@ -131,7 +172,9 @@ def add(request):
         if lang := request.POST.get("lang"):
             if content := request.POST.get("content"):
                 lang_object = get_object_or_404(Language, code=lang)
-                entry = Entry.objects.create(lang=lang_object, content=content.strip(), user=request.user)
+                entry = Entry.objects.create(
+                    lang=lang_object, content=content.strip(), user=request.user
+                )
                 return redirect("translations:entry", entry.pk)
 
     return render(request, "translations/add.html")
@@ -150,9 +193,13 @@ def edit_entry(request, entry_id):
 
             return redirect("translations:entry", entry.entry.pk)
 
-    return render(request, "translations/edit_entry.html", {
-        "entry": entry,
-    })
+    return render(
+        request,
+        "translations/edit_entry.html",
+        {
+            "entry": entry,
+        },
+    )
 
 
 @login_required(login_url="users:login")
@@ -168,9 +215,13 @@ def edit_translation(request, translation_id):
 
             return redirect("translations:entry", translation.entry.pk)
 
-    return render(request, "translations/edit_translation.html", {
-        "translation": translation,
-    })
+    return render(
+        request,
+        "translations/edit_translation.html",
+        {
+            "translation": translation,
+        },
+    )
 
 
 @login_required(login_url="users:login")
@@ -183,9 +234,13 @@ def delete_entry(request, entry_id):
     if next := request.GET.get("next"):
         return redirect(next)
 
-    return render(request, "translations/edit_entry.html", {
-        "entry": entry,
-    })
+    return render(
+        request,
+        "translations/edit_entry.html",
+        {
+            "entry": entry,
+        },
+    )
 
 
 @login_required(login_url="users:login")
@@ -198,9 +253,13 @@ def delete_translation(request, translation_id):
     if next := request.GET.get("next"):
         return redirect(next)
 
-    return render(request, "translations/edit_translation.html", {
-        "translation": translation,
-    })
+    return render(
+        request,
+        "translations/edit_translation.html",
+        {
+            "translation": translation,
+        },
+    )
 
 
 @login_required(login_url="users:login")
@@ -223,7 +282,9 @@ def vote(request, translation_id):
 
     if request.method == "POST":
         if request.user != translation.user:
-            vote, created = Vote.objects.get_or_create(translation=translation, user=request.user)
+            vote, created = Vote.objects.get_or_create(
+                translation=translation, user=request.user
+            )
             if request.POST.get("upvote"):
                 vote.direction = 1
                 vote.save()

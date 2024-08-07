@@ -38,7 +38,9 @@ class Entry(models.Model):
         self.mistake_count = proofreader.cal_mistake_count(data["checks"])
 
     def update_correctness(self):
-        self.correctness = proofreader.cal_correctness(self.word_count, self.mistake_count)
+        self.correctness = proofreader.cal_correctness(
+            self.word_count, self.mistake_count
+        )
 
     def save(self, *args, **kwargs):
         self.update_word_count()
@@ -52,10 +54,16 @@ class Entry(models.Model):
 
 
 class Translation(models.Model):
-    entry = models.ForeignKey(Entry, on_delete=models.CASCADE, related_name="translations")
+    entry = models.ForeignKey(
+        Entry, on_delete=models.CASCADE, related_name="translations"
+    )
     content = models.TextField()
-    lang = models.ForeignKey(Language, on_delete=models.PROTECT, related_name="translations")
-    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name="translations")
+    lang = models.ForeignKey(
+        Language, on_delete=models.PROTECT, related_name="translations"
+    )
+    user = models.ForeignKey(
+        User, on_delete=models.PROTECT, related_name="translations"
+    )
     vote_count = models.IntegerField(default=0)
     word_count = models.IntegerField(default=0)
     mistake_count = models.IntegerField(default=0)
@@ -88,7 +96,9 @@ class Translation(models.Model):
         self.mistake_count = proofreader.cal_mistake_count(data["checks"])
 
     def update_correctness(self):
-        self.correctness = proofreader.cal_correctness(self.word_count, self.mistake_count)
+        self.correctness = proofreader.cal_correctness(
+            self.word_count, self.mistake_count
+        )
 
     def save(self, *args, **kwargs):
         self.update_word_count()
@@ -98,7 +108,9 @@ class Translation(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.entry} to {self.content} ({self.lang.code}) by {self.user.username}"
+        return (
+            f"{self.entry} to {self.content} ({self.lang.code}) by {self.user.username}"
+        )
 
 
 class Vote(models.Model):
@@ -107,7 +119,9 @@ class Vote(models.Model):
         (-1, "downvote"),
     ]
 
-    translation = models.ForeignKey(Translation, on_delete=models.CASCADE, related_name="votes")
+    translation = models.ForeignKey(
+        Translation, on_delete=models.CASCADE, related_name="votes"
+    )
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="votes")
     direction = models.IntegerField(default=0, choices=DIRECTIONS)
 

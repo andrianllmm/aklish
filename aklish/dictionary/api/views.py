@@ -19,7 +19,7 @@ class DictEntryFilter:
             queryset = queryset.filter(word__in=words)
         if exclude_words := request.query_params.getlist("word!"):
             queryset = queryset.exclude(word__in=exclude_words)
-        
+
         if word_start := request.query_params.get("word^"):
             queryset = queryset.filter(word__startswith=word_start)
         if word_not_start := request.query_params.get("word!^"):
@@ -29,12 +29,12 @@ class DictEntryFilter:
             queryset = queryset.filter(word__endswith=word_end)
         if word_not_end := request.query_params.get("word!$"):
             queryset = queryset.exclude(word__endswith=word_not_end)
-        
+
         if word_contains := request.query_params.get("word*"):
             queryset = queryset.filter(word__icontains=word_contains)
         if word_not_contains := request.query_params.get("word!*"):
             queryset = queryset.exclude(word__icontains=word_not_contains)
-        
+
         if word := request.query_params.get("word_advanced"):
             if "_" in word:
                 pattern = "^" + word.replace("_", ".") + "$"
@@ -48,78 +48,100 @@ class DictEntryFilter:
                 queryset = queryset.filter(word__regex=r"^[A-Z][a-z]*$")
             elif casing_condition == "upper":
                 queryset = queryset.filter(word__regex=r"^[A-Z]+$")
-        
+
         if word_len := request.query_params.get("word_len"):
             if "-" in word_len:
                 min_length, max_length = map(int, word_len.split("-"))
-                queryset = queryset.annotate(word_length=Length("word")) \
-                    .filter(word_length__range=(min_length, max_length))
+                queryset = queryset.annotate(word_length=Length("word")).filter(
+                    word_length__range=(min_length, max_length)
+                )
             else:
-                queryset = queryset.annotate(word_length=Length("word")) \
-                    .filter(word_length=int(word_len))
-        
+                queryset = queryset.annotate(word_length=Length("word")).filter(
+                    word_length=int(word_len)
+                )
+
         if levenshtein := request.query_params.get("levenshtein"):
             target_word = levenshtein.strip()
             max_distance = 1
             if max_distance_param := request.query_params.get("max_distance"):
                 max_distance = max(int(max_distance_param), 5)
             queryset = queryset.filter(
-                Q(word__in=[
-                    entry.word
-                    for entry in DictEntry.objects.all()
-                    if 0 < Levenshtein.distance(entry.word, target_word) <= max_distance
-                ])
+                Q(
+                    word__in=[
+                        entry.word
+                        for entry in DictEntry.objects.all()
+                        if 0
+                        < Levenshtein.distance(entry.word, target_word)
+                        <= max_distance
+                    ]
+                )
             )
-        
+
         return queryset
 
     @staticmethod
     def definition(queryset, request):
         if definition_start := request.query_params.get("definition^"):
-            queryset = queryset.filter(attributes__definition__startswith=definition_start)
+            queryset = queryset.filter(
+                attributes__definition__startswith=definition_start
+            )
         if definition_not_start := request.query_params.get("definition!^"):
-            queryset = queryset.exclude(attributes__definition__startswith=definition_not_start)
+            queryset = queryset.exclude(
+                attributes__definition__startswith=definition_not_start
+            )
 
         if definition_end := request.query_params.get("definition$"):
             queryset = queryset.filter(attributes__definition__endswith=definition_end)
         if definition_not_end := request.query_params.get("definition!$"):
-            queryset = queryset.exclude(attributes__definition__endswith=definition_not_end)
+            queryset = queryset.exclude(
+                attributes__definition__endswith=definition_not_end
+            )
 
         if definition_contains := request.query_params.get("definition*"):
-            queryset = queryset.filter(attributes__definition__icontains=definition_contains)
+            queryset = queryset.filter(
+                attributes__definition__icontains=definition_contains
+            )
         if definition_not_contains := request.query_params.get("definition!*"):
-            queryset = queryset.exclude(attributes__definition__icontains=definition_not_contains)
+            queryset = queryset.exclude(
+                attributes__definition__icontains=definition_not_contains
+            )
 
         if definition_len := request.query_params.get("definition_len"):
             if "-" in definition_len:
-                min_length, max_length = map(int, definition_len.split('-'))
-                queryset = queryset.annotate(definition_length=Length("attributes__definition")) \
-                    .filter(definition_length__range=(min_length, max_length))
+                min_length, max_length = map(int, definition_len.split("-"))
+                queryset = queryset.annotate(
+                    definition_length=Length("attributes__definition")
+                ).filter(definition_length__range=(min_length, max_length))
             else:
-                queryset = queryset.annotate(definition_length=Length("attributes__definition")) \
-                    .filter(definition_length=int(definition_len))
+                queryset = queryset.annotate(
+                    definition_length=Length("attributes__definition")
+                ).filter(definition_length=int(definition_len))
 
         return queryset
-    
+
     @staticmethod
     def attribute(queryset, request):
         if poss := request.query_params.getlist("pos"):
             queryset = queryset.filter(attributes__pos__code__in=poss)
         if exclude_poss := request.query_params.getlist("pos!"):
             queryset = queryset.exclude(attributes__pos__code__in=exclude_poss)
-        
+
         if origins := request.query_params.getlist("origin"):
             queryset = queryset.filter(attributes__origin__code__in=origins)
         if exclude_origins := request.query_params.getlist("origin!"):
             queryset = queryset.exclude(attributes__origin__code__in=exclude_origins)
 
         if classifications := request.query_params.getlist("classification"):
-            queryset = queryset.filter(attributes__classification__code__in=classifications)
+            queryset = queryset.filter(
+                attributes__classification__code__in=classifications
+            )
         if exclude_classifications := request.query_params.getlist("classification!"):
-            queryset = queryset.exclude(attributes__classification__code__in=exclude_classifications)
+            queryset = queryset.exclude(
+                attributes__classification__code__in=exclude_classifications
+            )
 
         return queryset
-    
+
     @staticmethod
     def has(queryset, request):
         if has := request.query_params.getlist("has"):
@@ -143,22 +165,27 @@ class ListDictEntryAPIView(APIView):
         try:
             lang_object = Language.objects.get(code=lang)
         except Language.DoesNotExist:
-            return Response({"error": "Language not found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"error": "Language not found"}, status=status.HTTP_404_NOT_FOUND
+            )
 
         dict_entries = DictEntry.objects.filter(lang=lang_object)
 
         filtered_entries = DictEntryFilter.word(dict_entries, request)
         filtered_entries = DictEntryFilter.definition(filtered_entries, request)
         filtered_entries = DictEntryFilter.attribute(filtered_entries, request)
-        
+
         if filtered_entries.exists():
             num_entries = self.get_num_entries(request)
             sliced_entries = filtered_entries.order_by("?")[:num_entries]
             serializer = DictEntrySerializer(sliced_entries, many=True)
             return Response(serializer.data)
         else:
-            return Response({"error": "No words found matching the criteria"}, status=status.HTTP_404_NOT_FOUND)
-    
+            return Response(
+                {"error": "No words found matching the criteria"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
     def get_num_entries(self, request):
         default_num_entries = 5
         num_entries = request.query_params.get("num", default_num_entries)
@@ -169,13 +196,16 @@ class ListDictEntryAPIView(APIView):
             num_entries = default_num_entries
         return num_entries
 
+
 class RetrieveDictEntryAPIView(APIView):
     @method_decorator(ratelimit(key="user_or_ip", rate="60/m"))
     def get(self, request, lang, word=None):
         try:
             lang_object = Language.objects.get(code=lang)
         except Language.DoesNotExist:
-            return Response({"error": "Language not found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"error": "Language not found"}, status=status.HTTP_404_NOT_FOUND
+            )
 
         dict_entries = DictEntry.objects.filter(lang=lang_object)
 
@@ -185,16 +215,21 @@ class RetrieveDictEntryAPIView(APIView):
                 serializer = DictEntrySerializer(dict_entry)
                 return Response(serializer.data)
             except DictEntry.DoesNotExist:
-                return Response({"error": "Word not found"}, status=status.HTTP_404_NOT_FOUND)
+                return Response(
+                    {"error": "Word not found"}, status=status.HTTP_404_NOT_FOUND
+                )
         else:
             filtered_entries = DictEntryFilter.word(dict_entries, request)
             filtered_entries = DictEntryFilter.definition(filtered_entries, request)
             filtered_entries = DictEntryFilter.attribute(filtered_entries, request)
             filtered_entries = DictEntryFilter.has(filtered_entries, request)
-            
+
             if filtered_entries.exists():
                 random_entry = random.choice(filtered_entries)
                 serializer = DictEntrySerializer(random_entry)
                 return Response(serializer.data)
             else:
-                return Response({"error": "No words found matching the criteria"}, status=status.HTTP_404_NOT_FOUND)
+                return Response(
+                    {"error": "No words found matching the criteria"},
+                    status=status.HTTP_404_NOT_FOUND,
+                )

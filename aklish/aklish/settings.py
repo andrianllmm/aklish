@@ -30,7 +30,10 @@ load_dotenv(env_path)
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = "django-insecure-pwxp$ki)o2@z-7xv)arm2f88n(7pmg0m6^gj&$m=z7bgrhuxw%"
 
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "django-insecure-pwxp$ki)o2@z-7xv)arm2f88n(7pmg0m6^gj&$m=z7bgrhuxw%")
+SECRET_KEY = os.environ.get(
+    "DJANGO_SECRET_KEY",
+    "django-insecure-pwxp$ki)o2@z-7xv)arm2f88n(7pmg0m6^gj&$m=z7bgrhuxw%",
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
@@ -81,7 +84,7 @@ ROOT_URLCONF = "aklish.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / 'templates'],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -175,9 +178,7 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.AllowAny",
     ],
-    "DEFAULT_FILTER_BACKENDS": [
-        "django_filters.rest_framework.DjangoFilterBackend"
-    ],
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
 }
 
 

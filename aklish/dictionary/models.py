@@ -42,13 +42,37 @@ class Source(models.Model):
 
 class Attribute(models.Model):
     definition = models.TextField()
-    pos = models.ForeignKey(PartsOfSpeech, on_delete=models.SET_NULL, null=True, blank=True, related_name="attributes")
-    origin = models.ForeignKey(Origin, on_delete=models.SET_NULL, null=True, blank=True, related_name="attributes")
-    classification = models.ForeignKey(Classification, on_delete=models.SET_NULL, null=True, blank=True, related_name="attributes")
+    pos = models.ForeignKey(
+        PartsOfSpeech,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="attributes",
+    )
+    origin = models.ForeignKey(
+        Origin,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="attributes",
+    )
+    classification = models.ForeignKey(
+        Classification,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="attributes",
+    )
     similar = models.ManyToManyField("DictEntry", blank=True, related_name="similar")
     opposite = models.ManyToManyField("DictEntry", blank=True, related_name="opposite")
     examples = models.ManyToManyField(Entry, blank=True, related_name="example_of")
-    source = models.ForeignKey(Source, on_delete=models.SET_NULL, null=True, blank=True, related_name="attributes")
+    source = models.ForeignKey(
+        Source,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="attributes",
+    )
 
     def __str__(self):
         return f"{self.definition} ({self.pos.code})"
@@ -56,7 +80,9 @@ class Attribute(models.Model):
 
 class DictEntry(models.Model):
     word = models.CharField(max_length=100)
-    lang = models.ForeignKey(Language, on_delete=models.PROTECT, related_name="dict_entries")
+    lang = models.ForeignKey(
+        Language, on_delete=models.PROTECT, related_name="dict_entries"
+    )
     attributes = models.ManyToManyField(Attribute, blank=True, related_name="entry")
     last_selected = models.DateField(null=True, blank=True)
 

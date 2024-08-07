@@ -10,9 +10,15 @@ from .forms import RegisterForm, LoginForm
 
 
 def index(request):
-    return render(request, "users/index.html", {
-        "users": User.objects.order_by("-profile__reputation", "date_joined").filter(is_active=True).filter(is_staff=False)
-    })
+    return render(
+        request,
+        "users/index.html",
+        {
+            "users": User.objects.order_by("-profile__reputation", "date_joined")
+            .filter(is_active=True)
+            .filter(is_staff=False)
+        },
+    )
 
 
 def reputation_guide(request):
@@ -21,9 +27,13 @@ def reputation_guide(request):
 
 def profile(request, user_id, username):
     user = get_object_or_404(User, pk=user_id, username=username)
-    return render(request, "users/profile.html", {
-        "user": user,
-    })
+    return render(
+        request,
+        "users/profile.html",
+        {
+            "user": user,
+        },
+    )
 
 
 def bookmarks_votes(request, user_id, username):
@@ -41,9 +51,13 @@ def bookmarks_votes(request, user_id, username):
         return redirect("users:bookmarks_votes", request.user.pk, request.user.username)
 
     user = get_object_or_404(User, pk=user_id, username=username)
-    return render(request, "users/bookmarks_votes.html", {
-        "user": user,
-    })
+    return render(
+        request,
+        "users/bookmarks_votes.html",
+        {
+            "user": user,
+        },
+    )
 
 
 def entries_translations(request, user_id, username):
@@ -55,15 +69,23 @@ def entries_translations(request, user_id, username):
 
         if request.POST.get("delete_translation"):
             translation_to_delete_pk = request.POST.get("translation_to_delete_pk")
-            translation_to_delete = get_object_or_404(Translation, pk=translation_to_delete_pk)
+            translation_to_delete = get_object_or_404(
+                Translation, pk=translation_to_delete_pk
+            )
             translation_to_delete.delete()
 
-        return redirect("users:entries_translations", request.user.pk, request.user.username)
+        return redirect(
+            "users:entries_translations", request.user.pk, request.user.username
+        )
 
     user = get_object_or_404(User, pk=user_id, username=username)
-    return render(request, "users/entries_translations.html", {
-        "user": user,
-    })
+    return render(
+        request,
+        "users/entries_translations.html",
+        {
+            "user": user,
+        },
+    )
 
 
 def register(request):
@@ -108,7 +130,11 @@ def login(request):
 
 def logout(request):
     if request.user.is_authenticated:
-        last_login_session = LoginSession.objects.filter(user=request.user, logout_at=None).order_by("-login_at").first()
+        last_login_session = (
+            LoginSession.objects.filter(user=request.user, logout_at=None)
+            .order_by("-login_at")
+            .first()
+        )
         if last_login_session:
             last_login_session.logout_at = timezone.now()
             last_login_session.save()

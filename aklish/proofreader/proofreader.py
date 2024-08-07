@@ -50,14 +50,20 @@ def proofread_text(text, lang="akl", max_suggestions=5):
 
         suggestions = list(suggestions) if suggestions else []
 
-        suggestions = suggestions[:max_suggestions] if len(suggestions) > max_suggestions else suggestions
+        suggestions = (
+            suggestions[:max_suggestions]
+            if len(suggestions) > max_suggestions
+            else suggestions
+        )
 
-        data["checks"].append({
-            "token": token,
-            "cls": cls,
-            "valid": valid,
-            "suggestions": suggestions,
-        })
+        data["checks"].append(
+            {
+                "token": token,
+                "cls": cls,
+                "valid": valid,
+                "suggestions": suggestions,
+            }
+        )
 
     data["word_count"] = cal_word_count(data["checks"])
     data["mistake_count"] = cal_mistake_count(data["checks"])

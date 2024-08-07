@@ -1,6 +1,13 @@
 import json
 import os
-from dictionary.models import PartsOfSpeech, Origin, Classification, Source, Attribute, DictEntry
+from dictionary.models import (
+    PartsOfSpeech,
+    Origin,
+    Classification,
+    Source,
+    Attribute,
+    DictEntry,
+)
 from translations.models import Language, Entry, Translation
 from django.contrib.auth.models import User
 
@@ -20,18 +27,30 @@ def dictionary_to_model(lang, file_path=None):
             print(f"{entry['word']}:", end=" ")
 
             lang_object = Language.objects.get(code=lang)
-            entry_object = DictEntry.objects.get_or_create(word=entry["word"].strip(), lang=lang_object)[0]
+            entry_object = DictEntry.objects.get_or_create(
+                word=entry["word"].strip(), lang=lang_object
+            )[0]
 
             for attribute in entry["attributes"]:
                 print(f"{attribute['pos']};", end=" ")
 
-                attribute_object = Attribute.objects.create(definition=attribute["definition"])
+                attribute_object = Attribute.objects.create(
+                    definition=attribute["definition"]
+                )
 
                 if attribute["pos"]:
-                    if PartsOfSpeech.objects.filter(code=attribute["pos"].strip()).exists():
+                    if PartsOfSpeech.objects.filter(
+                        code=attribute["pos"].strip()
+                    ).exists():
                         pos = PartsOfSpeech.objects.get(code=attribute["pos"].strip())
                     else:
-                        errors.append({"error": "pos", "word": entry["word"], "attribute": attribute["pos"]})
+                        errors.append(
+                            {
+                                "error": "pos",
+                                "word": entry["word"],
+                                "attribute": attribute["pos"],
+                            }
+                        )
                         continue
                 else:
                     pos = None
@@ -40,16 +59,32 @@ def dictionary_to_model(lang, file_path=None):
                     if Origin.objects.filter(code=attribute["origin"].strip()).exists():
                         origin = Origin.objects.get(code=attribute["origin"].strip())
                     else:
-                        errors.append({"error": "origin", "word": entry["word"], "attribute": attribute["origin"]})
+                        errors.append(
+                            {
+                                "error": "origin",
+                                "word": entry["word"],
+                                "attribute": attribute["origin"],
+                            }
+                        )
                         continue
                 else:
                     origin = None
 
                 if attribute["classification"]:
-                    if Classification.objects.filter(code=attribute["classification"].strip()).exists():
-                        classification = Classification.objects.get(code=attribute["classification"].strip())
+                    if Classification.objects.filter(
+                        code=attribute["classification"].strip()
+                    ).exists():
+                        classification = Classification.objects.get(
+                            code=attribute["classification"].strip()
+                        )
                     else:
-                        errors.append({"error": "classification", "word": entry["word"], "attribute": attribute["classification"]})
+                        errors.append(
+                            {
+                                "error": "classification",
+                                "word": entry["word"],
+                                "attribute": attribute["classification"],
+                            }
+                        )
                         continue
                 else:
                     classification = None
@@ -68,7 +103,9 @@ def dictionary_to_model(lang, file_path=None):
                 if attribute["similar"]:
                     for similar_word in attribute["similar"]:
                         if similar_word != entry["word"]:
-                            similar_entry = DictEntry.objects.get_or_create(word=similar_word.strip(), lang=lang_object)[0]
+                            similar_entry = DictEntry.objects.get_or_create(
+                                word=similar_word.strip(), lang=lang_object
+                            )[0]
                             similar_entry.save()
                             attribute_object.similar.add(similar_entry)
                     attribute_object.save()
@@ -76,22 +113,37 @@ def dictionary_to_model(lang, file_path=None):
                 if attribute["opposite"]:
                     for opposite_word in attribute["opposite"]:
                         if opposite_word != entry["word"]:
-                            opposite_entry = DictEntry.objects.get_or_create(word=opposite_word.strip(), lang=lang_object)[0]
+                            opposite_entry = DictEntry.objects.get_or_create(
+                                word=opposite_word.strip(), lang=lang_object
+                            )[0]
                             opposite_entry.save()
                             attribute_object.opposite.add(opposite_entry)
                     attribute_object.save()
 
                 if attribute["examples"]:
-                    user_object = User.objects.get(username="andrianllmm", email="maagmaandrian@gmail.com", is_superuser=True)
+                    user_object = User.objects.get(
+                        username="andrianllmm",
+                        email="maagmaandrian@gmail.com",
+                        is_superuser=True,
+                    )
                     for example in attribute["examples"]:
                         example_entry = Entry.objects.get_or_create(
-                            content=example["original"], lang=lang_object, user=user_object
+                            content=example["original"],
+                            lang=lang_object,
+                            user=user_object,
                         )[0]
                         if example["translations"]:
-                            for translation_lang, translation in example["translations"].items():
-                                translation_lang_object = Language.objects.get(code=translation_lang)
+                            for translation_lang, translation in example[
+                                "translations"
+                            ].items():
+                                translation_lang_object = Language.objects.get(
+                                    code=translation_lang
+                                )
                                 Translation.objects.get_or_create(
-                                    entry=example_entry, content=translation, lang=translation_lang_object, user=user_object
+                                    entry=example_entry,
+                                    content=translation,
+                                    lang=translation_lang_object,
+                                    user=user_object,
                                 )
                         attribute_object.examples.add(example_entry)
                     attribute_object.save()
@@ -127,6 +179,8 @@ def attributes_to_model(folder_path=os.path.join(script_dir, "attributes/")):
 
     for classification in classification_list:
         print(classification)
-        classification_object = Classification.objects.get_or_create(code=classification["code"])[0]
+        classification_object = Classification.objects.get_or_create(
+            code=classification["code"]
+        )[0]
         classification_object.meaning = classification["meaning"]
         classification_object.save()
