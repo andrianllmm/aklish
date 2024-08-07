@@ -35,7 +35,7 @@
                     <textarea id="entry-text-example" name="content" autofocus
                     class="form-control mb-2" style="min-height: 100px;"
                     placeholder="Start writing and share your words to the world here..."></textarea>
-                    <a id="add-entry-example" href="{% url 'translations:add' %}" class="btn btn-primary">
+                    <a id="add-entry-example" href="{% url 'translate:add' %}" class="btn btn-primary">
                         Add an entry
                     </a>
                 </div>
@@ -47,18 +47,18 @@
                 </h2>
                 <div class="d-flex flex-column justify-content-center">
                     <div class="mb-2">
-                        <a href="{% url 'translations:catalog' %}"
+                        <a href="{% url 'translate:catalog' %}"
                         class="d-flex text-decoration-none align-items-center">
                             <i class="bi bi-chat-left-quote-fill fs-1 m-1"></i>
                             <p class="p-1 m-0">Ro anwang nagaeungaeog sa eugan-eugan.</p>
                         </a>
-                        <a href="{% url 'translations:catalog' %}"
+                        <a href="{% url 'translate:catalog' %}"
                         class="d-flex text-decoration-none align-items-center">
                             <i class="bi bi-chat-right-quote fs-1 m-1"></i>
                             <p class="p-1 m-0">The carabao is swimming in the mud.</p>
                         </a>
                     </div>
-                    <a href="{% url 'translations:catalog' %}" class="btn btn-primary">
+                    <a href="{% url 'translate:catalog' %}" class="btn btn-primary">
                         Translate an entry
                     </a>
                 </div>
@@ -72,18 +72,18 @@
             {% if not request.user.is_authenticated %}
             <a href="{% url 'users:register' %}">Join us</a> and contribute to our growing numbers!
             {% else %}
-            <a href="{% url 'translations:add' %}">Contribute</a> to our growing numbers!
+            <a href="{% url 'translate:add' %}">Contribute</a> to our growing numbers!
             {% endif %}
         </h2>
         <div class="row justify-content-center">
             <div class="col text-center">
-                <a href="{% url 'translations:add' %}" class="text-decoration-none">
+                <a href="{% url 'translate:add' %}" class="text-decoration-none">
                     <p class="fs-2 mb-0">{{ entries.count }}</p>
                     <p class="fs-6">Entries</p>
                 </a>
             </div>
             <div class="col text-center">
-                <a href="{% url 'translations:catalog' %}" class="text-decoration-none">
+                <a href="{% url 'translate:catalog' %}" class="text-decoration-none">
                     <p class="fs-2 mb-0">{{ translations.count }}</p>
                     <p class="fs-6">Translations</p>
                 </a>

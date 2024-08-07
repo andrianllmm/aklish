@@ -1,0 +1,34 @@
+{% extends 'translate/base.html' %}
+
+{% block title %}
+    Edit translation for "{{ translation.content|slice:20 }}..."
+{% endblock title %}
+
+{% block content %}
+    <div class="container pb-3 mb-3 border-bottom">
+        <h1>Edit translation for</h1>
+        <div>
+            <span class="badge bg-primary mb-2">{{ translation.entry.lang.name }}</span>
+            {{ translation.entry.content|linebreaks }}
+        </div>
+    </div>
+    <div class="container mb-3">
+        <p class="fw-bold p-0 m-0 mb-2">Old translation</p>
+        {{ translation.content|linebreaks }}
+        <form action="{% url 'translate:edit_translation' translation.pk %}" method="POST">
+            {% csrf_token %}
+            <div class="form-group mb-3 border-bottom">
+                <label for="content" class="fw-bold mb-2">New translation</label>
+                <div id="proofreader-field">
+                </div>
+            </div>
+            <div class="d-flex">
+                <input type="submit" value="Save changes" class="btn btn-primary me-auto">
+                <a href="{% url 'translate:delete_translation' translation.pk %}?next={{ request.path }}"
+                class="btn btn-danger">
+                    Delete
+                </a>
+            </div>
+        </form>
+    </div>
+{% endblock %}

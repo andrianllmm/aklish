@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 
-from translations.models import Entry, Translation
+from translate.models import Entry, Translation
 from dictionary.models import DictEntry
 
 

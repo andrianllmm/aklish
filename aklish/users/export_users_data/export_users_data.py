@@ -3,7 +3,7 @@ import os
 from django.utils import timezone
 from django.contrib.auth.models import User
 
-from translations.models import Entry, Translation
+from translate.models import Entry, Translation
 
 
 script_dir = os.path.dirname(os.path.realpath(__file__))

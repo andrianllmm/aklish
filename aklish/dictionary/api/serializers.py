@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from ..models import PartsOfSpeech, Origin, Classification, Attribute, DictEntry
-from translations.models import Language, Entry, Translation
+from translate.models import Language, Entry, Translation
 
 
 class LanguageSerializer(serializers.ModelSerializer):

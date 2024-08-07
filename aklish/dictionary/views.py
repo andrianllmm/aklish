@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.core.paginator import Paginator
 
 from .models import Attribute, DictEntry
-from translations.models import Language, Entry
+from translate.models import Language, Entry
 
 
 def index(request):

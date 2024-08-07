@@ -36,12 +36,12 @@
                                             {{ attribute.classification.meaning|lower }}
                                         </span>
                                     {% endif %}
-                                    
+
                                     <span>{{ attribute.definition }}</span>
 
                                     <div class="d-flex flex-wrap align-items-center ms-3">
                                     {% for entry in attribute.examples.all %}
-                                        <a href="{% url 'translations:entry' entry.pk %}"
+                                        <a href="{% url 'translate:entry' entry.pk %}"
                                         class="me-2 text-decoration-none"
                                         style="font-size: medium; color: grey;">
                                             "{{ entry.content }}"

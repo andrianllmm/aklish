@@ -1,0 +1,107 @@
+{% extends 'translate/base.html' %}
+
+{% block title %}
+    Browse Aklish
+{% endblock title %}
+
+{% load humanize %}
+
+{% block content %}
+    <div class="container pb-3 mb-3 border-bottom">
+        <div class="d-flex align-items-center mb-1">
+            <h1 class="me-auto">{{ entries_count }} entries</h1>
+            <div>
+                <a href="{% url 'translate:add' %}" class="btn btn-primary mb-1">Add entry</a>
+            </div>
+        </div>
+        <div class="row g-3 d-flex flex-wrap align-items-center">
+            <div class="col-md btn-group btn-group-sm d-flex flex-wrap border" role="group">
+                <a type="button" href="?sort=latest&q={{ query }}" class="btn">
+                    Latest
+                </a>
+                <a type="button" href="?sort=top&q={{ query }}" class="btn">
+                    Top
+                </a>
+                <a type="button" href="?sort=reputable&q={{ query }}" class="btn">
+                    Reputable
+                </a>
+
+                <div class="btn-group btn-group-sm" role="group">
+                    <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown">
+                        More
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="?sort=proofread&q={{ query }}">
+                            Proofread
+                        </a></li>
+                        <li><a class="dropdown-item" href="?sort=translated&q={{ query }}">
+                            Translated
+                        </a></li>
+                        <li><a class="dropdown-item" href="?sort=untranslated&q={{ query }}">
+                            Untranslated
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md">
+                <form action="{% url 'translate:search' %}?sort={{ sort }}">
+                    <div class="input-group d-flex flex-nowrap">
+                        <input name="q" type="search" required class="form-control" placeholder="Start searching..." autofocus>
+                        <button type="submit" class="btn btn-primary" aria-label="Search">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="alert p-1 px-2 alert-info alert-dismissible fade show" role="alert">
+            <small>
+                <strong>Note: </strong>
+                The following entries and translations are user-generated;
+                they are not guaranteed for validity.
+            </small>
+            <button type="button" class="btn-close p-2" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div class="mb-3">
+            {% for entry in entries %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <small class="card-subtitle text-muted">
+                            <span class="me-2">{{ entry.translations.count }} translations</span>
+                            <span></span>{{ entry.bookmarks.count }} bookmarks</span>
+                        </small>
+
+                        <h2 class="card-title mb-3 fs-6 fw-normal">
+                            <a href="{% url 'translate:entry' entry.id %}" class="text-decoration-none">
+                                {{ entry.content|slice:125 }}...
+                            </a>
+                        </h2>
+
+                        <div class="d-flex align-items-center">
+                            <div class="me-auto">
+                                <small class="me-1"><strong>{{ entry.correctness }}%</strong></small>
+                                <span class="badge bg-primary">{{ entry.lang.name }}</span>
+                            </div>
+                            <div class="d-flex flex-wrap justify-content-end text-muted">
+                                <small class="ms-3">
+                                    by
+                                    <a href="{% url 'users:profile' entry.user.id entry.user.username %}"
+                                    class="text-decoration-none">{{ entry.user.username }}</a>
+                                    <span class="fw-bold">{{ entry.user.profile.reputation }}</span>
+                                </small>
+                                <small class="ms-3">{{ entry.modified_at|naturaltime }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                No entries
+            {% endfor %}
+        </div>
+
+        {% block additional %}{% endblock %}
+    </div>
+{% endblock %}

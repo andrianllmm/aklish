@@ -8,7 +8,7 @@ from dictionary.models import (
     Attribute,
     DictEntry,
 )
-from translations.models import Language, Entry, Translation
+from translate.models import Language, Entry, Translation
 from django.contrib.auth.models import User
 
 

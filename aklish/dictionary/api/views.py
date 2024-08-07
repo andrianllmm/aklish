@@ -8,7 +8,7 @@ from rest_framework import status
 from django.utils.decorators import method_decorator
 from django_ratelimit.decorators import ratelimit
 from ..models import DictEntry
-from translations.models import Language
+from translate.models import Language
 from .serializers import DictEntrySerializer
 
 
