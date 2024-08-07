@@ -1,0 +1,107 @@
+{% extends 'translate/entries.html' %}
+
+{% load humanize %}
+
+{% block title %}
+    Search Aklish
+{% endblock title %}
+
+{% block additional %}
+    {% if as_translation %}
+        <div class="pt-3 mb-3">
+            <h2 class="h4">"{{ query }}" as translation</h2>
+            {% for entry in as_translation %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <small class="card-subtitle text-muted">
+                            <span class="me-2">{{ entry.translations.count }} translations</span>
+                            <span></span>{{ entry.bookmarks.count }} bookmarks</span>
+                        </small>
+
+                        <h2 class="card-title mb-3 fs-6 fw-normal">
+                            <a href="{% url 'translate:entry' entry.id %}" class="text-decoration-none">
+                                {{ entry.content|slice:125 }}...
+                            </a>
+                        </h2>
+
+                        <div class="d-flex align-items-center">
+                            <div class="me-auto">
+                                <small class="me-1"><strong>{{ entry.correctness }}%</strong></small>
+                                <span class="badge bg-primary">{{ entry.lang.name }}</span>
+                            </div>
+                            <div class="d-flex flex-wrap justify-content-end text-muted">
+                                <small class="ms-3">
+                                    by
+                                    <a href="{% url 'users:profile' entry.user.id entry.user.username %}"
+                                    class="text-decoration-none">{{ entry.user.username }}</a>
+                                    <span class="fw-bold">{{ entry.user.profile.reputation }}</span>
+                                </small>
+                                <small class="ms-3">{{ entry.modified_at|naturaltime }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <nav id="page-pagination">
+        <ul class="pagination pagination-sm flex-wrap justify-content-center">
+            {% if entries.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?q={{ request.GET.q }}&page=1">
+                        <span>&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?q={{ request.GET.q }}&page={{ entries.previous_page_number }}">
+                        <span>&lsaquo;</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#"><span>&laquo;</span></a>
+                </li>
+                <li class="page-item disabled">
+                    <a class="page-link" href="#"><span>&lsaquo;</span></a>
+                </li>
+            {% endif %}
+
+            {% for page_num in page_nums %}
+                {% if page_num == request.GET.page %}
+                    <li class="page-item">
+                        <a href="?q={{ request.GET.q }}&page={{ page_num }}" class="page-link active mb-1">
+                            {{ page_num }}
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item">
+                        <a href="?q={{ request.GET.q }}&page={{ page_num }}" class="page-link mb-1">
+                            {{ page_num }}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+
+            {% if entries.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?q={{ request.GET.q }}&page={{ entries.next_page_number }}">
+                        <span>&rsaquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?q={{ request.GET.q }}&page={{ entries.paginator.num_pages }}">
+                        <span>&raquo;</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#"><span>&rsaquo;</span></a>
+                </li>
+                <li class="page-item disabled">
+                    <a class="page-link" href="#"><span>&raquo;</span></a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+{% endblock %}

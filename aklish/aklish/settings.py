@@ -47,7 +47,7 @@ ALLOWED_HOSTS = ["*"]
 INSTALLED_APPS = [
     "main",
     "users",
-    "translations",
+    "translate",
     "dictionary",
     "proofreader",
     "games",

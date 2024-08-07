@@ -12,17 +12,17 @@
         <ul class="list-group">
             {% for entry in user.entries.all %}
                 <li class="list-group-item d-flex align-items-center">
-                    <a href="{% url 'translations:entry' entry.pk %}"
+                    <a href="{% url 'translate:entry' entry.pk %}"
                     class="me-auto text-decoration-none">
                         {{ entry.content|slice:100 }}...
                     </a>
                     {% if request.user == user %}
                         <div class="d-flex flex-nowrap">
-                            <a href="{% url 'translations:edit_entry' entry.pk %}"
+                            <a href="{% url 'translate:edit_entry' entry.pk %}"
                             class="ms-3 text-decoration-none" aria-label="Edit">
                                 <i class="bi bi-pen"></i>
                             </a>
-                            <a href="{% url 'translations:delete_entry' entry.pk %}?next={{ request.path }}"
+                            <a href="{% url 'translate:delete_entry' entry.pk %}?next={{ request.path }}"
                             class="text-danger ms-3 text-decoration-none" aria-label="Delete">
                                 <i class="bi bi-trash"></i>
                             </a>
@@ -43,17 +43,17 @@
         <ul class="list-group">
             {% for translation in user.translations.all %}
                 <li class="list-group-item d-flex align-items-center">
-                    <a href="{% url 'translations:entry' translation.entry.pk %}"
+                    <a href="{% url 'translate:entry' translation.entry.pk %}"
                     class="me-auto text-decoration-none">
                         {{ translation.content|slice:100 }}...
                     </a>
                     {% if request.user == user %}
                         <div class="d-flex flex-nowrap">
-                            <a href="{% url 'translations:edit_translation' translation.pk %}"
+                            <a href="{% url 'translate:edit_translation' translation.pk %}"
                             class="ms-3 text-decoration-none" aria-label="Edit">
                                 <i class="bi bi-pen"></i>
                             </a>
-                            <a href="{% url 'translations:delete_translation' translation.pk %}?next={{ request.path }}"
+                            <a href="{% url 'translate:delete_translation' translation.pk %}?next={{ request.path }}"
                             class="text-danger ms-3 text-decoration-none" aria-label="Trash">
                                 <i class="bi bi-trash"></i>
                             </a>

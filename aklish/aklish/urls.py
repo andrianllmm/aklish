@@ -26,7 +26,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("main.urls")),
     path("users/", include("users.urls")),
-    path("translate/", include("translations.urls")),
+    path("translate/", include("translate.urls")),
     path("dictionary/", include("dictionary.urls")),
     path("dictionary/api/", include("dictionary.api.urls")),
     path("proofreader/", include("proofreader.urls")),

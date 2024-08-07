@@ -1,6 +1,6 @@
 from django.db import models
 
-from translations.models import Language, Entry
+from translate.models import Language, Entry
 
 
 class PartsOfSpeech(models.Model):

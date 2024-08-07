@@ -12,7 +12,7 @@
         <ul class="list-group">
             {% for entry in user.bookmarks.all %}
                 <li class="list-group-item d-flex align-items-center">
-                    <a href="{% url 'translations:entry' entry.pk %}"
+                    <a href="{% url 'translate:entry' entry.pk %}"
                     class="me-auto text-decoration-none">
                         {{ entry.content|slice:100 }}...
                     </a>
@@ -39,7 +39,7 @@
         <ul class="list-group">
             {% for vote in user.votes.all %}
                 <li class="list-group-item d-flex align-items-center">
-                    <a href="{% url 'translations:entry' vote.translation.entry.pk %}"
+                    <a href="{% url 'translate:entry' vote.translation.entry.pk %}"
                     class="me-auto text-decoration-none">
                         {{ vote.translation.content|slice:100 }}...
                     </a>

@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 from .models import LoginSession
-from translations.models import Entry, Translation, Vote
+from translate.models import Entry, Translation, Vote
 from .forms import RegisterForm, LoginForm
 
 
