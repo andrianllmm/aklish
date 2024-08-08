@@ -5,66 +5,6 @@
 {% endblock title %}
 
 {% block body %}
-    <div class="pb-3 mb-3">
-        <h2 class="h5">
-            Entries
-        </h2>
-        <ul class="list-group">
-            {% for entry in user.entries.all %}
-                <li class="list-group-item d-flex align-items-center">
-                    <a href="{% url 'translate:entry' entry.pk %}"
-                    class="me-auto text-decoration-none">
-                        {{ entry.content|slice:100 }}...
-                    </a>
-                    {% if request.user == user %}
-                        <div class="d-flex flex-nowrap">
-                            <a href="{% url 'translate:edit_entry' entry.pk %}"
-                            class="ms-3 text-decoration-none" aria-label="Edit">
-                                <i class="bi bi-pen"></i>
-                            </a>
-                            <a href="{% url 'translate:delete_entry' entry.pk %}?next={{ request.path }}"
-                            class="text-danger ms-3 text-decoration-none" aria-label="Delete">
-                                <i class="bi bi-trash"></i>
-                            </a>
-                        </div>
-                    {% endif %}
-                </li>
-            {% empty %}
-                <li class="list-group-item">
-                    No entries
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-    <div class="pb-3 mb-3">
-        <h2 class="h5">
-            Translations
-        </h2>
-        <ul class="list-group">
-            {% for translation in user.translations.all %}
-                <li class="list-group-item d-flex align-items-center">
-                    <a href="{% url 'translate:entry' translation.entry.pk %}"
-                    class="me-auto text-decoration-none">
-                        {{ translation.content|slice:100 }}...
-                    </a>
-                    {% if request.user == user %}
-                        <div class="d-flex flex-nowrap">
-                            <a href="{% url 'translate:edit_translation' translation.pk %}"
-                            class="ms-3 text-decoration-none" aria-label="Edit">
-                                <i class="bi bi-pen"></i>
-                            </a>
-                            <a href="{% url 'translate:delete_translation' translation.pk %}?next={{ request.path }}"
-                            class="text-danger ms-3 text-decoration-none" aria-label="Trash">
-                                <i class="bi bi-trash"></i>
-                            </a>
-                        </div>
-                    {% endif %}
-                </li>
-            {% empty %}
-                <li class="list-group-item">
-                    No translations
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+    {% include 'users/components/entries_list.html' with entries=user.entries.all title='Entries' %}
+    {% include 'users/components/entries_list.html' with entries=user.translations.all title='Translations' %}
 {% endblock %}

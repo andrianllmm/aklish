@@ -20,20 +20,25 @@ export default function Suggestion({ check, setGenerateSuggestions, setTextInput
 
     return (
         <li className="list-group-item">
+            {/* Word */}
             <div className="d-flex mb-2">
                 <span>{check.token}</span>
             </div>
+
             {check.suggestions && (
                 <div className="d-flex mb-2">
+                    {/* Replace options */}
                     <select className="replace-mode form-select form-select-sm me-auto" style={{maxWidth: "110px", fontSize: "small"}}>
                         <option value="replace">Replace</option>
                         <option value="replace-all">Replace all</option>
                     </select>
+
+                    {/* Suggestions items */}
                     <div>
                         {check.suggestions.map((suggestion, i) => (
                             <button
                                 key={i}
-                                className="suggestion btn btn-sm btn-secondary me-1"
+                                className="suggestion btn btn-sm border me-1"
                                 data-changefrom={check.token}
                                 data-changeto={suggestion}
                                 onClick={handleSuggestionClick}

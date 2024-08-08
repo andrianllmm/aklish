@@ -8,7 +8,7 @@ import Button from "react-bootstrap/Button";
 
 export default function Match() {
     const modes = ["similar", "opposite"];
- 
+
     const wordLen = [3, 10];
     const [lang, setLang] = React.useState(useParams().lang);
     const [mode, setMode] = React.useState(modes[Math.floor(Math.random() * modes.length)]);
@@ -24,7 +24,7 @@ export default function Match() {
 
     React.useEffect(() => {
         fetch(
-            `/dictionary/api/${lang}/entry/?` + 
+            `/dictionary/api/${lang}/entry/?` +
             `has=${mode}&` +
             `word_len=${wordLen[0]}-${wordLen[1]}&` +
             `word_case=lower&` +
@@ -126,31 +126,47 @@ export default function Match() {
 
     return (
         <>
-            {word && ( 
+            {word && (
                 <>
                     <Header title="Match" />
-                    <div className="d-flex flex-column align-items-center text-center">
+
+                    <div className="pb-2 mb-2 d-flex flex-column align-items-center text-center border-bottom">
+                        {/* Question */}
                         <div>
                             <h1 className="m-2 fs-3">Which is {mode} to <strong>{word}</strong>?</h1>
                         </div>
+
+                        {/* Message */}
                         { message &&
                             <Message message={message[0]} variant={message[1]}/>
                         }
                         {endgame &&
                             <Message message={
-                                <>{isCorrect ? "Correct." : "Incorrect."} The match of <a className="text-reset" href={`/dictionary/${lang}/entry/${word}`}>{word}</a> is <a className="text-reset" href={`/dictionary/${lang}/entry/${matchWord}`}>{matchWord}</a>.</>
-                            }
-                            variant={"info"}
+                                    <>{isCorrect ? "Correct." : "Incorrect."} The match of <a className="text-reset" href={`/dictionary/${lang}/entry/${word}`}>{word}</a> is <a className="text-reset" href={`/dictionary/${lang}/entry/${matchWord}`}>{matchWord}</a>.</>
+                                }
+                                variant={"info"}
                             />
                         }
+
+                        {/* Choices */}
                         { choicesReady ?
                             <Choices choices={choices} onClick={handleChoiceClick} selectedChoice={selectedChoice} matchWord={matchWord} answerSelected={answerSelected} />
                             : <Message message={"Generating choices..."} variant={"warning"}/>
                         }
+
+                        {/* Next */}
                         {endgame ?
                             <Button onClick={() => {window.location.reload()}} variant="primary">Next</Button>
                             : <Button onClick={() => {window.location.reload()}} variant="secondary" disabled>Next</Button>
                         }
+                    </div>
+
+                    {/* Guide */}
+                    <div class="container d-flex">
+                        <a href="/help/match_guide" class="link-unstyled ms-auto">
+                            <i class="bi bi-question-circle me-2"></i>
+                            <small>How to play</small>
+                        </a>
                     </div>
                 </>
             )}

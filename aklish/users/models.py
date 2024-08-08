@@ -4,9 +4,7 @@ from django.utils import timezone
 
 
 class LoginSession(models.Model):
-    user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="login_session"
-    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="login_session")
     login_at = models.DateTimeField(default=timezone.now)
     logout_at = models.DateTimeField(null=True)
 
@@ -33,13 +31,9 @@ class Profile(models.Model):
             reputation += 1
 
             upvote_points = translation.upvote_count() * 10
-            reputation += upvote_points + upvote_points * (
-                translation.correctness / 100
-            )
+            reputation += upvote_points + upvote_points * (translation.correctness / 100)
             downvote_points = translation.downvote_count() * 5
-            reputation -= downvote_points - downvote_points * (
-                translation.correctness / 100
-            )
+            reputation -= downvote_points - downvote_points * (translation.correctness / 100)
 
         self.reputation = round(reputation)
         self.save()

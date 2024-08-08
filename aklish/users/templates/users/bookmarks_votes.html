@@ -12,16 +12,14 @@
         <ul class="list-group">
             {% for entry in user.bookmarks.all %}
                 <li class="list-group-item d-flex align-items-center">
-                    <a href="{% url 'translate:entry' entry.pk %}"
-                    class="me-auto text-decoration-none">
+                    <a href="{% url 'translate:entry' entry.pk %}" class="me-auto text-decoration-none">
                         {{ entry.content|slice:100 }}...
                     </a>
+
                     {% if request.user == user %}
-                        <form method="POST">
+                        <form action="{% url 'translate:bookmark' entry.pk %}" method="POST">
                             {% csrf_token %}
-                            <input type="hidden" name="entry_to_unbookmark_pk" value="{{ entry.pk }}">
-                            <input type="submit" name="remove_bookmark" value="Remove"
-                            class="btn btn-sm btn-danger">
+                            <button class="btn btn-sm btn-danger">Remove</button>
                         </form>
                     {% endif %}
                 </li>
@@ -39,16 +37,16 @@
         <ul class="list-group">
             {% for vote in user.votes.all %}
                 <li class="list-group-item d-flex align-items-center">
-                    <a href="{% url 'translate:entry' vote.translation.entry.pk %}"
-                    class="me-auto text-decoration-none">
+                    <a href="{% url 'translate:entry' vote.translation.entry.pk %}" class="me-auto text-decoration-none">
                         {{ vote.translation.content|slice:100 }}...
                     </a>
+
                     {% if request.user == user %}
-                        <form method="POST">
+                        <form action="{% url 'translate:vote' vote.translation.pk %}" method="POST">
                             {% csrf_token %}
-                            <input type="hidden" name="vote_to_unvote_pk" value="{{ vote.pk }}">
-                            <input type="submit" name="remove_vote" value="Remove"
-                            class="btn btn-sm btn-danger">
+                            <button name="direction" value="0" class="btn btn-sm btn-danger">
+                                Remove
+                            </button>
                         </form>
                     {% endif %}
                 </li>

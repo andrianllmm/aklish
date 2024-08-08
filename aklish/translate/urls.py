@@ -6,21 +6,12 @@ from . import views
 app_name = "translate"
 urlpatterns = [
     path("entries/", views.catalog, name="catalog"),
-    path("search/", views.search, name="search"),
-    path("entry/<int:entry_id>/", views.entry, name="entry"),
+    path("entry/<int:entry_pk>/", views.entry, name="entry"),
     path("add/", views.add, name="add"),
-    path("edit/entry/<int:entry_id>/", views.edit_entry, name="edit_entry"),
-    path(
-        "edit/translation/<int:translation_id>/",
-        views.edit_translation,
-        name="edit_translation",
-    ),
-    path(
-        "delete/translation/<int:translation_id>/",
-        views.delete_translation,
-        name="delete_translation",
-    ),
-    path("delete/entry/<int:entry_id>/", views.delete_entry, name="delete_entry"),
-    path("bookmark/<int:entry_id>/", views.bookmark, name="bookmark"),
-    path("vote/<int:translation_id>/", views.vote, name="vote"),
+    path("edit/entry/<int:entry_pk>/", views.edit_entry, name="edit_entry"),
+    path("edit/translation/<int:translation_pk>/", views.edit_translation, name="edit_translation",),
+    path("delete/translation/", views.delete_translation, name="delete_translation", ),
+    path("delete/entry/", views.delete_entry, name="delete_entry"),
+    path("bookmark/<int:entry_pk>/", views.bookmark, name="bookmark"),
+    path("vote/<int:translation_pk>/", views.vote, name="vote"),
 ]

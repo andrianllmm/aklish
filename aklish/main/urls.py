@@ -9,4 +9,6 @@ urlpatterns = [
     path("about/", views.about, name="about"),
     path("contact/", views.contact, name="contact"),
     path("sources/", views.sources, name="sources"),
+    path("help/", views.help, name="help"),
+    path("help/<str:page>/", views.help, name="help"),
 ]

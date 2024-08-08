@@ -8,56 +8,46 @@
     <div class="container pb-3 mb-3 border-bottom">
         <h1>Add an entry</h1>
     </div>
-    <div class="row g-4 container mb-3">
-        <div class="col-md">
-            <form action="{% url 'translate:add' %}" method="POST">
-                {% csrf_token %}
-                <div class="form-group mb-3 border-bottom">
-                    <label for="lang" class="fw-bold mb-2">Language</label>
-                    <select name="lang" id="lang" class="form-select mb-2">
-                        <option value="akl">Aklanon</option>
-                        <option value="eng">English</option>
-                    </select>
-                    <label for="content" class="fw-bold mb-2">Content</label>
-                    <div id="proofreader-field"></div>
-                </div>
-                <input type="submit" value="Add entry" class="btn btn-primary">
-            </form>
-        </div>
-        <div class="col-md-4 p-3 alert alert-info alert-dismissible fade show">
-            <h5>Guide in adding entries</h5>
-            <button type="button" class="btn-close p-3" data-bs-dismiss="alert" aria-label="Close"></button>
-            <ul>
-                <li class="mb-2">
-                    <strong>Conciseness</strong><br>
-                    <small>Keep your text within the 300-character limit to maintain readability and focus.</small>
-                </li>
-                <li class="mb-2">
-                    <strong>Accuracy</strong><br>
-                    <small>Ensure the accuracy of your text.</small>
-                </li>
-                <li class="mb-2">
-                    <strong>Relevance</strong><br>
-                    <small>Keep your text relevant to its purpose.</small>
-                </li>
-                <li class="mb-2">
-                    <strong>Clarity</strong><br>
-                    <small>Write clearly and concisely to aid understanding.</small>
-                </li>
-                <li class="mb-2">
-                    <strong>Language</strong><br>
-                    <small>Use appropriate language and avoid offensive or inappropriate content.</small>
-                </li>
-                <li class="mb-2">
-                    <strong>Respect Copyright</strong><br>
-                    <small>Only contribute original content or content you have permission to share.</small>
-                </li>
-                <li class="mb-2">
-                    <strong>Moderation</strong><br>
-                    <small>Understand that all submissions are subject to moderation.</small>
-                </li>
-            </ul>
-            <p><small>Thank you for contributing to our community!</small></p>
+
+    <!-- Add entry guide -->
+    <div class="container">
+        <div class="alert py-1 px-2 alert-info alert-dismissible show" role="alert">
+            <small>
+                Please review this
+                <a href="{% url 'main:help' 'adding_guide' %}" class="text-reset">guide</a>
+                before adding any entry.
+            </small>
+            <button type="button" class="btn-close p-2" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     </div>
+    <!-- End add entry guide -->
+
+    <!-- Add entry form -->
+    <div class="container">
+        {% if message %}
+            <div class="alert alert-warning px-2 py-1" role="alert">
+                {{ message }}
+            </div>
+        {% endif %}
+
+        <form action="{% url 'translate:add' %}" method="POST">
+            {% csrf_token %}
+
+            <div class="form-group mb-3">
+                <label for="lang" class="fw-bold mb-2">Language</label>
+                <select name="lang" id="lang" class="form-select mb-2">
+                    <option value="akl">Aklanon</option>
+                    <option value="eng">English</option>
+                </select>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="content" class="fw-bold mb-2">Content</label>
+                <div id="proofreader-field"></div>
+            </div>
+
+            <button class="btn btn-primary">Add entry</button>
+        </form>
+    </div>
+    <!-- End add entry form -->
 {% endblock %}

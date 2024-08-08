@@ -6,56 +6,80 @@ from aklstemmer import stemmer
 from nltk.tokenize import word_tokenize
 from spellchecker import SpellChecker
 from tabulate import tabulate
+from typing import Optional
 
 
 script_dir = os.path.dirname(os.path.realpath(__file__))
 
 
-def proofread_text(text, lang="akl", max_suggestions=5):
-    if lang == "eng":
-        spell = get_spellchecker()
-    elif lang == "akl":
-        spell = get_spellchecker("dictionary/data/akl_freqlist.json")
+def proofread_text(text: str, lang: Optional[str] = "akl", max_suggestions: Optional[int] = 5) -> dict:
+    """Proofreads Aklanon or English text.
 
+    Args:
+        text (str): Any text.
+        lang (str, optional): Language of the proofreader. Defaults to 'akl'. Values can be:
+            - 'akl': Aklanon
+            - 'eng': English
+        max_suggestions (int, optional): Maximum suggestions. Defaults to 5.
+
+    Returns:
+        dict: A dictionary containing a list of checks, word count, mistake count, and correctness.
+    """
+    # Get spell checkers
+    if lang == "akl":
+        spell = get_spellchecker("dictionary/data/akl_freqlist.json")
+    else:
+        spell = get_spellchecker()
+
+    # Initialize data
     data = {"checks": [], "word_count": 0, "mistake_count": 0, "correctness": None}
 
-    text = text.strip()
-
-    words = word_tokenize(text)
+    # Tokenize text
+    words = word_tokenize(text.strip())
     for token in words:
+        # Clean token
         clean_token = clean(token)
 
+        # Initialize fields
         cls = "word"
         valid = True
         suggestions = []
 
+        # Identify punctuation
         if all(char in string.punctuation for char in token):
             cls = "punc"
 
+        # Identify numerals
         elif token.replace(".", "").isnumeric():
             cls = "num"
 
         elif clean_token not in spell:
+            # Get lammas and stems
             lemmas = lemminflect.getAllLemmas(clean_token)
-
             stems = stemmer.get_stems(clean_token, valid_words=list(spell))
             if clean_token in stems:
                 stems.remove(clean_token)
 
+            # If no root, invalid
             if (lang == "eng" and not lemmas) or (lang == "akl" and not stems):
                 valid = False
                 suggestions = spell.candidates(clean_token)
+
+            # If has root, valid
             else:
                 cls = "stemmed"
 
+        # Convert suggestions to list
         suggestions = list(suggestions) if suggestions else []
 
+        # Limit suggestions
         suggestions = (
             suggestions[:max_suggestions]
             if len(suggestions) > max_suggestions
             else suggestions
         )
 
+        # Append data
         data["checks"].append(
             {
                 "token": token,
@@ -65,6 +89,7 @@ def proofread_text(text, lang="akl", max_suggestions=5):
             }
         )
 
+    # Calculate counts
     data["word_count"] = cal_word_count(data["checks"])
     data["mistake_count"] = cal_mistake_count(data["checks"])
     data["correctness"] = cal_correctness(data["word_count"], data["mistake_count"])
@@ -72,11 +97,13 @@ def proofread_text(text, lang="akl", max_suggestions=5):
     return data
 
 
-def clean(token):
+def clean(token: str) -> str:
+    """Cleans a token."""
     return re.sub(r"[^a-zA-Z'-]", "", token.strip())
 
 
-def cal_word_count(checks):
+def cal_word_count(checks: list) -> int:
+    """Calculates the word count."""
     word_count = 0
     for check in checks:
         if check["cls"] not in ["punc", "num"]:
@@ -84,7 +111,8 @@ def cal_word_count(checks):
     return word_count
 
 
-def cal_mistake_count(checks):
+def cal_mistake_count(checks: list) -> int:
+    """Calculates the mistake count."""
     mistake_count = 0
     for check in checks:
         if check["valid"] == False:
@@ -92,10 +120,10 @@ def cal_mistake_count(checks):
     return mistake_count
 
 
-def cal_correctness(word_count, mistake_count):
-    correctness = None
+def cal_correctness(word_count: int, mistake_count: int) -> float:
+    """Calculates the correctness in percentage."""
     if word_count == 0:
-        pass
+        correctness = 0
     elif mistake_count == 0:
         correctness = 100
     else:
@@ -103,7 +131,8 @@ def cal_correctness(word_count, mistake_count):
     return correctness
 
 
-def get_spellchecker(file_path=None):
+def get_spellchecker(file_path: str = None) -> SpellChecker:
+    """Gets a spellchecker from a file."""
     if file_path:
         spell = SpellChecker(language=None)
         spell.word_frequency.load_dictionary(file_path)

@@ -163,26 +163,41 @@ export default function Wordle() {
             {solution && (
                 <>
                     <Header title="Wordle" />
-                    <div className="text-center">
+
+                    <div className="pb-2 mb-2 text-center border-bottom">
+                        {/* Hint */}
                         <div>
                             <p className="m-2">Hint: <strong>{hint}</strong></p>
                         </div>
+
+                        {/* Message */}
                         {message &&
                             <div className="d-flex justify-content-center">
                                 <Message message={message[0]} variant={message[1]}/>
                             </div>
                         }
+
+                        {/* Grid */}
                         <Grid solutionLen={solution.length} currentGuess={currentGuess} guesses={guesses} turn={turn}></Grid>
+
+                        {/* Keyboard */}
                         <Keyboard handleKeyup={handleKeyup}></Keyboard>
                         {endgame && (
-                            <Endgame
-                            show={endgame}
-                            isCorrect={isCorrect}
-                            solution={solution}
-                            turn={turn}
-                            numGuesses={numGuesses}
+                            <Endgame show={endgame}
+                                isCorrect={isCorrect}
+                                solution={solution}
+                                turn={turn}
+                                numGuesses={numGuesses}
                             />
                         )}
+                    </div>
+
+                    {/* Guide */}
+                    <div class="container d-flex">
+                        <a href="/help/wordle_guide" class="link-unstyled ms-auto">
+                            <i class="bi bi-question-circle me-2"></i>
+                            <small>How to play</small>
+                        </a>
                     </div>
                 </>
             )}
