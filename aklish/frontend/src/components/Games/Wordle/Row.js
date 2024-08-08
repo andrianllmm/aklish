@@ -8,13 +8,13 @@ export default function Row({ len, guess, currentGuess }) {
                 {guess.map((char, i) => {
                     return <div key={i} className={char.status}>{char.key}</div>
                 })}
-            </div> 
-        ) 
+            </div>
+        )
     }
 
     if (currentGuess) {
         let chars = currentGuess.split("");
-    
+
         return (
             <div className="row current">
                 {chars.map((char, i) => {

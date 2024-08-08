@@ -8,49 +8,9 @@
     {% if request.user.profile.reputation < 20 %}
         <div class="alert alert-warning">
             You need at least 20 reputation points to play games. Learn how to gain reputation by visiting the
-            <a href="{% url 'users:reputation_guide' %}" class="text-reset">reputation guide</a>.
+            <a href="{% url 'main:help' 'reputation_guide' %}" class="text-reset">reputation guide</a>.
         </div>
     {% else %}
-        <div id="app"></div><br>  
+        <div id="app"></div>
     {% endif %}
-
-    <br><hr><br>
-
-    <div class="container">
-        <h1 class="text-center mb-3">How to Play Wordle</h1>
-        <div class="mb-2">
-            <h2>Objective</h2>
-            <p>Guess the 4-6-letter word in as few attempts as possible.</p>
-        </div>
-        <div class="mb-2">
-            <h2>Rules</h2>
-            <ul>
-                <li>You have 6 attempts to guess the secret word.</li>
-                <li>Each guess must fill the blank tiles.</li>
-                <li>Each guess must be a valid word in the dictionary.</li>
-                <li>Do not guess the same word more than once.</li>
-            </ul>
-        </div>
-        <div class="mb-2">
-            <h2>Gameplay</h2>
-            <ol>
-                <li>You are provided with a hint.</li>
-                <li>Start by entering your guess into the tiles.</li>
-                <li>Submit your guess by pressing the <i>Enter</i> or <i class="bi bi-arrow-return-left"></i> key.</li>
-                <li>Receive feedback on your guess based on the color of the tile:</li>
-                <ul>
-                    <li>
-                        <span class="text-success">Green:</span> if the letter is in the word, and it is in the correct spot.
-                    </li>
-                    <li>
-                        <span class="text-warning">Yellow:</span> if the letter is in the word, but it is not in the correct spot.
-                    </li>
-                    <li>
-                        <span class="text-secondary">Grey:</span> if the letter is not in the word.
-                    </li>
-                </ul>
-                <li>Continue guessing until you correctly identify the word or run out of attempts.</li>
-            </ol>
-        </div>
-    </div>
 {% endblock %}

@@ -8,12 +8,11 @@ export default function Endgame({ show, isCorrect, solution, turn, numGuesses}) 
     const { lang } = useParams();
 
     return (
-        <Modal
-        show={show}
-        size="sm"
-        centered
+        <Modal show={show}
+            size="sm"
+            centered
         >
-            {isCorrect && 
+            {isCorrect &&
             <>
                 <Modal.Header>
                     <Modal.Title>
@@ -28,7 +27,7 @@ export default function Endgame({ show, isCorrect, solution, turn, numGuesses}) 
                 </Modal.Body>
             </>
             }
-            {!isCorrect && 
+            {!isCorrect &&
             <>
                 <Modal.Header>
                     <Modal.Title>

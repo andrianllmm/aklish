@@ -7,11 +7,11 @@ export default function Message({ message, variant }) {
 
     if (show) {
         return (
-            <Alert
-            variant={variant}
-            onClose={() => setShow(false)}
-            className="py-1 px-2 m-0"
-            style={{maxWidth: "300px", fontSize: "small"}}>
+            <Alert variant={variant}
+                onClose={() => setShow(false)}
+                className="py-1 px-2 m-0"
+                style={{maxWidth: "300px", fontSize: "small"}}
+            >
                 {message}
             </Alert>
         );

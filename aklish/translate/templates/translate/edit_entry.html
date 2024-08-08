@@ -11,23 +11,37 @@
             <span class="badge bg-primary mb-2">{{ entry.lang.name }}</span>
         </div>
     </div>
+
     <div class="container mb-3">
-        <p class="fw-bold p-0 m-0 mb-2">Old content</p>
+        <!-- Old content -->
+        <label class="fw-bold mb-2">Old content</label>
         {{ entry.content|linebreaks }}
-        <form action="{% url 'translate:edit_entry' entry.pk %}" method="POST">
+        <!-- End old content -->
+
+        <!-- New content form -->
+        <form id="edit-entry" action="{% url 'translate:edit_entry' entry.pk %}" method="POST">
             {% csrf_token %}
+
             <div class="form-group mb-3 border-bottom">
                 <label for="content" class="fw-bold mb-2">New content</label>
                 <div id="proofreader-field">
                 </div>
             </div>
-            <div class="d-flex">
-                <input type="submit" value="Save changes" class="btn btn-primary me-auto">
-                <a href="{% url 'translate:delete_entry' entry.pk %}?next={% url 'translate:catalog' %}"
-                class="btn btn-danger">
-                    Delete
-                </a>
-            </div>
         </form>
+        <!-- End new content form -->
+
+        <!-- Delete entry form -->
+        <form id="delete-entry" action="{% url 'translate:delete_entry' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="entry_pk" value="{{ entry.pk }}">
+        </form>
+        <!-- End delete entry form -->
+
+        <!-- Actions -->
+        <div class="d-flex">
+            <button class="btn btn-primary me-auto" form="edit-entry">Save changes</button>
+            <button class="btn btn-danger" form="delete-entry">Delete</button>
+        </div>
+        <!-- End actions -->
     </div>
 {% endblock %}

@@ -4,64 +4,85 @@
     About Aklish
 {% endblock %}
 
-{% block content%}
-    <div class="container pb-3 mb-3 border-bottom">
-        <h1>About Aklish</h1>
-    </div>
+{% block content %}
+    <!-- About -->
+    <article id="about" class="container">
+        <!-- Title -->
+        <h1 class="pb-3 mb-3 border-bottom">About Aklish</h1>
 
-    <div class="container mb-3">
-
-        <p>Welcome to Aklish, your platform for crowdsourcing Aklanon-English translations and fostering language learning and cultural exchange.</p>
-
-        <div class="my-4">
-            <h2>Our Mission</h2>
+        <!-- Intro -->
+        <section id="intro" class="mb-4">
             <p>
-                At Aklish, our mission is to bridge language barriers and celebrate linguistic diversity by empowering Aklanon speakers and foreign learners to contribute and engage with the Aklanon and English languages.
+                Welcome to Aklish, your platform for crowdsourcing Aklanon-English translations and fostering language learning and cultural exchange.
             </p>
-        </div>
+        </section>
+        <!-- End intro -->
 
-        <div class="my-4">
+        <!-- Mission -->
+        <section id="mission" class="mb-4">
+            <h2>Our Mission</h2>
+
+            <p>
+                At Aklish, our mission is to bridge language barriers and celebrate linguistic diversity
+                by empowering Aklanon speakers and foreign learners to contribute and engage with the Aklanon and English languages.
+            </p>
+        </section>
+        <!-- End mission -->
+
+        <!-- Features -->
+        <section id="features" class="mb-4">
+            <h2>Features</h2>
+
+            <ul>
+                <li>
+                    <h3 class="fs-5 m-0">Crowdsourced Translations</h3>
+                    <p>
+                        Aklish allows users to add
+                        text entries for translation or
+                        contribute their translations to existing text entries.
+                    </p>
+                </li>
+                <li>
+                    <h3 class="fs-5 m-0">Aklanon-English Dictionary</h3>
+                    <p>
+                        Explore our comprehensive dictionary
+                        to look up Aklanon and English words,
+                        complete with definitions, parts of speech, examples, and more!
+                    </p>
+                </li>
+                <li>
+                    <h3 class="fs-5 m-0">Proofreading Tools</h3>
+                    <p>
+                        Our integrated proofreading tools help users
+                        refine their Aklanon and English writing skills,
+                        offering spelling suggestions tailored to both languages.
+                    </p>
+                </li>
+                <li>
+                    <h3 class="fs-5 m-0">Language Games</h3>
+                    <p>
+                        Aklish offers a variety of interactive games
+                        like Wordle and Match designed
+                        to reinforce language skills and vocabulary retention.
+                    </p>
+                </li>
+            </ul>
+        </section>
+        <!-- End features -->
+
+        <!-- Team -->
+        <section id="team" class="mb-4">
             <h2>Meet the Team</h2>
 
             <div class="mb-2">
-                <h5 class="m-0">Andrian Lloyd Maagma</h5>
+                <h3 class="fs-5 m-0">Andrian Lloyd Maagma</h3>
                 <small>Student Researcher and Developer</small>
             </div>
+        </section>
+        <!-- End team -->
 
-            <div class="mb-4">
-                <h5 class="m-0">Danizza Gay Salido</h5>
-                <small>Student Researcher</small>
-            </div>
-        </div>
-
-        <div class="my-4">
-            <h2>Features</h2>
-    
-            <ul>
-                <li><strong>Crowdsourced Translations</strong><br>
-                    Aklish allows users to add
-                    text entries for translation or
-                    contribute their translations to existing text entries.
-                </li>
-                <li><strong>Aklanon-English Dictionary</strong><br>
-                    Explore our comprehensive dictionary
-                    to look up Aklanon and English words,
-                    complete with definitions, parts of speech, examples, and more!
-                </li>
-                <li><strong>Proofreading Tools</strong><br>
-                    Our integrated proofreading tools help users
-                    refine their Aklanon and English writing skills,
-                    offering spelling suggestions tailored to both languages.
-                </li>
-                <li><strong>Language Games</strong><br>
-                    Aklish offers a variety of interactive games
-                    like Wordle and Match designed
-                    to reinforce language skills and vocabulary retention.
-                </li>
-            </ul>
-        </div>
-
-        <div class="my-4">
+        <!-- Contribute -->
+        <section id="contribute" class="mb-4">
             <h2>Get Involved</h2>
 
             <p>
@@ -70,12 +91,12 @@
                 or simply passionate about linguistic diversity
                 there are plenty of ways to get involved and contribute to Aklish.
             </p>
-        </div>
+            <p>
+                Thank you for being a part of the Aklish community!
+            </p>
+        </section>
+        <!-- End contribute -->
 
-        <p>
-            Thank you for being a part of the Aklish community!
-        </p>
-
-    </div>
-
+    </article>
+    <!-- End about -->
 {% endblock %}

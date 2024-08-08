@@ -1,5 +1,6 @@
 import React from "react";
 
+
 export default function TextField({ textInput, textMarks, handleInputChange }) {
     const syncScrollPositions = () => {
         const textArea = document.querySelector("#proofreader-text-area");

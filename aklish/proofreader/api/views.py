@@ -9,8 +9,8 @@ class ProofreadAPIView(APIView):
         lang = kwargs.get("lang", "akl")
         text = request.GET.get("text")
 
-        if text:
-            data = proofread_text(text, lang=lang, max_suggestions=3)
-            return Response(data)
-        else:
+        if not text:
             return Response({"error": "Text parameter is required."}, status=400)
+
+        data = proofread_text(text, lang=lang, max_suggestions=3)
+        return Response(data)

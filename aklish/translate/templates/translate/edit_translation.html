@@ -12,23 +12,37 @@
             {{ translation.entry.content|linebreaks }}
         </div>
     </div>
+
     <div class="container mb-3">
-        <p class="fw-bold p-0 m-0 mb-2">Old translation</p>
+        <!-- Old translation -->
+        <label class="fw-bold mb-2">Old translation</label>
         {{ translation.content|linebreaks }}
-        <form action="{% url 'translate:edit_translation' translation.pk %}" method="POST">
+        <!-- End old translation -->
+
+        <!-- New translation form -->
+        <form id="edit-translation" action="{% url 'translate:edit_translation' translation.pk %}" method="POST">
             {% csrf_token %}
+
             <div class="form-group mb-3 border-bottom">
                 <label for="content" class="fw-bold mb-2">New translation</label>
                 <div id="proofreader-field">
                 </div>
             </div>
-            <div class="d-flex">
-                <input type="submit" value="Save changes" class="btn btn-primary me-auto">
-                <a href="{% url 'translate:delete_translation' translation.pk %}?next={{ request.path }}"
-                class="btn btn-danger">
-                    Delete
-                </a>
-            </div>
         </form>
+        <!-- End new translation form -->
+
+        <!-- Delete translation form-->
+        <form id="delete-translation" action="{% url 'translate:delete_translation' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="translation_pk" value="{{ translation.pk }}">
+        </form>
+        <!-- End delete translation form -->
+
+        <!-- Actions -->
+        <div class="d-flex">
+            <button class="btn btn-primary me-auto" form="edit-translation">Save changes</button>
+            <button class="btn btn-danger" form="delete-translation">Delete</button>
+        </div>
+        <!-- End actions -->
     </div>
 {% endblock %}

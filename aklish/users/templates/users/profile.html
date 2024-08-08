@@ -5,6 +5,7 @@
 {% endblock title %}
 
 {% block body %}
+    <!-- Stats -->
     <div class="pb-3 mb-3">
         <h2 class="h5">
             Stats
@@ -21,17 +22,29 @@
             </li>
         </ul>
     </div>
+    <!-- End stats -->
+
+    <!-- Activity -->
     <div class="pb-3 mb-3">
         <h2 class="h5">
             Activity
         </h2>
         <ul class="list-group">
             <li class="list-group-item">
-                <a href="{% url 'users:bookmarks_votes' user.pk user.username %}">Bookmarks and Votes</a>
+                <a href="{% url 'users:bookmarks_votes' user.pk user.username %}"
+                    class="link-unstyled underline-hover"
+                >
+                    Bookmarks and Votes
+                </a>
             </li>
             <li class="list-group-item">
-                <a href="{% url 'users:entries_translations' user.pk user.username %}">Entries and Translations</a>
+                <a href="{% url 'users:entries_translations' user.pk user.username %}"
+                    class="link-unstyled underline-hover"
+                >
+                    Entries and Translations
+                </a>
             </li>
         </ul>
     </div>
+    <!-- End activity -->
 {% endblock %}

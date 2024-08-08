@@ -1,56 +1,5 @@
 {% extends 'proofreader/base.html' %}
 
 {% block content %}
-    <div id="app"></div><br><br>
-    
-    <br><br>
-
-    <div class="container">
-        <h1 class="text-center mb-3">How to Use Aklish Proofreader</h1>
-        <div class="mb-2">
-            <ol>
-                <li>Start by typing upto 300 characters in the text box.</li>
-                <li>You can select the language of your text from the dropdown menu.</li>
-                <li>You'll get instant feedback while you type:</li>
-                <ul>
-                    <li><u class="link-underline-danger">Highlighted</u> text means they are incorrect.</li>
-                    <li>The number of words and mistakes.</li>
-                    <li>The "correctness" % which is the ratio between the number of mistakes and words.</li>
-                </ul>
-                <li>Click the <i class="bi bi-spellcheck"></i> button to get suggestions.</li>
-                <li>You can accept the proposed changes by clicking on them individually.</li>
-            </ol>
-        </div>
-        <div class="mb-2">
-            <h2>How it works</h2>
-            <ul>
-                <li>
-                    The spellcheckers used utilizes the Python library
-                    <a href="https://pypi.org/project/pyspellchecker/"><code>PySpellChecker</code></a>.
-                </li>
-                <li>The Aklanon spellchecker is based on the Aklish Aklanon dictionary.</li>
-                <ul>
-                    <li>
-                        It utilizes a stemmer algorithm where it derives the root word of an inflected word
-                        based on Aklanon inflection rules.
-                    </li>
-                </ul>
-                <li>The English spellchecker is the default from <code>PySpellChecker</code>.</li>
-                <ul>
-                    <li>
-                        It utilizes a lemmatizer from the Python library
-                        <a href="https://github.com/bjascob/LemmInflect"><code>LemmInflect</code></a>
-                        where it derives the root word of an inflected word.
-                    </li>
-                </ul>
-            </ul>
-        </div>
-        <div class="mb-2">
-            <h2>Considerations</h2>
-            <ul>
-                <li>Our proofreader is still in its early stages, and we're constantly working to improve its accuracy and functionality.</li>
-                <li>It may make mistakes or miss errors, so use it alongside your own judgment.</li>
-            </ul>
-        </div>
-    </div>
+    <div id="app"></div>
 {% endblock %}

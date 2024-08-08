@@ -205,4 +205,7 @@ CSRF_TRUSTED_ORIGINS = (
 )
 
 
+LOGIN_URL = "/users/login"
+
+
 MODEL_LIMIT_CLASS = "users.limiter.UserLimiter"

@@ -6,17 +6,17 @@ export default function Choices({ choices, onClick, selectedChoice, matchWord, a
     return (
         <div className="d-flex flex-column m-2">
             {choices.map((choice, i) => (
-                <Button
-                key={i}
-                variant={
-                    selectedChoice !== choice ?
-                        (!answerSelected ?
-                            "outline-primary" :
-                            (choice !== matchWord ? "outline-primary" : "outline-success")) :
-                        (selectedChoice === matchWord ? "success" : "danger")
-                }
-                className="mb-2 rounded-pill"
-                onClick={() => onClick(choice)}>
+                <Button key={i}
+                    variant={
+                        selectedChoice !== choice ?
+                            (!answerSelected ?
+                                "outline-primary" :
+                                (choice !== matchWord ? "outline-primary" : "outline-success")) :
+                            (selectedChoice === matchWord ? "success" : "danger")
+                    }
+                    className="mb-2 rounded-pill"
+                    onClick={() => onClick(choice)}
+                >
                     {choice}
                 </Button>
             ))}

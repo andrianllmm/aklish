@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Profiler } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { useParams } from "react-router-dom";
 import Suggestion from "./Suggestion";
@@ -85,7 +85,7 @@ export default function ProofreaderField({ defaultShowSuggestions }) {
                     });
                     let filteredSuggestions = generatedSuggestions.filter(Boolean)
                     setSuggestions(filteredSuggestions);
-                    
+
                     if (filteredSuggestions.length === 0) {
                         setSuggestions(["No mistakes found."]);
                     }
@@ -129,12 +129,15 @@ export default function ProofreaderField({ defaultShowSuggestions }) {
     };
 
     return (
-        <div className="container mb-3">
+        <div className="container">
             <div className="row mb-2">
-                <div className="col-md p-0 m-1 ">
+                {/* Text field */}
+                <div className="col-md p-0 m-2">
                     <TextField textInput={textInput} textMarks={textMarks} handleInputChange={handleInputChange}/>
                 </div>
-                <div id="proofreader-suggestions-col" className={`col-md p-0 m-1 ${showSuggestions ? "" : "d-none"}`}>
+
+                {/* Suggestions */}
+                <div id="proofreader-suggestions-col" className={`col-md p-0 m-2 ${showSuggestions ? "" : "d-none"}`}>
                     <div>
                         <h5>Suggestions</h5>
                     </div>
@@ -145,7 +148,9 @@ export default function ProofreaderField({ defaultShowSuggestions }) {
                     </div>
                 </div>
             </div>
+
             <div className="d-flex align-items-center p-1 border-top border-bottom">
+                {/* Stats */}
                 <div className="d-flex flex-wrap me-auto">
                     <small className="me-2 text-nowrap">
                         <strong id="word-count">{wordCount}</strong> words
@@ -157,13 +162,24 @@ export default function ProofreaderField({ defaultShowSuggestions }) {
                         <strong id="correctness">{correctness}%</strong> correct
                     </small>
                 </div>
-                <div>
-                    <button id="toggle-suggestions" className="btn px-2 py-1" onClick={toggleSuggestions} aria-label="Toggle suggestions">
+
+                {/* Actions */}
+                <div className="d-flex no-wrap">
+                    <button id="toggle-suggestions" className="btn-icon p-0" onClick={toggleSuggestions}
+                        title="Toggle suggestions" aria-label="Toggle suggestions"
+                    >
                         <i className={showSuggestions ? "bi bi-eye-slash" : "bi bi-eye"}></i>
                     </button>
-                    <button id="generate-suggestions" className="btn px-2 py-1" onClick={handleGenerateSuggestions} aria-label="Generate suggestions">
+                    <button id="generate-suggestions" className="btn-icon p-0" onClick={handleGenerateSuggestions}
+                        title="Generate suggestions" aria-label="Generate suggestions"
+                    >
                         <i className="bi bi-spellcheck"></i>
                     </button>
+                    <a href="/help/proofreader_guide" className="btn-icon p-0 text-reset"
+                        title="See guide" aria-label="See guide"
+                    >
+                        <i className="bi bi-question-circle"></i>
+                    </a>
                 </div>
             </div>
         </div>
