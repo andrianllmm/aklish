@@ -130,7 +130,7 @@ export default function Match() {
                 <>
                     <Header title="Match" />
 
-                    <div className="pb-2 mb-2 d-flex flex-column align-items-center text-center border-bottom">
+                    <div className="container pb-2 mb-2 d-flex flex-column align-items-center text-center border-bottom">
                         {/* Question */}
                         <div>
                             <h1 className="m-2 fs-3">Which is {mode} to <strong>{word}</strong>?</h1>

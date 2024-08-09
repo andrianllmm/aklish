@@ -7,7 +7,9 @@ export default function Proofreader() {
     return (
         <>
             <Header title="Proofreader" />
-            <ProofreaderField defaultShowSuggestions={true} />
+            <div className="container">
+                <ProofreaderField defaultShowSuggestions={true} />
+            </div>
         </>
     );
 }

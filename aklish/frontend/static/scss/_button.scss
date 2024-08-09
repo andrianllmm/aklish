@@ -1,28 +1,7 @@
 // button unstyled
-.btn-unstyled, .btn-icon {
+.btn-unstyled, .btn-unstyled:hover, .btn-unstyled:active, .btn-unstyled:focus {
     background-color: transparent;
     border: none;
     outline: none;
     box-shadow: none;
-}
-
-// button icon
-.btn-icon {
-    text-decoration: none;
-}
-.btn-icon > * {
-    border: none;
-    background-color: transparent;
-    padding: map-get($spacers, 2);
-    margin: 0;
-    aspect-ratio: 1/1;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-}
-
-.btn-icon > *:hover {
-    background-color: rgba(0, 0, 0, 0.1);
 }

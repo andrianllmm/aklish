@@ -48,10 +48,12 @@ class Attribute(models.Model):
     similar = models.ManyToManyField("DictEntry", blank=True, related_name="similar")
     opposite = models.ManyToManyField("DictEntry", blank=True, related_name="opposite")
     examples = models.ManyToManyField(Entry, blank=True, related_name="example_of")
-    source = models.ForeignKey(Source, on_delete=models.SET_NULL, null=True, blank=True, related_name="attributes",)
+    sources = models.ManyToManyField(Source, blank=True, related_name="attributes")
 
     def __str__(self):
-        return f"{self.definition} ({self.pos.code})"
+        if self.pos:
+            return f"{self.definition} ({self.pos.code})"
+        return f"{self.definition}"
 
 
 class DictEntry(models.Model):

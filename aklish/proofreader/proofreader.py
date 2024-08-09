@@ -1,10 +1,11 @@
 import lemminflect
 import os
+import pkg_resources
 import re
 import string
 from aklstemmer import stemmer
 from nltk.tokenize import word_tokenize
-from spellchecker import SpellChecker
+from symspellpy import SymSpell, Verbosity
 from tabulate import tabulate
 from typing import Optional
 
@@ -27,7 +28,7 @@ def proofread_text(text: str, lang: Optional[str] = "akl", max_suggestions: Opti
     """
     # Get spell checkers
     if lang == "akl":
-        spell = get_spellchecker("dictionary/data/akl_freqlist.json")
+        spell = get_spellchecker("dictionary/data/akl_freqlist.csv")
     else:
         spell = get_spellchecker()
 
@@ -53,24 +54,24 @@ def proofread_text(text: str, lang: Optional[str] = "akl", max_suggestions: Opti
         elif token.replace(".", "").isnumeric():
             cls = "num"
 
-        elif clean_token not in spell:
+        elif clean_token not in list(spell.words.keys()):
             # Get lammas and stems
             lemmas = lemminflect.getAllLemmas(clean_token)
-            stems = stemmer.get_stems(clean_token, valid_words=list(spell))
+            stems = stemmer.get_stems(clean_token, valid_words=list(spell.words.keys()))
             if clean_token in stems:
                 stems.remove(clean_token)
 
             # If no root, invalid
             if (lang == "eng" and not lemmas) or (lang == "akl" and not stems):
                 valid = False
-                suggestions = spell.candidates(clean_token)
+                suggestions = spell.lookup(clean_token, Verbosity.CLOSEST, max_edit_distance=2)
 
             # If has root, valid
             else:
                 cls = "stemmed"
 
         # Convert suggestions to list
-        suggestions = list(suggestions) if suggestions else []
+        suggestions = [suggestion.term for suggestion in suggestions] if suggestions else []
 
         # Limit suggestions
         suggestions = (
@@ -131,13 +132,16 @@ def cal_correctness(word_count: int, mistake_count: int) -> float:
     return correctness
 
 
-def get_spellchecker(file_path: str = None) -> SpellChecker:
+def get_spellchecker(file_path: str = None) -> SymSpell:
     """Gets a spellchecker from a file."""
-    if file_path:
-        spell = SpellChecker(language=None)
-        spell.word_frequency.load_dictionary(file_path)
-    else:
-        spell = SpellChecker()
+    spell = SymSpell()
+
+    if not file_path:
+        file_path = pkg_resources.resource_filename(
+            "symspellpy", "frequency_dictionary_en_82_765.txt"
+        )
+
+    spell.load_dictionary(file_path, 0, 1, ",")
 
     return spell
 

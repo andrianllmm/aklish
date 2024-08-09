@@ -1,11 +1,11 @@
-/* keyboard */
+// keyboard
 .keyboard {
     max-width: 300px;
     margin: 10px auto;
 }
 
 
-/* grid */
+// grid
 .grid {
     display: flex;
     flex-direction: column;
@@ -26,31 +26,99 @@
     flex: 1;
     max-width: 80px;
     aspect-ratio: 1;
-    border: 1px solid lightgray;
+    border: 1px solid $border-color;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.5em;
+    font-size: 1.5rem;
     font-weight: bold;
     text-transform: uppercase;
 }
 
 .grid > .row > div.correct {
-    --background: #6ca965;
-    --border-color: #6ca965;
-    animation: flip 0.5s ease forwards;
+    animation: flip-correct 0.5s ease forwards;
 }
 
 .grid > .row > div.misplaced {
-    --background: #c8b653;
-    --border-color: #c8b653;
-    animation: flip 0.5s ease forwards;
+    animation: flip-misplaced 0.5s ease forwards;
 }
 
 .grid > .row > div.absent {
-    --background: #787c7f;
-    --border-color: #787c7f;
-    animation: flip 0.5s ease forwards;
+    animation: flip-absent 0.5s ease forwards;
+}
+
+
+// animations
+@keyframes flip-correct {
+    0% {
+        transform: rotateX(0);
+        background: $body-bg;
+        border-color: $border-color;
+    }
+    45% {
+        transform: rotateX(90deg);
+        background: $body-bg;
+        border-color: $border-color;
+    }
+    55% {
+        transform: rotateX(90deg);
+        background: $success;
+        border-color: $success;
+    }
+    100% {
+        transform: rotateX(0deg);
+        background: $success;
+        border-color: $success;
+        color: $white;
+    }
+}
+
+@keyframes flip-misplaced {
+    0% {
+        transform: rotateX(0);
+        background: $body-bg;
+        border-color: $border-color;
+    }
+    45% {
+        transform: rotateX(90deg);
+        background: $body-bg;
+        border-color: $border-color;
+    }
+    55% {
+        transform: rotateX(90deg);
+        background: $warning;
+        border-color: $warning;
+    }
+    100% {
+        transform: rotateX(0deg);
+        background: $warning;
+        border-color: $warning;
+        color: $white;
+    }
+}
+
+@keyframes flip-absent {
+    0% {
+        transform: rotateX(0);
+        background: $body-bg;
+        border-color: $border-color;
+    }
+    45% {
+        transform: rotateX(90deg);
+        background: $body-bg;
+        border-color: $border-color;
+    }
+    55% {
+        transform: rotateX(90deg);
+        background: $gray-500;
+        border-color: $gray-500;
+    }
+    100% {
+        transform: rotateX(0deg);
+        background: $gray-500;
+        border-color: $gray-500;
+        color: $white;
+    }
 }
 
 .grid > .row > div:nth-child(2) {
@@ -77,42 +145,16 @@
     animation: bounce 0.2s ease-in-out forwards;
 }
 
-
-/* animations */
-@keyframes flip {
-    0% {
-        transform: rotateX(0);
-        background: white;
-        border-color: darkgrey;
-    }
-    45% {
-        transform: rotateX(90deg);
-        background: white;
-        border-color: darkgrey;
-    }
-    55% {
-        transform: rotateX(90deg);
-        background: var(--background);
-        border-color: var(--border-color);
-    }
-    100% {
-        transform: rotateX(0deg);
-        background: var(--background);
-        border-color: var(--border-color);
-        color: white;
-    }
-}
-
 @keyframes bounce {
     0% {
       transform: scale(1);
-      border-color: lightgrey;
+      border-color: $border-color;
     }
     50% {
       transform: scale(1.1);
     }
     100% {
       transform: scale(1);
-      border-color: darkgrey;
+      border-color: darken($border-color, 10%);
     }
   }

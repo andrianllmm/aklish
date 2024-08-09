@@ -129,22 +129,24 @@ export default function ProofreaderField({ defaultShowSuggestions }) {
     };
 
     return (
-        <div className="container">
-            <div className="row mb-2">
-                {/* Text field */}
-                <div className="col-md p-0 m-2">
-                    <TextField textInput={textInput} textMarks={textMarks} handleInputChange={handleInputChange}/>
-                </div>
-
-                {/* Suggestions */}
-                <div id="proofreader-suggestions-col" className={`col-md p-0 m-2 ${showSuggestions ? "" : "d-none"}`}>
-                    <div>
-                        <h5>Suggestions</h5>
+        <div>
+            <div class="mb-2">
+                <div className="row g-2">
+                    {/* Text field */}
+                    <div className="col-md">
+                        <TextField textInput={textInput} textMarks={textMarks} handleInputChange={handleInputChange}/>
                     </div>
-                    <div>
-                        <ul id="proofreader-suggestions" className="list-group">
-                            {suggestions}
-                        </ul>
+
+                    {/* Suggestions */}
+                    <div id="proofreader-suggestions-col" className={`col-md ${showSuggestions ? "" : "d-none"}`}>
+                        <div>
+                            <h5>Suggestions</h5>
+                        </div>
+                        <div>
+                            <ul id="proofreader-suggestions" className="list-group">
+                                {suggestions}
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -165,17 +167,17 @@ export default function ProofreaderField({ defaultShowSuggestions }) {
 
                 {/* Actions */}
                 <div className="d-flex no-wrap">
-                    <button id="toggle-suggestions" className="btn-icon p-0" onClick={toggleSuggestions}
+                    <button id="toggle-suggestions" className="btn btn-unstyled" onClick={toggleSuggestions}
                         title="Toggle suggestions" aria-label="Toggle suggestions"
                     >
                         <i className={showSuggestions ? "bi bi-eye-slash" : "bi bi-eye"}></i>
                     </button>
-                    <button id="generate-suggestions" className="btn-icon p-0" onClick={handleGenerateSuggestions}
+                    <button id="generate-suggestions" className="btn btn-unstyled" onClick={handleGenerateSuggestions}
                         title="Generate suggestions" aria-label="Generate suggestions"
                     >
                         <i className="bi bi-spellcheck"></i>
                     </button>
-                    <a href="/help/proofreader_guide" className="btn-icon p-0 text-reset"
+                    <a href="/help/proofreader_guide" className="btn btn-unstyled text-reset"
                         title="See guide" aria-label="See guide"
                     >
                         <i className="bi bi-question-circle"></i>
@@ -185,6 +187,7 @@ export default function ProofreaderField({ defaultShowSuggestions }) {
         </div>
     );
 }
+
 
 const proofreaderFieldElement = document.querySelector("#proofreader-field");
 if (proofreaderFieldElement) {
