@@ -1,0 +1,130 @@
+{% extends 'translate/base.html' %}
+
+{% block title %}
+    Browse Aklish
+{% endblock title %}
+
+{% load humanize %}
+
+{% block content %}
+    <!-- Header -->
+    <div class="container pb-3 mb-3 border-bottom">
+
+        <div class="d-flex align-items-center mb-3">
+            <h1 class="me-auto">{{ entries_count }} entries</h1>
+            <div>
+                <a href="{% url 'translate:add' %}" class="btn btn-primary mb-1">Add entry</a>
+            </div>
+        </div>
+
+        <div class="row g-2 align-items-center">
+            <!-- Sort entries -->
+            <div class="col-md">
+                <ul class="nav nav-pills nav-fill nav-justified p-1 m-0 rounded-pill border">
+                    <!-- Sort options -->
+                    <li class="nav-item">
+                        <a href="?sort=latest&q={{ query }}"
+                            class="nav-link p-0 rounded-pill {% if sort_by == 'latest' %} active {% endif %}"
+                        >
+                            Latest
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="?sort=top&q={{ query }}"
+                            class="nav-link p-0 rounded-pill {% if sort_by == 'top' %} active {% endif %}"
+                        >
+                            Top
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="?sort=reputable&q={{ query }}"
+                            class="nav-link p-0 rounded-pill {% if sort_by == 'reputable' %} active {% endif %}"
+                        >
+                            Reputable
+                        </a>
+                    </li>
+                    <!-- End options -->
+
+                    <!-- More options -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle p-0 rounded-pill"
+                            role="button" data-bs-toggle="dropdown" href="#"
+                        >
+                            More
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="?sort=proofread&q={{ query }}">
+                                    Proofread
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="?sort=translated&q={{ query }}">
+                                    Translated
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="?sort=untranslated&q={{ query }}">
+                                    Untranslated
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- End more options -->
+                </ul>
+            </div>
+            <!-- End sort entries -->
+
+            <!-- Search entries -->
+            <div class="col-md">
+                {% url 'translate:catalog' as catalog_url %}
+                {% include "components/search.html" with url=catalog_url placeholder='Search entries' sort_by=sort_by %}
+            </div>
+            <!-- End search entries -->
+        </div>
+    </div>
+    <!-- End header -->
+
+    <!-- Notices -->
+    <div class="container">
+        <div class="alert py-1 px-2 alert-info alert-dismissible show" role="alert">
+            <small>
+                <strong>Note: </strong>
+                The following entries and translations are user-generated;
+                they are not guaranteed for validity.
+            </small>
+            <button type="button" class="btn-close p-2" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+    <!-- End notices -->
+
+    <!-- List of entries -->
+    <div class="container">
+        <!-- Entries -->
+        <div class="mb-3">
+            {% for entry in entries %}
+                {% include "translate/components/entry_card.html" with entry=entry %}
+            {% empty %}
+                No entries
+            {% endfor %}
+        </div>
+        <!-- End entries -->
+
+        <!-- As translations -->
+        {% if as_translations %}
+            <div class="mb-3">
+                <h2 class="h4">"{{ query }}" as translation</h2>
+
+                {% for entry in as_translations %}
+                    {% include "translate/components/entry_card.html" with entry=entry %}
+                {% endfor %}
+            </div>
+        {% endif %}
+        <!-- End as translations -->
+    </div>
+    <!-- End list of entries -->
+
+    <!-- Pagination -->
+    {% include "components/page_pagination.html" with entries=entries %}
+    <!-- End pagination -->
+{% endblock %}

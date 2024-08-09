@@ -1,0 +1,58 @@
+{% extends 'users/base.html' %}
+
+{% load humanize %}
+
+{% block title %}
+    Aklish Leaderboard
+{% endblock title %}
+
+{% block content %}
+    <div class="container pb-3 mb-3 border-bottom">
+        <h1>{{ users.count }} users</h1>
+    </div>
+
+    <div class="container pb-3 mb-3">
+        <!-- Reputation guide -->
+        <div class="mb-2">
+            <small class="text-muted">
+                Learn more about
+                <a href="{% url 'main:help' 'reputation_guide' %}" class="text-reset">reputation</a>.
+            </small>
+        </div>
+
+        <!-- Leaderboard -->
+        <ul class="list-group">
+            {% for user in users %}
+                <li class="list-group-item">
+                    <!-- Rank and username -->
+                    <div class="d-flex">
+                        <div class="me-auto">
+                            <span class="me-2">Rank #{{ forloop.counter }}</span>
+                        </div>
+                        <div>
+                            {{ user.profile.reputation }} reputation
+                        </div>
+                    </div>
+
+                    <!-- Details -->
+                    <div class="d-flex">
+                        <div class="me-auto">
+                            <a href="{% url 'users:profile' user.pk user.username %}" class="text-decoration-none">
+                                {{ user.username }}
+                            </a>
+                        </div>
+                        <div class="text-end text-muted">
+                            <small>
+                                <span class="text-nowrap">member for</span>
+                                <span class="text-nowrap">{{ user.date_joined|timesince }}</span>
+                            </small>
+                        </div>
+                    </div>
+                </li>
+            {% empty %}
+                No users
+            {% endfor %}
+        </ul>
+        <!-- End leaderboard -->
+    </div>
+{% endblock %}

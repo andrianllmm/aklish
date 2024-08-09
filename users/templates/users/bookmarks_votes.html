@@ -1,0 +1,60 @@
+{% extends 'users/profile_base.html' %}
+
+{% block title %}
+    {{ user.username }}'s Bookmarks and Votes
+{% endblock title %}
+
+{% block body %}
+    <div class="pb-3 mb-3">
+        <h2 class="h5">
+            Bookmarks
+        </h2>
+        <ul class="list-group">
+            {% for entry in user.bookmarks.all %}
+                <li class="list-group-item d-flex align-items-center">
+                    <a href="{% url 'translate:entry' entry.pk %}" class="me-auto text-decoration-none">
+                        {{ entry.content|slice:100 }}...
+                    </a>
+
+                    {% if request.user == user %}
+                        <form action="{% url 'translate:bookmark' entry.pk %}" method="POST">
+                            {% csrf_token %}
+                            <button class="btn btn-sm btn-danger">Remove</button>
+                        </form>
+                    {% endif %}
+                </li>
+            {% empty %}
+                <li class="list-group-item">
+                    No bookmarks
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="pb-3 mb-3">
+        <h2 class="h5">
+            Votes
+        </h2>
+        <ul class="list-group">
+            {% for vote in user.votes.all %}
+                <li class="list-group-item d-flex align-items-center">
+                    <a href="{% url 'translate:entry' vote.translation.entry.pk %}" class="me-auto text-decoration-none">
+                        {{ vote.translation.content|slice:100 }}...
+                    </a>
+
+                    {% if request.user == user %}
+                        <form action="{% url 'translate:vote' vote.translation.pk %}" method="POST">
+                            {% csrf_token %}
+                            <button name="direction" value="0" class="btn btn-sm btn-danger">
+                                Remove
+                            </button>
+                        </form>
+                    {% endif %}
+                </li>
+            {% empty %}
+                <li class="list-group-item">
+                    No votes
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

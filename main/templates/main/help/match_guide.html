@@ -1,0 +1,42 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+    Guide on Playing Aklish Match
+{% endblock title %}
+
+{% block content %}
+    <div id="match-guide" class="container">
+        <!-- Title -->
+        <h1 class="pb-3 mb-3 border-bottom">How to Play Match</h1>
+
+        <!-- Objective -->
+        <section id="objective">
+            <h2>Objective</h2>
+            <p>Choose the word that is similar to the word being asked.</p>
+        </section>
+
+        <!-- Rules -->
+        <section id="rules">
+            <h2>Rules</h2>
+            <ul>
+                <li>You have only one try to pick the matching word.</li>
+                <li>You can only choose among the provided options.</li>
+            </ul>
+        </section>
+
+        <!-- Gameplay -->
+        <section id="gameplay">
+            <h2>Gameplay</h2>
+            <ol>
+                <li>You are provided with a word and four choices.</li>
+                <li>Select a word from the provided options that is similar to the word being asked.</li>
+                <li>Click or tap on your chosen option.</li>
+                <li>Receive immediate feedback on your choice.</li>
+                <li>
+                    The button of the correct choice will turn <span class="text-success">green</span>,
+                    while the button of the wrong choice will turn <span class="text-danger">red</span>.
+                </li>
+            </ol>
+        </section>
+    </div>
+{% endblock content %}

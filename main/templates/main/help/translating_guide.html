@@ -1,0 +1,49 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+    Guide on Playing Aklish Match
+{% endblock title %}
+
+{% block content %}
+    <article id="translating-guide" class="container">
+        <!-- Title -->
+        <h1 class="pb-3 mb-3 border-bottom">Guide in translating entries</h1>
+
+        <!-- Guides -->
+        <section id="guides">
+            <ul>
+                <li class="mb-2">
+                    <strong>Conciseness</strong><br>
+                    Keep translations within the 300-character limit for readability and focus.
+                </li>
+                <li class="mb-2">
+                    <strong>Accuracy</strong><br>
+                    Ensure the translated text accurately reflects the original meaning.
+                </li>
+                <li class="mb-2">
+                    <strong>Relevance</strong><br>
+                    Ensure translations remain relevant to the original entry's purpose.
+                </li>
+                <li class="mb-2">
+                    <strong>Clarity</strong><br>
+                    Translate clearly and concisely to aid understanding.
+                </li>
+                <li class="mb-2">
+                    <strong>Language</strong><br>
+                    Use appropriate language in translations, avoiding offensive or inappropriate content.
+                </li>
+                <li class="mb-2">
+                    <strong>Use our Dictionary</strong><br>
+                    Use our resources like the
+                    <a href="{% url 'dictionary:catalog' 'akl' %}">Aklish dictionary</a>
+                    to look up words, definitions, and more.
+                </li>
+                <li class="mb-2">
+                    <strong>Moderation</strong><br>
+                    Understand that all translations are subject to moderation.
+                </li>
+            </ul>
+        </section>
+        <!-- End guides -->
+    </article>
+{% endblock %}

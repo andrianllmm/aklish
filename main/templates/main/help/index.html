@@ -1,0 +1,28 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+    Aklish Help Center
+{% endblock title %}
+
+{% block content %}
+    <article class="container">
+        <h1 class="pb-3 mb-3 border-bottom">Help center</h1>
+
+        <ul class="row list-unstyled">
+            {% for category_title, pages in categories.items %}
+                <li class="col-lg-4 col-md-6 col-sm-12 mb-5">
+                    <h2 class="fs-5 pb-2 mb-2 border-bottom">{{ category_title }}</h2>
+                    <ul class="list-unstyled">
+                        {% for page, page_title in pages.items %}
+                            <li>
+                                <a href="{% url 'main:help' page %}" class="underline-hover">
+                                    {{ page_title }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+    </article>
+{% endblock %}

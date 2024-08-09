@@ -1,0 +1,47 @@
+{% extends 'translate/base.html' %}
+
+{% block title %}
+    Edit entry for "{{ entry.content|slice:20 }}..."
+{% endblock title %}
+
+{% block content %}
+    <div class="container pb-3 mb-3 border-bottom">
+        <h1>Edit entry</h1>
+        <div>
+            <span class="badge bg-primary mb-2">{{ entry.lang.name }}</span>
+        </div>
+    </div>
+
+    <div class="container mb-3">
+        <!-- Old content -->
+        <label class="fw-bold mb-2">Old content</label>
+        {{ entry.content|linebreaks }}
+        <!-- End old content -->
+
+        <!-- New content form -->
+        <form id="edit-entry" action="{% url 'translate:edit_entry' entry.pk %}" method="POST">
+            {% csrf_token %}
+
+            <div class="form-group mb-3 border-bottom">
+                <label for="content" class="fw-bold mb-2">New content</label>
+                <div id="proofreader-field">
+                </div>
+            </div>
+        </form>
+        <!-- End new content form -->
+
+        <!-- Delete entry form -->
+        <form id="delete-entry" action="{% url 'translate:delete_entry' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="entry_pk" value="{{ entry.pk }}">
+        </form>
+        <!-- End delete entry form -->
+
+        <!-- Actions -->
+        <div class="d-flex">
+            <button class="btn btn-primary me-auto" form="edit-entry">Save changes</button>
+            <button class="btn btn-danger" form="delete-entry">Delete</button>
+        </div>
+        <!-- End actions -->
+    </div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'users/base.html' %}
+
+{% block title %}
+    {{ user.username }}'s Profile
+{% endblock title %}
+
+{% block content %}
+    <div class="container px-4">
+        <!-- Profile header -->
+        <div class="container pb-3 mb-3 border-bottom">
+            <div class="d-flex mb-2">
+                <!-- Fullname -->
+                <h1>{{ user.first_name }} {{ user.last_name }}</h1>
+
+                <!-- Logout button -->
+                {% if user == request.user %}
+                    <div class="ms-auto d-flex align-items-center">
+                        <a href="{% url 'users:logout' %}" class="btn btn-sm border">Logout</a>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="text-muted">
+                <!-- Activity -->
+                <div class="mb-1">
+                    <small class="me-2">Member since {{ user.date_joined|date:'d M y' }}</small>
+                    <small class="me-2">Last active {{ user.last_login|date:'d M y' }}</small>
+                </div>
+
+                <!-- Contact -->
+                <div class="mb-1">
+                    <small class="me-2">@{{ user.username }}</small>
+                    <small class="me-2">{{ user.email }}</small>
+                </div>
+            </div>
+        </div>
+        <!-- End profile header -->
+
+        <div class="container">
+            {% block body %}{% endblock %}
+        </div>
+    </div>
+{% endblock %}

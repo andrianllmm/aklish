@@ -1,0 +1,36 @@
+{% load humanize %}
+{% load translate_tags %}
+
+<div class="d-flex align-items-center justify-content-between">
+    <div class="me-auto">
+        <small class="me-1"><strong>{{ entry.correctness }}%</strong></small>
+        <span class="badge bg-primary">{{ entry.lang.name }}</span>
+    </div>
+
+    <div class="d-flex flex-wrap align-items-center justify-content-end text-muted">
+        <small class="text-nowrap">
+            <a href="{% url 'users:profile' entry.user.id entry.user.username %}"
+                class="text-decoration-none"
+            >
+                {{ entry.user.username }}
+            </a>
+            <span class="fw-bold">{{ entry.user.profile.reputation }}</span>
+        </small>
+
+        <small class="text-nowrap m-2">{{ entry.modified_at|naturaltime }}</small>
+
+        {% if entry.user == request.user %}
+            {% with class_name=entry|get_class_name|lower %}
+                <a href="{% url 'translate:edit_'|add:class_name entry.pk %}"
+                    class="btn btn-unstyled p-0" title="Edit" aria-label="Edit"
+                >
+                    <i class="bi bi-pen"></i>
+                </a>
+            {% endwith %}
+        {% else %}
+            <button class="btn btn-unstyled p-0" aria-label="Edit" title="Edit">
+                <i class="bi bi-pen"></i>
+            </button>
+        {% endif %}
+    </div>
+</div>

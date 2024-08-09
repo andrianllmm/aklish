@@ -1,0 +1,50 @@
+{% extends 'users/profile_base.html' %}
+
+{% block title %}
+    {{ user.username }}'s Profile
+{% endblock title %}
+
+{% block body %}
+    <!-- Stats -->
+    <div class="pb-3 mb-3">
+        <h2 class="h5">
+            Stats
+        </h2>
+        <ul class="list-group">
+            <li class="list-group-item">
+                {{ user.profile.reputation }} reputation
+            </li>
+            <li class="list-group-item">
+                {{ user.entries.count }} entries
+            </li>
+            <li class="list-group-item">
+                {{ user.translations.count }} translations
+            </li>
+        </ul>
+    </div>
+    <!-- End stats -->
+
+    <!-- Activity -->
+    <div class="pb-3 mb-3">
+        <h2 class="h5">
+            Activity
+        </h2>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <a href="{% url 'users:bookmarks_votes' user.pk user.username %}"
+                    class="underline-hover"
+                >
+                    Bookmarks and Votes
+                </a>
+            </li>
+            <li class="list-group-item">
+                <a href="{% url 'users:entries_translations' user.pk user.username %}"
+                    class="underline-hover"
+                >
+                    Entries and Translations
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- End activity -->
+{% endblock %}

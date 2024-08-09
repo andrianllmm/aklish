@@ -1,0 +1,16 @@
+{% extends 'games/base.html' %}
+
+{% block title %}
+    Play Aklish Wordle
+{% endblock title %}
+
+{% block content %}
+    {% if request.user.profile.reputation < 20 %}
+        <div class="alert alert-warning">
+            You need at least 20 reputation points to play games. Learn how to gain reputation by visiting the
+            <a href="{% url 'main:help' 'reputation_guide' %}" class="text-reset">reputation guide</a>.
+        </div>
+    {% else %}
+        <div id="app"></div>
+    {% endif %}
+{% endblock %}
