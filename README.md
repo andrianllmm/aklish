@@ -22,7 +22,7 @@
 
 ## License
 
-This project is licensed under the [Apache License](LICENSE).
+This project is licensed under the [GNU GPLv3 License](LICENSE).
 
 ---
 
