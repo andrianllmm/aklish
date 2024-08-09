@@ -8,19 +8,21 @@
 
 {% block content %}
     <!-- Title and tagline-->
-    <div class="container text-center">
-        <h1 class="display-1 fw-bold">Aklish</h1>
-        <p class="m-0 lead fst-italic">
+    <div class="container text-center mb-3">
+        <h1 class="display-4 fw-bold text-center">
+            Translate and
+            <br>
+            be translated
+        </h1>
+        <small class="fst-italic">
             The Aklanon & English platform where your<br>
             words translate and are translated.
-        </p>
+        </small>
     </div>
     <!-- End title and tagline -->
 
-    <hr>
-
     <!-- Call to action -->
-    <div class="container mx-auto" style="max-width: 800px;">
+    <div class="container p-3 mx-auto" style="max-width: 800px;">
         <div class="row g-3">
             <!-- Add entry -->
             <div class="col-sm">
@@ -78,19 +80,19 @@
         <div class="row">
             <div class="col text-center">
                 <a href="{% url 'translate:add' %}" class="link-unstyled">
-                    <p class="fs-2 mb-0">{{ entries.count }}</p>
+                    <p class="fs-2 mb-0 text-primary">{{ entries.count }}</p>
                     <p class="fs-6">Entries</p>
                 </a>
             </div>
             <div class="col text-center">
                 <a href="{% url 'translate:catalog' %}" class="link-unstyled">
-                    <p class="fs-2 mb-0">{{ translations.count }}</p>
+                    <p class="fs-2 mb-0 text-primary">{{ translations.count }}</p>
                     <p class="fs-6">Translations</p>
                 </a>
             </div>
             <div class="col text-center">
                 <a href="{% url 'dictionary:catalog' 'akl' %}" class="link-unstyled">
-                    <p class="fs-2 mb-0">{{ dict_entries.count }}</p>
+                    <p class="fs-2 mb-0 text-primary">{{ dict_entries.count }}</p>
                     <p class="fs-6">Words</p>
                 </a>
             </div>

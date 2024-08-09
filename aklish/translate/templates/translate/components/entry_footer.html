@@ -22,13 +22,13 @@
         {% if entry.user == request.user %}
             {% with class_name=entry|get_class_name|lower %}
                 <a href="{% url 'translate:edit_'|add:class_name entry.pk %}"
-                    class="btn-icon p-0" title="Edit" aria-label="Edit"
+                    class="btn btn-unstyled p-0" title="Edit" aria-label="Edit"
                 >
                     <i class="bi bi-pen"></i>
                 </a>
             {% endwith %}
         {% else %}
-            <button class="btn-icon p-0" aria-label="Edit" title="Edit">
+            <button class="btn btn-unstyled p-0" aria-label="Edit" title="Edit">
                 <i class="bi bi-pen"></i>
             </button>
         {% endif %}

@@ -164,7 +164,7 @@ export default function Wordle() {
                 <>
                     <Header title="Wordle" />
 
-                    <div className="pb-2 mb-2 text-center border-bottom">
+                    <div className="container pb-2 mb-2 text-center border-bottom">
                         {/* Hint */}
                         <div>
                             <p className="m-2">Hint: <strong>{hint}</strong></p>

@@ -20,7 +20,7 @@
                         {% with class_name=entry|get_class_name|lower %}
                             <!-- Edit button -->
                             <a href="{% url 'translate:edit_'|add:class_name entry.pk %}"
-                                class="btn-icon" title="Edit" aria-label="Edit"
+                                class="btn-unstyled me-2" title="Edit" aria-label="Edit"
                             >
                                 <i class="bi bi-pen"></i>
                             </a>
@@ -30,7 +30,7 @@
                                 {% csrf_token %}
 
                                 <button name="{{ class_name|add:'_pk' }}" value="{{ entry.pk }}"
-                                class="btn-icon" title="Delete" aria-label="Delete"
+                                class="btn-unstyled" title="Delete" aria-label="Delete"
                                 >
                                     <i class="bi bi-trash text-danger"></i>
                                 </button>

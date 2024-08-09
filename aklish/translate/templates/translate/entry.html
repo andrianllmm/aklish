@@ -15,7 +15,7 @@
             <form action="{% url 'translate:bookmark' entry.pk %}" method="POST">
                 {% csrf_token %}
 
-                <button class="btn-icon p-0 border-0 shadow-none" title="Bookmark" aria-label="Bookmark"
+                <button class="btn btn-unstyled border-0 shadow-none" title="Bookmark" aria-label="Bookmark"
                     {% if request.user == entry.user %} disabled {% endif %}
                 >
                     <i class="bi bi-bookmark{% if bookmarked %}-fill{% endif %} text-primary"></i>
@@ -38,12 +38,12 @@
     <!-- End entry -->
 
     <!-- Translations -->
-    <div>
+    <div class="container">
         <h2 class="h5 mb-4">{{ translations_votes|length }} Translations</h2>
 
         <!-- List of translations -->
         {% for translation in translations %}
-            <div class="container d-flex pb-3 mb-4 border-bottom">
+            <div class="d-flex pb-3 mb-4 border-bottom">
                 <!-- Vote buttons -->
                 <div class="me-3 text-center">
                     <form action="{% url 'translate:vote' translation.pk %}" method="POST">
@@ -84,7 +84,7 @@
                 </div>
             </div>
         {% empty %}
-            <div class="container pb-3 mb-4 border-bottom">
+            <div class="pb-3 mb-4 border-bottom">
                 No translations
             </div>
         {% endfor %}

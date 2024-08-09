@@ -81,7 +81,7 @@ class AttributeSerializer(serializers.ModelSerializer):
             "similar",
             "opposite",
             "examples",
-            "source",
+            "sources",
         ]
 
 

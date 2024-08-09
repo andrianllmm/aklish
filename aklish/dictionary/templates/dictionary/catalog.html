@@ -86,9 +86,11 @@
                         <h2 class="card-title fs-5">{{ entry_today.word }}</h2>
 
                         <p class="card-text">
-                            <span class="badge text-bg-secondary">
-                                {{ entry_today.attributes.first.pos.code }}
-                            </span>
+                            {% if entry_today.attributes.first.pos.code %}
+                                <span class="badge text-bg-secondary">
+                                    {{ entry_today.attributes.first.pos.code }}
+                                </span>
+                            {% endif %}
                             {{ entry_today.attributes.first.definition }}
                         </p>
 

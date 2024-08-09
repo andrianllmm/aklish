@@ -32,7 +32,7 @@
                 {% for pos in pos_list %}
                     <div class="mb-3">
                         <span class="me-1 fst-italic">
-                            {{ pos.grouper.meaning }}
+                            {{ pos.grouper.meaning|default:'No POS' }}
                         </span>
                         <ol class="list-group list-group-numbered mb-1">
                             {% for attribute in pos.list %}
@@ -63,9 +63,9 @@
                                             </span>
                                         {% endfor %}
                                         <a href="{% url 'dictionary:add_example' lang.code word attribute.pk %}"
-                                            class="btn-icon p-0 text-reset"
+                                            class="btn btn-secondary rounded-circle p-0 text-reset"
                                         >
-                                            <i class="bi bi-plus-lg"></i>
+                                            <i class="bi bi-plus-lg mx-1"></i>
                                         </a>
                                     </div>
                                     <!-- End examples -->
@@ -112,15 +112,17 @@
                                         {% endif %}
 
                                         <!-- Source -->
-                                        {% if attribute.source %}
-                                            <a href="{% url 'main:sources' %}"
-                                                class="link-unstyled underline-hover text-muted mb-1"
-                                                style="font-size: smaller;"
-                                            >
-                                                <strong class="fw-normal fst-italic">Source:</strong>
-                                                {{ attribute.source }}
-                                            </a>
-                                        {% endif %}
+                                        {% for source in attribute.sources.all %}
+                                            {% if source %}
+                                                <a href="{% url 'main:sources' %}"
+                                                    class="link-unstyled underline-hover text-muted mb-1"
+                                                    style="font-size: smaller;"
+                                                >
+                                                    <strong class="fw-normal fst-italic">Source:</strong>
+                                                    {{ attribute.source }}
+                                                </a>
+                                            {% endif %}
+                                        {% endfor %}
                                     </div>
                                 </li>
                             {% endfor %}
