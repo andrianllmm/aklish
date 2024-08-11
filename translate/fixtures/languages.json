@@ -1,0 +1,18 @@
+[
+    {
+        "model": "translate.language",
+        "pk": 1,
+        "fields": {
+            "code": "eng",
+            "name": "English"
+        }
+    },
+    {
+        "model": "translate.language",
+        "pk": 2,
+        "fields": {
+            "code": "akl",
+            "name": "Aklanon"
+        }
+    }
+]

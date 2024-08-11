@@ -28,16 +28,13 @@ load_dotenv(env_path)
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = "django-insecure-pwxp$ki)o2@z-7xv)arm2f88n(7pmg0m6^gj&$m=z7bgrhuxw%"
-
 SECRET_KEY = os.environ.get(
     "DJANGO_SECRET_KEY",
-    "django-insecure-pwxp$ki)o2@z-7xv)arm2f88n(7pmg0m6^gj&$m=z7bgrhuxw%",
+    "django-insecure-pwxp$ki)o2@z-7xv)arm2f88n(7pmg0m6^gj&$m=z7bgrhuxw%",  # default
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-DEBUG = os.environ.get("DJANGO_DEBUG", "") != "False"
+DEBUG = os.environ.get("DJANGO_DEBUG", "") != "False"  # defaults to True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -103,18 +100,18 @@ WSGI_APPLICATION = "aklish.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
-
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
 if DATABASE_URL:
     DATABASES = {
         "default": dj_database_url.config(default=DATABASE_URL, conn_max_age=1800),
+    }
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
     }
 
 

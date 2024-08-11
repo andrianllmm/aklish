@@ -3,6 +3,8 @@ import json
 import os
 from itertools import repeat
 
+from django.core.management.base import BaseCommand, CommandError
+
 from dictionary.models import (
     PartsOfSpeech,
     Origin,
@@ -18,46 +20,62 @@ from django.contrib.auth.models import User
 script_dir = os.path.dirname(os.path.realpath(__file__))
 
 
+class Command(BaseCommand):
+    help = "Loads dictionary data."
+
+    def add_arguments(self, parser):
+        parser.add_argument("lang", type=str, help="Language for the dictionary data.")
+        parser.add_argument("--dictionary_path", type=str, help="Path to the folder containing attributes data.", default=None)
+
+    def handle(self, *args, **options):
+        lang = options["lang"]
+        dictionary_path = options["dictionary_path"]
+        dictionary_to_model(lang, dictionary_path)
+
+
 def dictionary_to_model(lang, file_path=None):
     if not file_path:
-        file_path = os.path.join(script_dir, f"{lang}_dictionary.json")
+        file_path = os.path.join(script_dir, f"../../data/{lang}_dictionary.json")
 
-    # Only include common English words
-    if lang == "eng":
-        with open(os.path.join(script_dir, "eng_common.txt")) as eng_common_file:
-            eng_common = [word.strip().lower() for word in eng_common_file.readlines()]
+    # Only include common words
+    common = None
+    try:
+        with open(os.path.join(script_dir, "../../data/{lang}_common.txt")) as common_file:
+            common = [word.strip().lower() for word in common_file.readlines()]
+    except FileNotFoundError:
+        pass
 
     with open(file_path) as in_file:
         entries = json.load(in_file)
 
         errors = []
 
-        # with concurrent.futures.ProcessPoolExecutor() as executor:
-        #     results = executor.map(entry_to_model, repeat(lang), entries)
+        with concurrent.futures.ProcessPoolExecutor() as executor:
+            results = executor.map(entry_to_model, repeat(lang), entries, repeat(common))
 
-        #     for result in results:
-        #         if results:
-        #             errors.append(result)
+            for result in results:
+                if results:
+                    errors.append(result)
 
-        for entry in entries:
-            if lang == "eng" and entry["word"].lower() not in eng_common:
-                continue
-
-            if not entry.get("word"):
-                continue
-
-            result = entry_to_model(lang, entry)
-            if result:
-                errors.append(result)
+        # for entry in entries:
+        #     result = entry_to_model(lang, entry)
+        #     if result:
+        #         errors.append(result)
 
         with open(os.path.join(script_dir, "errors.json"), "w") as errors_file:
             json.dump(errors, errors_file, indent=4, ensure_ascii=False)
 
 
-def entry_to_model(lang, entry):
-    print(f"{entry['word']}:", end=" ")
-
+def entry_to_model(lang, entry, common=None):
     error = None
+
+    if not entry.get("word"):
+        return error
+
+    if common and entry["word"].lower() not in common:
+        return error
+
+    print(f"{entry['word']}:", end=" ")
 
     lang_object = Language.objects.get(code=lang)
     entry_object = DictEntry.objects.get_or_create(word=entry["word"].strip(), lang=lang_object)[0]
@@ -148,21 +166,28 @@ def entry_to_model(lang, entry):
                     )[0]
 
                 elif isinstance(example, dict):
+                    original = example.get("original")
+                    if original:
+                        original = original.strip()
+                    else:
+                        original = ""
+
                     example_entry = Entry.objects.get_or_create(
-                        content=example.get("original") or "",
+                        content=original,
                         lang=lang_object,
                         user=user_object,
                     )[0]
 
                     if example.get("translations"):
                         for translation_lang, translation in example["translations"].items():
-                            translation_lang_object = Language.objects.get(code=translation_lang)
-                            Translation.objects.get_or_create(
-                                entry=example_entry,
-                                content=translation,
-                                lang=translation_lang_object,
-                                user=user_object,
-                            )
+                            if translation_lang and translation:
+                                translation_lang_object = Language.objects.get(code=translation_lang.strip())
+                                Translation.objects.get_or_create(
+                                    entry=example_entry,
+                                    content=translation.strip(),
+                                    lang=translation_lang_object,
+                                    user=user_object,
+                                )
 
                 attribute_object.examples.add(example_entry)
             attribute_object.save()
@@ -171,34 +196,3 @@ def entry_to_model(lang, entry):
     print()
 
     return error
-
-
-def attributes_to_model(folder_path=os.path.join(script_dir, "attributes/")):
-    with open(f"{folder_path}/pos.json") as pos_file:
-        pos_list = json.load(pos_file)
-
-    for pos in pos_list:
-        print(pos)
-        pos_object = PartsOfSpeech.objects.get_or_create(code=pos["code"])[0]
-        pos_object.meaning = pos["meaning"]
-        pos_object.save()
-
-    with open(f"{folder_path}/origin.json") as origin_file:
-        origin_list = json.load(origin_file)
-
-    for origin in origin_list:
-        print(origin)
-        origin_object = Origin.objects.get_or_create(code=origin["code"])[0]
-        origin_object.meaning = origin["meaning"]
-        origin_object.save()
-
-    with open(f"{folder_path}/classification.json") as classification_file:
-        classification_list = json.load(classification_file)
-
-    for classification in classification_list:
-        print(classification)
-        classification_object = Classification.objects.get_or_create(
-            code=classification["code"]
-        )[0]
-        classification_object.meaning = classification["meaning"]
-        classification_object.save()
