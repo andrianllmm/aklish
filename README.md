@@ -3,6 +3,15 @@
 **A Django x React.js web application for crowdsourcing Aklanon-English translations.**
 
 
+<div align="center">
+   <img src="demo/mockups/demo.png" alt="demo" width="500"/>
+   <br>
+   <a href="https://aklish.up.railway.app" >
+      <strong>↗ Demo</strong>
+   </a>
+</div>
+
+
 ## About
 
 [Aklish](https://aklish.up.railway.app) is a web application designed to facilitate the crowdsourcing of Aklanon-English translations. It offers a collaborative platform where users can contribute and manage translations between Aklanon and English. The app focuses on community engagement and high-quality results by employing several key strategies.
