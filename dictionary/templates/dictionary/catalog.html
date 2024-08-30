@@ -31,22 +31,16 @@
         </div>
 
         <!-- Letter pagination -->
-        <nav id="letter-pagination" class="container mb-2">
+        <nav id="letter-pagination" class="mb-2">
             <ul class="pagination pagination-sm flex-wrap justify-content-center m-0">
                 {% for letter in 'abcdefghijklmnopqrstuvwxyz' %}
-                    {% if letter == current_letter %}
-                        <li class="page-item">
-                            <a href="{% url 'dictionary:catalog' lang.code letter %}" class="page-link active mb-1">
-                                {{ letter|upper }}{{ letter }}
-                            </a>
-                        </li>
-                    {% else %}
-                        <li class="page-item">
-                            <a href="{% url 'dictionary:catalog' lang.code letter %}" class="page-link mb-1">
-                                {{ letter|upper }}{{ letter }}
-                            </a>
-                        </li>
-                    {% endif %}
+                    <li class="page-item">
+                        <a href="{% url 'dictionary:catalog' lang.code letter %}"
+                            class="page-link {% if letter == current_letter %}active{% endif %} px-md-2 px-1"
+                        >
+                            {{ letter|upper }}{{ letter }}
+                        </a>
+                    </li>
                 {% endfor %}
             </ul>
         </nav>
@@ -61,27 +55,27 @@
     </div>
     <!-- End header -->
 
-    <!-- Notices -->
-    <div class="container">
-        <div class="alert py-1 px-2 alert-info alert-dismissible show" role="alert">
-            <small>
-                <strong>Note: </strong>
-                This dictionary is mainly from our <a href="{% url 'main:sources' %}" class="text-reset">sources</a>
-                and is supplemented by the <a href="{% url 'main:about' %}#team" class="text-reset">lead researchers</a>.
-                It may have missing words and errors.
-            </small>
-            <button type="button" class="btn-close p-2" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    </div>
-    <!-- End notices -->
-
     <div class="row g-3">
         {% if entry_today %}
-            <!-- Word of the day -->
             <div class="col-sm-3">
-                {% include 'dictionary/word_today.html' %}
+                <!-- Word of the day -->
+                <div class="mb-3">
+                    {% include 'dictionary/word_today.html' %}
+                </div>
+                <!-- End word of the day -->
+
+                <!-- Notices -->
+                <div class="alert py-1 px-2 mb-3 alert-info alert-dismissible show" role="alert">
+                    <small>
+                        <strong>Note: </strong>
+                        This dictionary is mainly from our <a href="{% url 'main:sources' %}" class="text-reset">sources</a>
+                        and is supplemented by the <a href="{% url 'main:about' %}#team" class="text-reset">lead researchers</a>.
+                        It may have missing words and errors.
+                    </small>
+                    <button type="button" class="btn-close p-2" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <!-- End notices -->
             </div>
-            <!-- End word of the day -->
         {% endif %}
 
         <!-- Lis of entries -->
