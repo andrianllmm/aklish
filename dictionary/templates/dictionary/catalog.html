@@ -76,31 +76,10 @@
     <!-- End notices -->
 
     <div class="row g-3">
-        <!-- Word of the day -->
         {% if entry_today %}
+            <!-- Word of the day -->
             <div class="col-sm-3">
-                <div class="card">
-                    <div class="card-header">Word of the day</div>
-
-                    <div class="card-body">
-                        <h2 class="card-title fs-5">{{ entry_today.word }}</h2>
-
-                        <p class="card-text">
-                            {% if entry_today.attributes.first.pos.code %}
-                                <span class="badge text-bg-secondary">
-                                    {{ entry_today.attributes.first.pos.code }}
-                                </span>
-                            {% endif %}
-                            {{ entry_today.attributes.first.definition }}
-                        </p>
-
-                        <a href="{% url 'dictionary:entry' entry_today.lang.code entry_today.word %}"
-                            class="btn btn-sm btn-primary"
-                        >
-                            See entry
-                        </a>
-                    </div>
-                </div>
+                {% include 'dictionary/word_today.html' %}
             </div>
             <!-- End word of the day -->
         {% endif %}

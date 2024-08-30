@@ -1,0 +1,27 @@
+<div class="card p-3 border-primary border-3">
+    <div class="card-header bg-body border-0 py-2">
+        <h3 class="fs-5 fw-bold m-0">Word of the Day</h3>
+        <span class="text-muted">{% now "jS F Y" %}</span>
+    </div>
+
+    <div class="card-body py-2">
+        <h2 class="card-title fs-3 fw-bold">{{ entry_today.word }}</h2>
+
+        <p class="card-text">
+            {% if entry_today.attributes.first.pos.code %}
+                <span class="badge text-bg-secondary">
+                    {{ entry_today.attributes.first.pos.code }}
+                </span>
+            {% endif %}
+            {{ entry_today.attributes.first.definition }}
+        </p>
+
+        <div class="py-2">
+            <a href="{% url 'dictionary:entry' entry_today.lang.code entry_today.word %}"
+                class="btn btn-sm btn-primary"
+            >
+                See entry
+            </a>
+        </div>
+    </div>
+</div>
