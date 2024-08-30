@@ -155,17 +155,17 @@
     <!-- End main -->
 
     <!-- Footer -->
-    <footer class="mt-auto text-center text-muted bg-body-tertiary">
+    <footer class="mt-auto text-center text-muted border-top">
         <!-- Actions -->
         <div class="container p-3 mt-3 text-md-start">
             <div class="row mt-3">
                 <!-- About -->
                 <div class="col-md-4 mx-auto mb-4">
-                    <h1 class="fs-3 text-uppercase fw-bold mb-4">
+                    <h1 class="fs-3 text-uppercase fw-bold mb-3">
                         <a href="{% url 'main:homepage' %}"
                             class="link-unstyled text-primary p-0 pb-lg-0 pb-2"
                         >
-                            <img src="{% static 'images/logo.svg' %}" alt="Aklish" width="45" height="auto" class="me-1">
+                            <img src="{% static 'images/logo.svg' %}" alt="Aklish" width="36" height="auto" class="me-1">
                             Aklish
                         </a>
                     </h1>
@@ -180,7 +180,7 @@
                 <!-- Links -->
                 <div class="col-md-4 mx-auto mb-4">
                     <h1 class="fs-6 text-uppercase fw-bold mb-4">
-                        <a href="{% url 'main:about' %}" class="link-unstyled underline-hover">
+                        <a href="{% url 'main:about' %}" class="underline-hover">
                             About
                         </a>
                     </h1>
@@ -198,7 +198,7 @@
                 <!-- Contact -->
                 <div class="col-md-4 mx-auto mb-4">
                     <h1 class="fs-6 text-uppercase fw-bold mb-4">
-                        <a href="{% url 'main:contact' %}" class="link-unstyled underline-hover">
+                        <a href="{% url 'main:contact' %}" class="underline-hover">
                             Contact
                         </a>
                     </h1>
@@ -221,7 +221,7 @@
         <!-- End actions -->
 
         <!-- Copyright -->
-        <div class="p-3 mb-3">© 2024 Aklish.com</div>
+        <div class="fw-bold p-1 mb-4">© 2024 Aklish.com</div>
         <!-- End copyright -->
     </footer>
     <!-- End footer -->
