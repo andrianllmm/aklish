@@ -1,5 +1,6 @@
 {% extends 'main/base.html' %}
 
+{% load static %}
 {% load humanize %}
 
 {% block title %}
@@ -7,117 +8,139 @@
 {% endblock %}
 
 {% block content %}
-    <!-- Title and tagline-->
-    <div class="container text-center mb-3">
-        <h1 class="display-4 fw-bold text-center">
-            Translate and
-            <br>
-            be translated
-        </h1>
-        <small class="fst-italic">
-            The Aklanon & English platform where your<br>
-            words translate and are translated.
-        </small>
-    </div>
-    <!-- End title and tagline -->
-
-    <!-- Call to action -->
-    <div class="container p-3 mx-auto" style="max-width: 800px;">
+    <!-- Hero -->
+    <section id="hero" class="container p-lg-4 p-md-3">
         <div class="row g-3">
-            <!-- Add entry -->
-            <div class="col-sm">
-                <div class="h-100 p-4 d-flex flex-column border rounded-4">
-                    <h2 class="text-center fs-5 mb-3">
-                        Imong hambae, their translation
-                    </h2>
-
-                    <textarea id="entry-text-example" name="content"
-                    class="form-control mb-3 flex-grow-1"
-                    placeholder="Start writing here."></textarea>
-
-                    <a id="add-entry-example" href="{% url 'translate:add' %}" class="btn btn-primary">
-                        Add an entry
+            <div class="col-md-6 d-flex flex-column justify-content-center align-items-center text-center">
+                <h1 class="display-2 fw-bold text-nowrap">
+                    Translate and
+                    <br>
+                    be translated
+                </h1>
+                <p>
+                    The Aklanon & English platform where your<br>
+                    words translate and are translated.
+                </p>
+                <div>
+                    <a href="{% url 'users:register' %}" class="btn btn-primary mb-2 text-nowrap">
+                        Get started
                     </a>
                 </div>
             </div>
-            <!-- End add entry -->
-
-            <!-- Translate entry -->
-            <div class="col-sm">
-                <div class="h-100 p-4 d-flex flex-column border rounded-4">
-                    <h2 class="text-center fs-5 mb-3">
-                        Their words, imong pagsalin
-                    </h2>
-
-                    <div class="mb-2">
-                        <div class="d-flex align-items-center">
-                            <i class="bi bi-chat-left-quote-fill fs-1 m-1"></i>
-                            <p class="p-1 m-0">Ro anwang nagaeungaeog sa eugan-eugan.</p>
-                        </div>
-
-                        <div class="d-flex align-items-center">
-                            <i class="bi bi-chat-right-quote fs-1 m-1"></i>
-                            <p class="p-1 m-0">The carabao is swimming in the mud.</p>
-                        </div>
-                    </div>
-
-                    <a href="{% url 'translate:catalog' %}" class="btn btn-primary">
-                        Translate an entry
-                    </a>
-                </div>
+            <div class="col-md-6 px-lg-5 d-flex justify-content-center align-items-center">
+                <img src="{% static 'images/carabao-reading.svg' %}" alt="Aklish" style="width: 80%; height: auto;">
             </div>
-            <!-- End translate entry -->
         </div>
-    </div>
-    <!-- End call to action -->
-
-    <hr>
+    </section>
+    <!-- End hero -->
 
     <!-- Stats -->
-    <div class="container p-3">
-        <h2 class="text-center fs-4 mb-3">Contribute to our growing numbers!</h2>
+    <section class="container p-3 mb-5">
+        <hr>
+        <h2 class="text-center fw-bold mb-3">Contribute to our growing numbers!</h2>
 
         <div class="row">
-            <div class="col text-center">
+            <div class="col-4 text-center">
                 <a href="{% url 'translate:add' %}" class="link-unstyled">
-                    <p class="fs-2 mb-0 text-primary">{{ entries.count }}</p>
+                    <p class="display-5 fw-bold text-primary mb-0">{{ entries.count }}</p>
                     <p class="fs-6">Entries</p>
                 </a>
             </div>
-            <div class="col text-center">
+            <div class="col-4 text-center">
                 <a href="{% url 'translate:catalog' %}" class="link-unstyled">
-                    <p class="fs-2 mb-0 text-primary">{{ translations.count }}</p>
+                    <p class="display-5 fw-bold text-primary mb-0">{{ translations.count }}</p>
                     <p class="fs-6">Translations</p>
                 </a>
             </div>
-            <div class="col text-center">
+            <div class="col-4 text-center">
                 <a href="{% url 'dictionary:catalog' 'akl' %}" class="link-unstyled">
-                    <p class="fs-2 mb-0 text-primary">{{ dict_entries.count }}</p>
+                    <p class="display-5 fw-bold text-primary mb-0">{{ dict_entries.count }}</p>
                     <p class="fs-6">Words</p>
                 </a>
             </div>
         </div>
-    </div>
+        <hr>
+    </section>
     <!-- End stats -->
 
-    <hr>
+    <!-- Call to action -->
+    <section class="container p-3 mb-5">
+        <div class="row g-3">
+            <div class="col-md-6 order-sm-1 order-2 px-lg-5 d-flex flex-column justify-content-center align-items-center">
+                <textarea id="entry-text-example" name="content"
+                class="form-control p-4 mb-3 flex-grow-1 fs-3 border-2 border-primary"
+                placeholder="Write what you want to translate here" rows="3"></textarea>
+
+                <a id="add-entry-example" href="{% url 'translate:add' %}" class="btn btn-outline-primary">
+                    Add an entry
+                </a>
+            </div>
+            <div class="col-md-6 order-sm-2 order-1 d-flex flex-column justify-content-center align-items-center text-md-end text-center">
+                <div>
+                    <h1 class="display-6 fw-bold text-nowrap">
+                        Imong hambae,
+                        <br>
+                        their translation
+                    </h1>
+                    <p>
+                        Easily submit your text for others to translate
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container p-3 mb-5">
+        <div class="row g-3">
+            <div class="col-md-6 d-flex flex-column justify-content-center align-items-center text-md-start text-center">
+                <div>
+                    <h1 class="display-6 fw-bold text-nowrap">
+                        Their words,
+                        <br>
+                        imong pagsalin
+                    </h1>
+                    <p>
+                        Help translate texts submitted by others.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6 px-lg-5 d-flex flex-column justify-content-center align-items-center">
+                <div class="mb-2">
+                    <div class="d-flex align-items-center justify-content-center text-muted">
+                        <i class="bi bi-chat-right-quote fs-1 text-primary me-3"></i>
+                        <p class="fs-4 fw-bold m-0">The carabao is swimming in the mud.</p>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-center text-muted">
+                        <i class="bi bi-chat-left-quote-fill fs-1 text-primary me-3"></i>
+                        <p class="fs-6 fw-bold m-0">Ro anwang nagaeungaeog sa eugan-eugan.</p>
+                    </div>
+                </div>
+
+                <a href="{% url 'translate:catalog' %}" class="btn btn-outline-primary">
+                    Translate an entry
+                </a>
+            </div>
+        </div>
+    </section>
+    <!-- End call to action -->
 
     <!-- Featured -->
-    <div class="p-3">
-        <h2 class="text-center fs-4 mb-3">Featured</h2>
+    <section class="p-3">
+        <h2 class="text-center fw-bold mb-4">Explore More Features</h2>
 
         <div class="row g-3">
             <!-- Proofreader -->
             <div class="col-sm">
                 <div class="card h-100 p-2 rounded-4">
                     <div class="card-body d-flex flex-column">
-                        <h3 class="card-title fs-5 mb-1">Aklanon Spellchecker</h3>
+                        <h3 class="card-title fs-5 fw-bold mb-1">Aklanon Spellchecker</h3>
                         <div>
-                            <span class="badge text-bg-secondary mb-2">proofreader</span>
+                            <span class="badge text-bg-secondary mb-3">proofreader</span>
                         </div>
 
                         <p class="card-text">
-                            Are your Aklanon spellings correct?
+                            Ensure your Aklanon spelling is accurate.
                             <div class="p-2 text-center bg-body-tertiary rounded">
                                 saea <u class="link-underline-danger">run</u> hay!
                             </div>
@@ -125,7 +148,7 @@
 
                         <div class="mt-auto d-flex justify-content-center">
                             <a href="{% url 'proofreader:index' 'akl' %}" class="btn btn-sm btn-primary">
-                                Try now!
+                                Try it now!
                             </a>
                         </div>
                     </div>
@@ -137,9 +160,9 @@
             <div class="col-sm">
                 <div class="card h-100 p-2 rounded-4">
                     <div class="card-body d-flex flex-column">
-                        <h3 class="card-title fs-5 mb-1">Aklanon Wordle</h3>
+                        <h3 class="card-title fs-5 fw-bold mb-1">Aklanon Wordle</h3>
                         <div>
-                            <span class="badge text-bg-secondary mb-2">games</span>
+                            <span class="badge text-bg-secondary mb-3">games</span>
                         </div>
 
                         <p class="card-text m-0">
@@ -172,9 +195,9 @@
             <div class="col-sm">
                 <div class="card h-100 p-2 rounded-4">
                     <div class="card-body d-flex flex-column">
-                        <h3 class="card-title fs-5 mb-1">Aklanon Match</h3>
+                        <h3 class="card-title fs-5 fw-bold mb-1">Aklanon Match</h3>
                         <div>
-                            <span class="badge text-bg-secondary mb-2">games</span>
+                            <span class="badge text-bg-secondary mb-3">games</span>
                         </div>
 
                         <p class="card-text">
@@ -206,13 +229,13 @@
             <div class="col-sm">
                 <div class="card h-100 p-2 rounded-4">
                     <div class="card-body d-flex flex-column">
-                        <h3 class="card-title fs-5 mb-1">Top Users</h3>
+                        <h3 class="card-title fs-5 fw-bold mb-1">Top Contributors</h3>
                         <div>
-                            <span class="badge text-bg-secondary mb-2">users</span>
+                            <span class="badge text-bg-secondary mb-3">users</span>
                         </div>
 
                         <p class="card-text">
-                            Thanks to all contributors!
+                            A special thanks to our top users for their contributions!
                             {% for user in top_users %}
                                 <div>
                                     <span class="me-1">#{{ forloop.counter }}</span>
@@ -234,7 +257,7 @@
             </div>
             <!-- End of leaderboard -->
         </div>
-    </div>
+    </section>
     <!-- End of featured -->
 
     <script>
