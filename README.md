@@ -4,10 +4,10 @@
 
 
 <div align="center">
-   <img src="demo/mockups/demo.png" alt="demo" width="500"/>
+   <img src="demo/mockups/mockup.png" alt="Mockup" width="750"/>
    <br>
    <a href="https://aklish.up.railway.app" >
-      <strong>↗ Demo</strong>
+      <strong>↗ Site</strong>
    </a>
 </div>
 
