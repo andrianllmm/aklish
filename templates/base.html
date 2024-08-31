@@ -136,7 +136,7 @@
                     <!-- Color mode toggle -->
                     <div class="d-flex justify-content-center m-2">
                         <button id="switch-theme" class="btn-unstyled p-0" title="Switch theme" aria-label="Switch theme">
-                            <i class="bi bi-moon-fill text-muted"></i>
+                            <i class="bi"></i>
                         </button>
                     </div>
                     <!-- End color mode toggle -->
@@ -230,32 +230,49 @@
     <script src="{% static 'js/main.js' %}"></script>
 
     <script>
-        const switchTheme = document.querySelector("#switch-theme");
+        document.addEventListener("DOMContentLoaded", function() {
+            const switchTheme = document.querySelector("#switch-theme");
 
-        const toggleTheme = () => {
-            const htmlElement = document.documentElement;
-            if (htmlElement.dataset.bsTheme == "light") {
-                htmlElement.dataset.bsTheme = "dark";
-                localStorage.setItem("theme", "dark");
-            } else {
-                htmlElement.dataset.bsTheme = "light";
-                localStorage.setItem("theme", "light");
-            }
-        };
-
-        const setThemeFromLocalStorage = () => {
-            const storedTheme = localStorage.getItem("theme");
-            if (storedTheme) {
+            // Function to toggle the theme between light and dark
+            const toggleTheme = () => {
                 const htmlElement = document.documentElement;
-                htmlElement.dataset.bsTheme = storedTheme;
-            }
-        };
+                if (htmlElement.dataset.bsTheme === "light") {
+                    htmlElement.dataset.bsTheme = "dark";
+                    switchTheme.querySelector("i").className = "bi bi-moon-fill text-muted";
+                    localStorage.setItem("theme", "dark");
+                } else {
+                    htmlElement.dataset.bsTheme = "light";
+                    switchTheme.querySelector("i").className = "bi bi-sun-fill text-muted";
+                    localStorage.setItem("theme", "light");
+                }
+            };
 
-        switchTheme.addEventListener("click", () => {
-            toggleTheme();
+            // Function to apply the theme based on the local storage or system preference
+            const setTheme = () => {
+                const htmlElement = document.documentElement; // Define htmlElement here
+                const storedTheme = localStorage.getItem("theme");
+
+                // If there is a stored theme in localStorage, use it
+                if (storedTheme) {
+                    htmlElement.dataset.bsTheme = storedTheme;
+                    switchTheme.querySelector("i").className = storedTheme === "light" ? "bi bi-sun-fill text-muted" : "bi bi-moon-fill text-muted";
+                } else {
+                    // If no theme is stored, apply the system preference
+                    const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
+                    const theme = prefersDarkScheme ? "dark" : "light";
+                    htmlElement.dataset.bsTheme = theme;
+                    switchTheme.querySelector("i").className = prefersDarkScheme ? "bi bi-moon-fill text-muted" : "bi bi-sun-fill text-muted";
+                }
+            };
+
+            // Event listener for theme switch
+            switchTheme.addEventListener("click", () => {
+                toggleTheme();
+            });
+
+            // Set the theme on page load
+            setTheme();
         });
-
-        setThemeFromLocalStorage();
     </script>
 
 </body>
