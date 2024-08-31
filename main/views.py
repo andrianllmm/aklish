@@ -5,8 +5,15 @@ from django import template
 from translate.models import Entry, Translation
 from dictionary.models import DictEntry
 
+from dictionary.helpers import get_word_today
+
 
 def homepage(request):
+    dict_entries = DictEntry.objects.filter(lang__code="akl")
+    entry_today = get_word_today(dict_entries)
+
+    top_users = User.objects.filter(is_active=True).filter(is_staff=False).order_by("-profile__reputation")[:3]
+
     return render(
         request,
         "main/homepage.html",
@@ -14,9 +21,8 @@ def homepage(request):
             "entries": Entry.objects.all(),
             "translations": Translation.objects.all(),
             "dict_entries": DictEntry.objects.all(),
-            "top_users": User.objects.filter(is_active=True)
-            .filter(is_staff=False)
-            .order_by("-profile__reputation")[:3],
+            "entry_today": entry_today,
+            "top_users": top_users,
         },
     )
 

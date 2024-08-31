@@ -35,7 +35,7 @@
     <!-- End hero -->
 
     <!-- Stats -->
-    <section class="container p-3 mb-5">
+    <section id="stats" class="container p-3 mb-5">
         <hr>
         <h2 class="text-center fw-bold mb-3">Contribute to our growing numbers!</h2>
 
@@ -64,9 +64,9 @@
     <!-- End stats -->
 
     <!-- Call to action -->
-    <section class="container p-3 mb-5">
+    <section id="add-entry" class="container p-3 mb-5">
         <div class="row g-3">
-            <div class="col-md-6 order-sm-1 order-2 px-lg-5 d-flex flex-column justify-content-center align-items-center">
+            <div class="col-md-6 order-md-1 order-2 px-lg-5 d-flex flex-column justify-content-center align-items-center">
                 <textarea id="entry-text-example" name="content"
                 class="form-control p-4 mb-3 flex-grow-1 fs-3 border-2 border-primary"
                 placeholder="Write what you want to translate here" rows="3"></textarea>
@@ -75,7 +75,7 @@
                     Add an entry
                 </a>
             </div>
-            <div class="col-md-6 order-sm-2 order-1 d-flex flex-column justify-content-center align-items-center text-md-end text-center">
+            <div class="col-md-6 order-md-2 order-1 d-flex flex-column justify-content-center align-items-center text-md-end text-center">
                 <div>
                     <h1 class="display-6 fw-bold text-nowrap">
                         Imong hambae,
@@ -83,14 +83,14 @@
                         their translation
                     </h1>
                     <p>
-                        Easily submit your text for others to translate
+                        Easily submit your text for translation <br> and contribute to the community.
                     </p>
                 </div>
             </div>
         </div>
     </section>
-
-    <section class="container p-3 mb-5">
+    <br>
+    <section id="add-translation" class="container p-3 mb-5">
         <div class="row g-3">
             <div class="col-md-6 d-flex flex-column justify-content-center align-items-center text-md-start text-center">
                 <div>
@@ -100,7 +100,7 @@
                         imong pagsalin
                     </h1>
                     <p>
-                        Help translate texts submitted by others.
+                        Help translate texts submitted by others <br> and make a difference in our shared knowledge.
                     </p>
                 </div>
             </div>
@@ -124,141 +124,179 @@
         </div>
     </section>
     <!-- End call to action -->
-
-    <!-- Featured -->
-    <section class="p-3">
-        <h2 class="text-center fw-bold mb-4">Explore More Features</h2>
-
+    <br>
+    <!-- Dictionary -->
+    <section id="dictionary" class="container p-3 mb-5">
         <div class="row g-3">
-            <!-- Proofreader -->
-            <div class="col-sm">
-                <div class="card h-100 p-2 rounded-4">
-                    <div class="card-body d-flex flex-column">
-                        <h3 class="card-title fs-5 fw-bold mb-1">Aklanon Spellchecker</h3>
-                        <div>
-                            <span class="badge text-bg-secondary mb-3">proofreader</span>
-                        </div>
-
-                        <p class="card-text">
-                            Ensure your Aklanon spelling is accurate.
-                            <div class="p-2 text-center bg-body-tertiary rounded">
-                                saea <u class="link-underline-danger">run</u> hay!
-                            </div>
-                        </p>
-
-                        <div class="mt-auto d-flex justify-content-center">
-                            <a href="{% url 'proofreader:index' 'akl' %}" class="btn btn-sm btn-primary">
-                                Try it now!
-                            </a>
-                        </div>
-                    </div>
+            <div class="col-md-6 order-md-1 order-2 px-lg-5 d-flex flex-column justify-content-center align-items-center">
+                {% include 'dictionary/word_today.html' %}
+            </div>
+            <div class="col-md-6 order-md-2 order-1 d-flex flex-column justify-content-center align-items-center text-md-end text-center">
+                <div>
+                    <h1 class="display-6 fw-bold text-nowrap">
+                        Explore the
+                        <br>
+                        Dictionary
+                    </h1>
+                    <p>
+                        Dive into comprehensive Aklanon and English dictionaries.
+                    </p>
                 </div>
             </div>
-            <!-- End of proofreader -->
-
-            <!-- Wordle -->
-            <div class="col-sm">
-                <div class="card h-100 p-2 rounded-4">
-                    <div class="card-body d-flex flex-column">
-                        <h3 class="card-title fs-5 fw-bold mb-1">Aklanon Wordle</h3>
-                        <div>
-                            <span class="badge text-bg-secondary mb-3">games</span>
-                        </div>
-
-                        <p class="card-text m-0">
-                            Can you guess the secret Aklanon word in 6 turns?
-                        </p>
-
-                        <div class="px-2">
-                            <div class="grid">
-                                <div class="row d-flex">
-                                    <div class="misplaced">K</div>
-                                    <div class="misplaced">A</div>
-                                    <div class="absent">L</div>
-                                    <div class="correct">A</div>
-                                    <div class="correct">N</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mt-auto d-flex justify-content-center">
-                            <a href="{% url 'games:wordle' 'akl' %}" class="btn btn-sm btn-primary">
-                                Play now!
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- End of wordle -->
-
-            <!-- Match -->
-            <div class="col-sm">
-                <div class="card h-100 p-2 rounded-4">
-                    <div class="card-body d-flex flex-column">
-                        <h3 class="card-title fs-5 fw-bold mb-1">Aklanon Match</h3>
-                        <div>
-                            <span class="badge text-bg-secondary mb-3">games</span>
-                        </div>
-
-                        <p class="card-text">
-                            Can you identify the synonym of an Aklanon word?
-                            <div class="p-2 d-flex justify-content-center bg-body-tertiary rounded">
-                                <button class="btn btn-sm btn-outline-primary rounded-pill">
-                                    bahoe
-                                </button>
-                                <button class="btn btn-sm btn-danger rounded-pill mx-1">
-                                    isot
-                                </button>
-                                <button class="btn btn-sm btn-outline-success rounded-pill">
-                                    eagko
-                                </button>
-                            </div>
-                        </p>
-
-                        <div class="mt-auto d-flex justify-content-center">
-                            <a href="{% url 'games:match' 'akl' %}" class="btn btn-sm btn-primary">
-                                Play now!
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- End of match -->
-
-            <!-- Leaderboard -->
-            <div class="col-sm">
-                <div class="card h-100 p-2 rounded-4">
-                    <div class="card-body d-flex flex-column">
-                        <h3 class="card-title fs-5 fw-bold mb-1">Top Contributors</h3>
-                        <div>
-                            <span class="badge text-bg-secondary mb-3">users</span>
-                        </div>
-
-                        <p class="card-text">
-                            A special thanks to our top users for their contributions!
-                            {% for user in top_users %}
-                                <div>
-                                    <span class="me-1">#{{ forloop.counter }}</span>
-                                    <a href="{% url 'users:profile' user.pk user.username %}" class="text-decoration-none">
-                                        <i class="bi bi-person"></i>
-                                        {{ user.username }}
-                                    </a>
-                                </div>
-                            {% endfor %}
-                        </p>
-
-                        <div class="mt-auto d-flex justify-content-center">
-                            <a href="{% url 'users:index' %}"class="btn btn-sm btn-primary">
-                                See leaderboard
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- End of leaderboard -->
         </div>
     </section>
-    <!-- End of featured -->
+    <!-- End dictionary -->
+    <br>
+    <!-- Proofreader -->
+    <section id="proofreader" class="container p-3 mb-5">
+        <div class="row g-3">
+            <div class="col-md-6 d-flex flex-column justify-content-center align-items-center text-md-start text-center">
+                <div>
+                    <h1 class="display-6 fw-bold text-nowrap">
+                        Use the
+                        <br>
+                        Spellchecker
+                    </h1>
+                    <p>
+                        Verify your Aklanon spelling with our accurate spellchecking tool.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6 px-lg-5 d-flex flex-column justify-content-center align-items-center">
+                <div class="px-5 py-4 mb-3 bg-body-tertiary rounded">
+                    <div class="fs-4 mb-3">
+                        saea gilang <u class="link-underline-danger">run</u> hay,
+                        <u class="link-underline-danger">gapnalapong</u> ka
+                    </div>
+
+                    <div class="d-flex flex-wrap fs-5 text-muted">
+                        <small class="me-2 text-nowrap">
+                            <strong id="word-count">6</strong> words
+                        </small>
+                        <small class="me-2 text-nowrap">
+                            <strong id="mistake-count">2</strong> mistakes
+                        </small>
+                        <small class="me-2 text-nowrap">
+                            <strong id="correctness">33%</strong> correct
+                        </small>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center">
+                    <a href="{% url 'proofreader:index' 'akl' %}" class="btn btn-outline-primary">
+                        Try for free
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End proofreader -->
+    <br>
+    <!-- Games-->
+    <section id="games" class="p-3 mb-5">
+        <div class="row g-3">
+            <div class="col-md-6 order-md-1 order-2 px-lg-5 d-flex flex-column justify-content-center align-items-center">
+                <div class="row g-3">
+                    <!-- Wordle -->
+                    <div class="col-md">
+                        <div class="card h-100 p-2 rounded-4 border-2 border-primary">
+                            <div class="card-body d-flex flex-column">
+                                <h3 class="card-title fs-4 fw-bold mb-1">Aklanon Wordle</h3>
+
+                                <p class="card-text m-0">
+                                    Can you guess the secret Aklanon word in 6 turns?
+                                </p>
+
+                                <div class="px-2">
+                                    <div class="grid">
+                                        <div class="row d-flex">
+                                            <div class="misplaced">K</div>
+                                            <div class="misplaced">A</div>
+                                            <div class="absent">L</div>
+                                            <div class="correct">A</div>
+                                            <div class="correct">N</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End of wordle -->
+
+                    <!-- Match -->
+                    <div class="col-md">
+                        <div class="card h-100 p-2 rounded-4">
+                            <div class="card-body d-flex flex-column">
+                                <h3 class="card-title fs-4 fw-bold mb-1">Aklanon Match</h3>
+
+                                <p class="card-text">
+                                    Can you identify the synonym of an Aklanon word?
+                                    <div class="p-2 d-flex justify-content-center bg-body-tertiary rounded">
+                                        <button class="btn btn-sm btn-outline-primary rounded-pill">
+                                            bahoe
+                                        </button>
+                                        <button class="btn btn-sm btn-danger rounded-pill mx-1">
+                                            isot
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-success rounded-pill">
+                                            eagko
+                                        </button>
+                                    </div>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End of match -->
+
+                    <div class="d-flex justify-content-center">
+                        <a href="{% url 'games:wordle' 'akl' %}" class="btn btn-outline-primary">
+                            Play now!
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 order-md-2 order-1 d-flex flex-column justify-content-center align-items-center text-md-end text-center">
+                <div>
+                    <h1 class="display-6 fw-bold text-nowrap">
+                        Play Fun
+                        <br>
+                        Word Games
+                    </h1>
+                    <p>
+                        Challenge yourself with Aklanon and English <br> language games and enhance your skills.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End of games -->
+    <br>
+    <!-- Leaderboard -->
+    <section id="leaderboard" class="p-3 mt-5">
+        <h2 class="text-center fw-bold mb-3">Top Contributors</h2>
+
+        <div class="mb-4 d-flex justify-content-center">
+            <div class="d-flex flex-column">
+                {% for user in top_users %}
+                    <div class="fs-5">
+                        <span class="me-1">#{{ forloop.counter }}</span>
+                        <a href="{% url 'users:profile' user.pk user.username %}" class="text-decoration-none">
+                            <i class="bi bi-person"></i>
+                            {{ user.username }}
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="mt-auto d-flex justify-content-center">
+            <a href="{% url 'users:index' %}" class="text-decoration-none fw-bold">
+                See leaderboard
+                <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+    </section>
+    <!-- End of leaderboard -->
 
     <script>
         const addEntryExample = document.querySelector("#add-entry-example");
