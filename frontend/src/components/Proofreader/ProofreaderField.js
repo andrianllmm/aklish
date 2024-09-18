@@ -130,7 +130,7 @@ export default function ProofreaderField({ defaultShowSuggestions }) {
 
     return (
         <div>
-            <div class="mb-2">
+            <div className="mb-2">
                 <div className="row g-2">
                     {/* Text field */}
                     <div className="col-md">
