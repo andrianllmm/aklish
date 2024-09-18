@@ -1,3 +1,7 @@
+import nltk
+nltk.download("punkt")
+nltk.download("punkt_tab")
+
 import lemminflect
 import os
 import pkg_resources
