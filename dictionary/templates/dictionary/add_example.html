@@ -20,25 +20,26 @@
         </div>
     </div>
 
+    {% comment %}
     {% if request.user.profile.reputation < 30 %}
         <div class="alert alert-warning">
             You need at least 30 reputation points to add an example. Learn how to gain reputation by visiting the
             <a href="{% url 'main:help' 'reputation_guide' %}" class="text-reset">reputation guide</a>.
         </div>
     {% else %}
-        <!-- Add example form -->
-        <div class="container mb-3">
-            <form action="{% url 'dictionary:add_example' lang.code word attribute.pk %}" method="POST">
-                {% csrf_token %}
+    {% endcomment %}
+    <!-- Add example form -->
+    <div class="container mb-3">
+        <form action="{% url 'dictionary:add_example' lang.code word attribute.pk %}" method="POST">
+            {% csrf_token %}
 
-                <div class="form-group mb-3 border-bottom">
-                    <label for="content" class="fw-bold mb-2">Content</label>
-                    <div id="proofreader-field"></div>
-                </div>
+            <div class="form-group mb-3 border-bottom">
+                <label for="content" class="fw-bold mb-2">Content</label>
+                <div id="proofreader-field"></div>
+            </div>
 
-                <button class="btn btn-primary">Add example</button>
-            </form>
-        </div>
-        <!-- End add example form -->
-    {% endif %}
+            <button class="btn btn-primary">Add example</button>
+        </form>
+    </div>
+    <!-- End add example form -->
 {% endblock %}
