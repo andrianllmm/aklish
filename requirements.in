@@ -1,6 +1,6 @@
 aklstemmer @ git+https://github.com/andrianllmm/aklanon-stemmer@main
 dj_database_url==3.0.0
-Django==5.2.3
+Django==5.2.9
 django_limits==0.0.6
 django_ratelimit==4.1.0
 djangorestframework==3.16.0
