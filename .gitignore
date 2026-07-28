@@ -96,7 +96,7 @@ coverage.xml
 .ipynb_checkpoints
 
 # pyenv
-.python-version
+# .python-version is intentionally tracked to pin Render's Python version
 
 # celery
 celerybeat-schedule.*
