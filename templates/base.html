@@ -1,8 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en" data-bs-theme="light">
+<html lang="en">
 
 <head>
+
+    <!-- Set theme before first paint to avoid a flash of the wrong theme -->
+    <script>
+        (function() {
+            var storedTheme = localStorage.getItem("theme");
+            var theme = storedTheme || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+            document.documentElement.dataset.bsTheme = theme;
+        })();
+    </script>
 
     <!-- Metadata -->
     <meta charset="UTF-8">
@@ -247,22 +256,10 @@
                 }
             };
 
-            // Function to apply the theme based on the local storage or system preference
+            // Function to sync the switch icon with the theme set before first paint
             const setTheme = () => {
-                const htmlElement = document.documentElement; // Define htmlElement here
-                const storedTheme = localStorage.getItem("theme");
-
-                // If there is a stored theme in localStorage, use it
-                if (storedTheme) {
-                    htmlElement.dataset.bsTheme = storedTheme;
-                    switchTheme.querySelector("i").className = storedTheme === "light" ? "bi bi-sun-fill text-muted" : "bi bi-moon-fill text-muted";
-                } else {
-                    // If no theme is stored, apply the system preference
-                    const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
-                    const theme = prefersDarkScheme ? "dark" : "light";
-                    htmlElement.dataset.bsTheme = theme;
-                    switchTheme.querySelector("i").className = prefersDarkScheme ? "bi bi-moon-fill text-muted" : "bi bi-sun-fill text-muted";
-                }
+                const theme = document.documentElement.dataset.bsTheme;
+                switchTheme.querySelector("i").className = theme === "light" ? "bi bi-sun-fill text-muted" : "bi bi-moon-fill text-muted";
             };
 
             // Event listener for theme switch
