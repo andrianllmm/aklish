@@ -1,1 +1,1 @@
-web: python manage.py migrate && gunicorn aklish.wsg
+web: gunicorn aklish.wsgi:application

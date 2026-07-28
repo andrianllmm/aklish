@@ -4,6 +4,7 @@ Django==5.2.9
 django_limits==0.0.6
 django_ratelimit==4.1.0
 djangorestframework==3.16.0
+gunicorn==23.0.0
 lemminflect==0.2.3
 nltk==3.9.1
 python-dotenv==1.1.0

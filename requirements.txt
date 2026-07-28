@@ -26,6 +26,8 @@ djangorestframework==3.16.0
     # via -r requirements.in
 editdistpy==0.1.6
     # via symspellpy
+gunicorn==23.0.0
+    # via -r requirements.in
 joblib==1.5.1
     # via nltk
 lemminflect==0.2.3
