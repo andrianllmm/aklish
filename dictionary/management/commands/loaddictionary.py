@@ -158,7 +158,11 @@ def entry_to_model(lang, entry, common=None):
             attribute_object.save()
 
         if attribute["examples"]:
-            user_object = User.objects.get(username="andrianllmm", email="maagmaandrian@gmail.com", is_superuser=True,)
+            admin_username = os.environ.get("ADMIN_USERNAME")
+            admin_email = os.environ.get("ADMIN_EMAIL")
+            if not admin_username or not admin_email:
+                raise CommandError("ADMIN_USERNAME and ADMIN_EMAIL must be set to load dictionary examples.")
+            user_object = User.objects.get(username=admin_username, email=admin_email, is_superuser=True,)
 
             for example in attribute["examples"]:
                 if isinstance(example, str):

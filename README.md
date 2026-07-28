@@ -72,9 +72,9 @@ games) strategies.
    ```
 5. Seed the database
 
-   Create the superuser account that dictionary examples are attributed to
-   (username `admin`, email `admin@example.com`), then load the
-   data:
+   Set `ADMIN_USERNAME`/`ADMIN_EMAIL` in `.env` (see `.env.example`), then
+   create that superuser account — dictionary examples are attributed to it —
+   and load the data. The username/email below must match your `.env` values:
 
    ```sh
    python manage.py createsuperuser --username admin --email admin@example.com
@@ -82,6 +82,12 @@ games) strategies.
    python manage.py loadattributes
    python manage.py loaddictionary akl
    python manage.py loaddictionary eng
+   ```
+
+   `loaddictionary` only loads common words by default for languages with a
+   `<lang>_common.txt` file (e.g. `eng`). Pass `--all` to load every entry:
+   ```sh
+   python manage.py loaddictionary eng --all
    ```
 
 6. Run the development server
@@ -97,6 +103,8 @@ Create a `.env` file (see `.env.example`) and configure the following variables:
 - `DJANGO_DEBUG`: set to `True` for development or `False` for production
 - `DJANGO_ALLOWED_HOSTS`: comma-separated list of allowed hostnames
 - `DJANGO_TRUSTED_ORIGINS`: comma-separated list of extra CORS/CSRF origins
+- `DATABASE_URL`: database connection URL (falls back to sqlite3 if unset)
+- `ADMIN_USERNAME`/`ADMIN_EMAIL`: superuser dictionary examples are attributed to
 - `DATABASE_URL`: database connection URL (falls back to sqlite3 if unset)
 
 ## Contributing
