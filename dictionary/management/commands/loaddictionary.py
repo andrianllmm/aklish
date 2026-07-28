@@ -26,24 +26,27 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument("lang", type=str, help="Language for the dictionary data.")
         parser.add_argument("--dictionary_path", type=str, help="Path to the folder containing attributes data.", default=None)
+        parser.add_argument("--all", action="store_true", help="Load all words instead of only common ones.")
 
     def handle(self, *args, **options):
         lang = options["lang"]
         dictionary_path = options["dictionary_path"]
-        dictionary_to_model(lang, dictionary_path)
+        load_all = options["all"]
+        dictionary_to_model(lang, dictionary_path, load_all)
 
 
-def dictionary_to_model(lang, file_path=None):
+def dictionary_to_model(lang, file_path=None, load_all=False):
     if not file_path:
         file_path = os.path.join(script_dir, f"../../data/{lang}_dictionary.json")
 
-    # Only include common words
+    # Only include common words unless --all is passed
     common = None
-    try:
-        with open(os.path.join(script_dir, "../../data/{lang}_common.txt")) as common_file:
-            common = [word.strip().lower() for word in common_file.readlines()]
-    except FileNotFoundError:
-        pass
+    if not load_all:
+        try:
+            with open(os.path.join(script_dir, f"../../data/{lang}_common.txt")) as common_file:
+                common = [word.strip().lower() for word in common_file.readlines()]
+        except FileNotFoundError:
+            pass
 
     with open(file_path) as in_file:
         entries = json.load(in_file)
