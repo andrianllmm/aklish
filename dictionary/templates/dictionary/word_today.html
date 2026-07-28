@@ -5,23 +5,27 @@
     </div>
 
     <div class="card-body py-2">
-        <h2 class="card-title fs-3 fw-bold">{{ entry_today.word }}</h2>
+        {% if entry_today %}
+            <h2 class="card-title fs-3 fw-bold">{{ entry_today.word }}</h2>
 
-        <p class="card-text">
-            {% if entry_today.attributes.first.pos.code %}
-                <span class="badge text-bg-secondary">
-                    {{ entry_today.attributes.first.pos.code }}
-                </span>
-            {% endif %}
-            {{ entry_today.attributes.first.definition }}
-        </p>
+            <p class="card-text">
+                {% if entry_today.attributes.first.pos.code %}
+                    <span class="badge text-bg-secondary">
+                        {{ entry_today.attributes.first.pos.code }}
+                    </span>
+                {% endif %}
+                {{ entry_today.attributes.first.definition }}
+            </p>
 
-        <div class="py-2">
-            <a href="{% url 'dictionary:entry' entry_today.lang.code entry_today.word %}"
-                class="btn btn-sm btn-primary"
-            >
-                See entry
-            </a>
-        </div>
+            <div class="py-2">
+                <a href="{% url 'dictionary:entry' entry_today.lang.code entry_today.word %}"
+                    class="btn btn-sm btn-primary"
+                >
+                    See entry
+                </a>
+            </div>
+        {% else %}
+            <p class="card-text text-muted">No entries yet.</p>
+        {% endif %}
     </div>
 </div>
