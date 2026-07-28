@@ -70,18 +70,34 @@ games) strategies.
    ```sh
    python manage.py migrate
    ```
-5. Run the development server
+5. Seed the database
+
+   Create the superuser account that dictionary examples are attributed to
+   (username `admin`, email `admin@example.com`), then load the
+   data:
+
+   ```sh
+   python manage.py createsuperuser --username admin --email admin@example.com
+   python manage.py loaddata translate/fixtures/languages.json
+   python manage.py loadattributes
+   python manage.py loaddictionary akl
+   python manage.py loaddictionary eng
+   ```
+
+6. Run the development server
    ```sh
    python manage.py runserver
    ```
 
 ### Configuration
 
-Create a `.env` file and configure the following variables:
+Create a `.env` file (see `.env.example`) and configure the following variables:
 
-- `DATABASE_URL`: database connection URL
-- `SECRET_KEY`: Django secret key
-- `DEBUG`: set to `True` for development or `False` for production
+- `DJANGO_SECRET_KEY`: Django secret key
+- `DJANGO_DEBUG`: set to `True` for development or `False` for production
+- `DJANGO_ALLOWED_HOSTS`: comma-separated list of allowed hostnames
+- `DJANGO_TRUSTED_ORIGINS`: comma-separated list of extra CORS/CSRF origins
+- `DATABASE_URL`: database connection URL (falls back to sqlite3 if unset)
 
 ## Contributing
 
